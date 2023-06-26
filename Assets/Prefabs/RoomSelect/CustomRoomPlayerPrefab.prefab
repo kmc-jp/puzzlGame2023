@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -8198435693393054307}
   - component: {fileID: -6375741411462068801}
   m_Layer: 0
-  m_Name: Custom Room Player Prefab
+  m_Name: CustomRoomPlayerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

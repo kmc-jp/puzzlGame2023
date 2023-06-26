@@ -321,7 +321,7 @@ GameObject:
   - component: {fileID: 561721517}
   - component: {fileID: 561721516}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 788459030}
   - component: {fileID: 788459029}
   m_Layer: 5
-  m_Name: Available Rooms
+  m_Name: AvailableRooms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -650,7 +650,7 @@ GameObject:
   - component: {fileID: 930796802}
   - component: {fileID: 930796801}
   m_Layer: 5
-  m_Name: Create Room
+  m_Name: CreateRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -810,7 +810,7 @@ GameObject:
   - component: {fileID: 1019705651}
   - component: {fileID: 1019705650}
   m_Layer: 5
-  m_Name: Update Rooms
+  m_Name: UpdateRooms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1193,8 +1193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044fe448eff400a44a50e54831d36711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomBannerPrefab: {fileID: 4863673689827810288, guid: 5493110f1b3f3c84d9314c8f0c98b1fa, type: 3}
-  roomBannerBoard: {fileID: 341313266}
+  _roomBannerPrefab: {fileID: 0}
+  _roomBannerBoard: {fileID: 0}
 --- !u!1 &1330957266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,7 +1208,7 @@ GameObject:
   - component: {fileID: 1330957269}
   - component: {fileID: 1330957268}
   m_Layer: 5
-  m_Name: Create Room Button
+  m_Name: CreateRoomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1355,7 +1355,7 @@ GameObject:
   - component: {fileID: 1592711504}
   - component: {fileID: 1592711503}
   m_Layer: 5
-  m_Name: Update Rooms Button
+  m_Name: UpdateRoomsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1500,7 +1500,7 @@ GameObject:
   - component: {fileID: 1752551095}
   - component: {fileID: 1752551096}
   m_Layer: 5
-  m_Name: Room Banner List
+  m_Name: RoomBannerList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
