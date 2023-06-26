@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 9152771342776335764}
   - component: {fileID: 4444791643336334600}
   - component: {fileID: 7538680672963560593}
+  - component: {fileID: 9192851530181840477}
   m_Layer: 5
   m_Name: Join Button
   m_TagString: Untagged
@@ -461,4 +462,40 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4444791643336334600}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9192851530181840477}
+        m_TargetAssemblyTypeName: RoomSelect.JoinButtonController, Assembly-CSharp
+        m_MethodName: StopAvailableServerInquiring
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9192851530181840477}
+        m_TargetAssemblyTypeName: RoomSelect.JoinButtonController, Assembly-CSharp
+        m_MethodName: JoinServer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9192851530181840477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476852127395267825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62aff9f56bbc7c49a4ad09f0eeade54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

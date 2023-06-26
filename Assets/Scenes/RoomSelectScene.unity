@@ -230,50 +230,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &296927349
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 296927351}
-  - component: {fileID: 296927350}
-  m_Layer: 0
-  m_Name: Available Room Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &296927350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296927349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0283c9d1934b54fadd8b3ed642dabd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &296927351
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296927349}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &341313265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,6 +1038,163 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1222729656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1222729657}
+  - component: {fileID: 1222729660}
+  - component: {fileID: 1222729659}
+  - component: {fileID: 1222729658}
+  - component: {fileID: 1222729661}
+  m_Layer: 0
+  m_Name: NetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1222729657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1222729658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  RecvBufferSize: 7361536
+  SendBufferSize: 7361536
+  FastResend: 2
+  ReceiveWindowSize: 4096
+  SendWindowSize: 4096
+  MaxRetransmit: 40
+  MaximizeSocketBuffers: 1
+  ReliableMaxMessageSize: 297433
+  UnreliableMaxMessageSize: 1195
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
+--- !u!114 &1222729659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615e6c6589cf9e54cad646b5a11e0529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  autoStartServerBuild: 1
+  autoConnectClientBuild: 0
+  sendRate: 30
+  offlineScene: Assets/Scenes/RoomSelectScene.unity
+  onlineScene: Assets/Scenes/RoomSettingScene.unity
+  transport: {fileID: 1222729658}
+  networkAddress: localhost
+  maxConnections: 100
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 2264799676638732986, guid: 02df54d3868606d4bbeebab56cbf9182, type: 3}
+  autoCreatePlayer: 1
+  playerSpawnMethod: 0
+  spawnPrefabs: []
+  snapshotSettings:
+    bufferTimeMultiplier: 2
+    catchupNegativeThreshold: -1
+    catchupPositiveThreshold: 1
+    catchupSpeed: 0.019999999552965164
+    slowdownSpeed: 0.03999999910593033
+    driftEmaDuration: 1
+    dynamicAdjustment: 1
+    dynamicAdjustmentTolerance: 1
+    deliveryTimeEmaDuration: 2
+  timeInterpolationGui: 0
+  showRoomGUI: 0
+  minPlayers: 2
+  roomPlayerPrefab: {fileID: -6375741411462068801, guid: e4d1d1b34b93cde428251918f27c51c4, type: 3}
+  RoomScene: Assets/Scenes/RoomSettingScene.unity
+  GameplayScene: Assets/Scenes/BattlefieldScene.unity
+  _allPlayersReady: 0
+  roomSlots: []
+  clientIndex: 0
+--- !u!114 &1222729660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 1222729658}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1222729661}
+        m_TargetAssemblyTypeName: RoomSelect.AvailableRoomBannerManager, Assembly-CSharp
+        m_MethodName: CreateBanner
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  secretHandshake: 7315115786635033553
+--- !u!114 &1222729661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044fe448eff400a44a50e54831d36711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomBannerPrefab: {fileID: 4863673689827810288, guid: 5493110f1b3f3c84d9314c8f0c98b1fa, type: 3}
+  roomBannerBoard: {fileID: 341313266}
 --- !u!1 &1330957266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,7 +1278,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1330957269}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1222729659}
+        m_TargetAssemblyTypeName: Mirror.NetworkManager, Mirror
+        m_MethodName: StartServer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1222729660}
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryBase`2[[Mirror.Discovery.ServerRequest,
+          Mirror.Components
+        m_MethodName: AdvertiseServer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1330957269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1287,7 +1425,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1592711504}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1222729661}
+        m_TargetAssemblyTypeName: RoomSelect.AvailableRoomBannerManager, Assembly-CSharp
+        m_MethodName: DeleteAllBanners
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1222729660}
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryBase`2[[Mirror.Discovery.ServerRequest,
+          Mirror.Components
+        m_MethodName: StartDiscovery
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1592711504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,133 +1557,3 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &2024416447
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2024416448}
-  - component: {fileID: 2024416451}
-  - component: {fileID: 2024416450}
-  - component: {fileID: 2024416449}
-  m_Layer: 0
-  m_Name: Custom Network Room Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2024416448
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024416447}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2024416449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024416447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  DualMode: 1
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  RecvBufferSize: 7361536
-  SendBufferSize: 7361536
-  FastResend: 2
-  ReceiveWindowSize: 4096
-  SendWindowSize: 4096
-  MaxRetransmit: 40
-  MaximizeSocketBuffers: 1
-  ReliableMaxMessageSize: 297433
-  UnreliableMaxMessageSize: 1195
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
---- !u!114 &2024416450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024416447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableActiveDiscovery: 1
-  BroadcastAddress: 
-  serverBroadcastListenPort: 47777
-  ActiveDiscoveryInterval: 3
-  transport: {fileID: 2024416449}
-  OnServerFound:
-    m_PersistentCalls:
-      m_Calls: []
-  secretHandshake: -6629867574139853876
---- !u!114 &2024416451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2024416447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cf6373530b1e4641ab0c01743f04b0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  autoStartServerBuild: 1
-  autoConnectClientBuild: 0
-  sendRate: 30
-  offlineScene: Assets/Scenes/RoomSelectScene.unity
-  onlineScene: Assets/Scenes/RoomSettingScene.unity
-  transport: {fileID: 2024416449}
-  networkAddress: localhost
-  maxConnections: 100
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 2264799676638732986, guid: 02df54d3868606d4bbeebab56cbf9182, type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
-  snapshotSettings:
-    bufferTimeMultiplier: 2
-    catchupNegativeThreshold: -1
-    catchupPositiveThreshold: 1
-    catchupSpeed: 0.019999999552965164
-    slowdownSpeed: 0.03999999910593033
-    driftEmaDuration: 1
-    dynamicAdjustment: 1
-    dynamicAdjustmentTolerance: 1
-    deliveryTimeEmaDuration: 2
-  timeInterpolationGui: 0
-  showRoomGUI: 0
-  minPlayers: 2
-  roomPlayerPrefab: {fileID: -6375741411462068801, guid: e4d1d1b34b93cde428251918f27c51c4, type: 3}
-  RoomScene: Assets/Scenes/RoomSettingScene.unity
-  GameplayScene: Assets/Scenes/BattlefieldScene.unity
-  _allPlayersReady: 0
-  roomSlots: []
-  clientIndex: 0
