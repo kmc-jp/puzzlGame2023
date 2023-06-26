@@ -1049,7 +1049,7 @@ GameObject:
   - component: {fileID: 1222729657}
   - component: {fileID: 1222729660}
   - component: {fileID: 1222729659}
-  - component: {fileID: 1222729658}
+  - component: {fileID: 1222729662}
   - component: {fileID: 1222729661}
   m_Layer: 0
   m_Name: NetworkManager
@@ -1073,35 +1073,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1222729658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222729656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  DualMode: 1
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  RecvBufferSize: 7361536
-  SendBufferSize: 7361536
-  FastResend: 2
-  ReceiveWindowSize: 4096
-  SendWindowSize: 4096
-  MaxRetransmit: 40
-  MaximizeSocketBuffers: 1
-  ReliableMaxMessageSize: 297433
-  UnreliableMaxMessageSize: 1195
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
 --- !u!114 &1222729659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1121,7 +1092,7 @@ MonoBehaviour:
   sendRate: 30
   offlineScene: Assets/Scenes/RoomSelectScene.unity
   onlineScene: Assets/Scenes/RoomSettingScene.unity
-  transport: {fileID: 1222729658}
+  transport: {fileID: 1222729662}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
@@ -1164,7 +1135,7 @@ MonoBehaviour:
   BroadcastAddress: 
   serverBroadcastListenPort: 47777
   ActiveDiscoveryInterval: 3
-  transport: {fileID: 1222729658}
+  transport: {fileID: 1222729662}
   OnServerFound:
     m_PersistentCalls:
       m_Calls:
@@ -1193,8 +1164,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044fe448eff400a44a50e54831d36711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomBannerPrefab: {fileID: 0}
-  _roomBannerBoard: {fileID: 0}
+  _roomBannerPrefab: {fileID: 4863673689827810288, guid: 5493110f1b3f3c84d9314c8f0c98b1fa, type: 3}
+  _roomBannerBoard: {fileID: 341313266}
+--- !u!114 &1222729662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222729656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  NoDelay: 1
+  SendTimeout: 5000
+  ReceiveTimeout: 30000
+  serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
+  serverSendQueueLimitPerConnection: 10000
+  serverReceiveQueueLimitPerConnection: 10000
+  clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
+  clientSendQueueLimit: 10000
+  clientReceiveQueueLimit: 10000
 --- !u!1 &1330957266
 GameObject:
   m_ObjectHideFlags: 0
