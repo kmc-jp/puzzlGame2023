@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 687438888}
   - component: {fileID: 687438887}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: LeaveRoomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -969,7 +969,7 @@ GameObject:
   - component: {fileID: 1709322775}
   - component: {fileID: 1709322774}
   m_Layer: 5
-  m_Name: Back
+  m_Name: LeaveRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
