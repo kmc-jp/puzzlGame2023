@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 7393017520743533811}
   - component: {fileID: -8198435693393054307}
   - component: {fileID: -6375741411462068801}
+  - component: {fileID: 8732826571981703391}
   m_Layer: 0
   m_Name: CustomRoomPlayerPrefab
-  m_TagString: Untagged
+  m_TagString: RoomPlayerPrefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-8198435693393054307
 MonoBehaviour:
@@ -68,3 +69,19 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
+--- !u!114 &8732826571981703391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9132466785542701207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a2983b2cc8f024eae3cb4369a19260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  IsLeader: 0
