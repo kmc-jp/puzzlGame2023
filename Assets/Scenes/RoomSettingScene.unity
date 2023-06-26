@@ -209,7 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4021735135482226464, guid: 91e3e45b2d36a0a458bc13a6828bcade, type: 3}
       propertyPath: m_Name
-      value: Member Banner List 2
+      value: MemberBannerList2
       objectReference: {fileID: 0}
     - target: {fileID: 4277372051031177220, guid: 91e3e45b2d36a0a458bc13a6828bcade, type: 3}
       propertyPath: m_Pivot.x
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 576967530}
   - component: {fileID: 576967529}
   m_Layer: 5
-  m_Name: Start Game Button
+  m_Name: StartGameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 687438888}
   - component: {fileID: 687438887}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 767219940}
   - component: {fileID: 767219939}
   m_Layer: 5
-  m_Name: Ready Button
+  m_Name: ReadyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -769,7 +769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4021735135482226464, guid: 91e3e45b2d36a0a458bc13a6828bcade, type: 3}
       propertyPath: m_Name
-      value: Member Banner List 1
+      value: MemberBannerList1
       objectReference: {fileID: 0}
     - target: {fileID: 4277372051031177220, guid: 91e3e45b2d36a0a458bc13a6828bcade, type: 3}
       propertyPath: m_Pivot.x
@@ -1232,7 +1232,7 @@ GameObject:
   - component: {fileID: 2110392492}
   - component: {fileID: 2110392491}
   m_Layer: 5
-  m_Name: Start Game
+  m_Name: StartGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
