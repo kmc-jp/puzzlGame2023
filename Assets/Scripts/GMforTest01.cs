@@ -38,7 +38,7 @@ public class GM : MonoBehaviour
         }
 
         if (Input.GetMouseButtonUp(0)) {
-            _finalizeLineObject();
+            _completeLineObject();
         }
     }
 
@@ -97,5 +97,5 @@ public class GM : MonoBehaviour
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
 
-    void _finalizeLineObject() {}
+    void _completeLineObject() {}
 }
