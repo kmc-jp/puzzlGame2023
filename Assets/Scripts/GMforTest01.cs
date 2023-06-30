@@ -32,13 +32,10 @@ public class GM : MonoBehaviour
             _addLineObject();
         }
 
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetMouseButton(0))
+        {
             Debug.Log("on");
             _addPositionDataToLineRendererList();
-        }
-
-        if (Input.GetMouseButtonUp(0)) {
-            _completeLineObject();
         }
     }
 
@@ -96,6 +93,4 @@ public class GM : MonoBehaviour
         //あとから描いた線が上に来るように調整
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
-
-    void _completeLineObject() {}
 }
