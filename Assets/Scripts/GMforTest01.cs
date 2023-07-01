@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GM : MonoBehaviour
@@ -97,5 +98,11 @@ public class GM : MonoBehaviour
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
 
-    void _completeLineObject() {}
+    void _completeLineObject() {
+        _attachColiderToLineObject();
+    }
+
+    void _attachColiderToLineObject() {
+        lineRenderers.Last().AddComponent<BoxCollider2D>();
+    }
 }
