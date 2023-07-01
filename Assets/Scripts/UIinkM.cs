@@ -84,7 +84,7 @@ public class UIinkMnager : MonoBehaviour
     {
         //CubeのスクリプトGMからインク総量を取得
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
-        Object = GameObject.Find("Cube");
+        Object = GameObject.Find("DrawingCanvas");
         script = Object.GetComponent<GM>();
         inkAmount = script.inkAmount;
 
@@ -93,7 +93,7 @@ public class UIinkMnager : MonoBehaviour
 
         //CubeのスクリプトGMからインク残量を取得
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
-        Object = GameObject.Find("Cube");
+        Object = GameObject.Find("DrawingCanvas");
         script = Object.GetComponent<GM>();
         inkLeft = script.inkLeft;
 
