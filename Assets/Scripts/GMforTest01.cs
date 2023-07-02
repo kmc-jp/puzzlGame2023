@@ -17,7 +17,11 @@ public class GM : MonoBehaviour
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
-    //インク総量(秒)
+    [Range(0.0f, 100.0f)]
+    public double MaxInkAmount = 2.0;
+    
+    [Range(0.0f, 100.0f)]
+    public double InkRecovery = 0.5;
     public double inkAmount;
     //インク残量(秒)
     public double inkLeft;
