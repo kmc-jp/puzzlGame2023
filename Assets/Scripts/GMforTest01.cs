@@ -22,11 +22,9 @@ public class GM : MonoBehaviour
     
     [Range(0.0f, 100.0f)]
     public double InkRecovery = 0.5;
-    public double inkAmount;
+
     //インク残量(秒)
-    public double inkLeft;
-    //インク回復量(秒/秒)
-    public double inkRecovery;
+    double _inkLeft;
 
     // Start is called before the first frame update
     void Start()
