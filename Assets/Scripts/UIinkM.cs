@@ -36,14 +36,14 @@ public class UIinkMnager : MonoBehaviour
     private Image image;
 
     //Cubeのスクリプト取得用
-    private GameObject Object;
+    public GameObject DrawingCampas;
     GM script;
 
     //CubeのinkLeftを受け取る変数
-    public double inkLeft;
+    public double _inkLeft;
 
     //CubeのinkAmountを受け取る変数
-    public double inkAmount;
+    public double MaxInkAmount;
     //インク総量を20等分
     public double inkUnit;
 
@@ -84,26 +84,24 @@ public class UIinkMnager : MonoBehaviour
     {
         //CubeのスクリプトGMからインク総量を取得
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
-        Object = GameObject.Find("DrawingCanvas");
-        script = Object.GetComponent<GM>();
-        inkAmount = script.MaxInkAmount;
+        DrawingCampas = GameObject.Find("DrawingCanvas");
+        script = DrawingCampas.GetComponent<GM>();
+        MaxInkAmount = script.MaxInkAmount;
 
         //inkUnitを初期化
-        inkUnit = inkAmount / 20;
+        inkUnit = MaxInkAmount / 20;
 
         //CubeのスクリプトGMからインク残量を取得
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
-        Object = GameObject.Find("DrawingCanvas");
-        script = Object.GetComponent<GM>();
-        inkLeft = script._inkLeft;
+        DrawingCampas = GameObject.Find("DrawingCanvas");
+        script = DrawingCampas.GetComponent<GM>();
+        _inkLeft = script._inkLeft;
 
-        Debug.Log("inkUnit="+inkUnit);
-        Debug.Log("inkAmount=" + inkAmount);
+       
         for (int i = 20; i >= 0; i--)
         {
-            Debug.Log(i);
-            Debug.Log(inkLeft >= i * inkUnit);
-            if(inkLeft >= i * inkUnit)
+           
+            if(_inkLeft >= i * inkUnit)
             {
                 image.sprite = sprites[i];
                 break;
