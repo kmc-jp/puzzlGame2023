@@ -17,12 +17,14 @@ public class GM : MonoBehaviour
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
+    List<Vector2> linePoints;
+
     // Start is called before the first frame update
     void Start()
     {
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
-
+        linePoints = new List<Vector2>();
     }
 
     // Update is called once per frame
@@ -94,6 +96,8 @@ public class GM : MonoBehaviour
         //LineRendererコンポーネントリストを更新
         lineRenderers.Last().SetPosition(lineRenderers.Last().positionCount - 1, worldPosition);
 
+        linePoints.Add(worldPosition);
+
         //あとから描いた線が上に来るように調整
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
@@ -103,6 +107,7 @@ public class GM : MonoBehaviour
     }
 
     void _attachColiderToLineObject() {
-        lineRenderers.Last().AddComponent<BoxCollider2D>();
+        var edgeCollider = lineRenderers.Last().AddComponent<EdgeCollider2D>();
+        edgeCollider.SetPoints(linePoints);
     }
 }
