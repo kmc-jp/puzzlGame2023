@@ -86,7 +86,7 @@ public class UIinkMnager : MonoBehaviour
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
         Object = GameObject.Find("DrawingCanvas");
         script = Object.GetComponent<GM>();
-        inkAmount = script.inkAmount;
+        inkAmount = script.MaxInkAmount;
 
         //inkUnitを初期化
         inkUnit = inkAmount / 20;
@@ -95,7 +95,7 @@ public class UIinkMnager : MonoBehaviour
         //この方法はバグを起こしやすいので変えた方がいいかもしれない
         Object = GameObject.Find("DrawingCanvas");
         script = Object.GetComponent<GM>();
-        inkLeft = script.inkLeft;
+        inkLeft = script._inkLeft;
 
         Debug.Log("inkUnit="+inkUnit);
         Debug.Log("inkAmount=" + inkAmount);
