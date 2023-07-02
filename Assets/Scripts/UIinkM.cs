@@ -39,15 +39,6 @@ public class UIinkMnager : MonoBehaviour
     public GameObject DrawingCampas;
     GM script;
 
-    //Cubeの_inkLeftを受け取る変数
-    public double _inkLeft;
-
-    //CubeのMaxInkAmountを受け取る変数
-    public double MaxInkAmount;
-    //インク総量を20等分
-    public double inkUnit;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -82,6 +73,15 @@ public class UIinkMnager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Cubeの_inkLeftを受け取る変数
+        double _inkLeft;
+
+        //CubeのMaxInkAmountを受け取る変数
+        double MaxInkAmount;
+
+        //インク総量を20等分
+        double inkUnit;
+
         //CubeのスクリプトGMからインク総量を取得
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
