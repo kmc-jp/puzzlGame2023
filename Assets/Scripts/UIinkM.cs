@@ -74,10 +74,11 @@ public class UIinkMnager : MonoBehaviour
     void Update()
     {
         //Cubeの_inkLeftを受け取る変数
-        double _inkLeft;
+        double inkLeft;
 
         //CubeのMaxInkAmountを受け取る変数
-        double MaxInkAmount;
+        double maxInkAmount;
+
 
         //インク総量を20等分
         double inkUnit;
