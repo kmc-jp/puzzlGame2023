@@ -39,10 +39,10 @@ public class UIinkMnager : MonoBehaviour
     public GameObject DrawingCampas;
     GM script;
 
-    //CubeのinkLeftを受け取る変数
+    //Cubeの_inkLeftを受け取る変数
     public double _inkLeft;
 
-    //CubeのinkAmountを受け取る変数
+    //CubeのMaxInkAmountを受け取る変数
     public double MaxInkAmount;
     //インク総量を20等分
     public double inkUnit;
@@ -83,7 +83,6 @@ public class UIinkMnager : MonoBehaviour
     void Update()
     {
         //CubeのスクリプトGMからインク総量を取得
-        //この方法はバグを起こしやすいので変えた方がいいかもしれない
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
         MaxInkAmount = script.MaxInkAmount;
@@ -91,9 +90,7 @@ public class UIinkMnager : MonoBehaviour
         //inkUnitを初期化
         inkUnit = MaxInkAmount / 20;
 
-        //CubeのスクリプトGMからインク残量を取得
-        //この方法はバグを起こしやすいので変えた方がいいかもしれない
-        DrawingCampas = GameObject.Find("DrawingCanvas");
+        //_inkLeftを取得
         script = DrawingCampas.GetComponent<GM>();
         _inkLeft = script._inkLeft;
 
