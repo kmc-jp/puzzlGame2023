@@ -46,7 +46,8 @@ public class GM : MonoBehaviour
             //lineObjを生成し、初期化する
             _addLineObject();
 
-            Debug.Log(inkLeft);
+            Debug.Log(_inkLeft);
+
         }
 
         if (Input.GetMouseButton(0))
