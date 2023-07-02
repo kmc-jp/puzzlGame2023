@@ -53,13 +53,14 @@ public class GM : MonoBehaviour
         if (Input.GetMouseButton(0))
         { 
             //インク残量があれば
-            if (inkLeft >0) 
+            if (_inkLeft > 0) 
             { 
                 //線を描画
                 _addPositionDataToLineRendererList(); 
 
                //インク残量を減らす
-               inkLeft -= Time.deltaTime;
+               _inkLeft -= Time.deltaTime;
+
             }
            
         }
