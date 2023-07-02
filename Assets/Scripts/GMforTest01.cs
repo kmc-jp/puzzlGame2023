@@ -66,7 +66,8 @@ public class GM : MonoBehaviour
         }
 
         //マウスボタンが離されていれば
-        if (! Input.GetMouseButton(0) && inkLeft <= 2)
+        if (! Input.GetMouseButton(0) && _inkLeft <= 2)
+
         {
             //インクを回復
             inkLeft += Time.deltaTime * inkRecovery;
