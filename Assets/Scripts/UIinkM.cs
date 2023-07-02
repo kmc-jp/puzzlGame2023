@@ -86,20 +86,21 @@ public class UIinkMnager : MonoBehaviour
         //CubeのスクリプトGMからインク総量を取得
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
-        MaxInkAmount = script.MaxInkAmount;
+        maxInkAmount = script.MaxInkAmount;
 
         //inkUnitを初期化
-        inkUnit = MaxInkAmount / 20;
+        inkUnit = maxInkAmount / 20;
 
         //_inkLeftを取得
         script = DrawingCampas.GetComponent<GM>();
-        _inkLeft = script._inkLeft;
+        inkLeft = script._inkLeft;
 
        
         for (int i = 20; i >= 0; i--)
         {
            
-            if(_inkLeft >= i * inkUnit)
+            if(inkLeft >= i * inkUnit)
+
             {
                 image.sprite = sprites[i];
                 break;
