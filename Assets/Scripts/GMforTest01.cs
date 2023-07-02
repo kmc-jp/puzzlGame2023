@@ -32,14 +32,11 @@ public class GM : MonoBehaviour
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
 
-        //インク総量の初期化
-        inkAmount =2.0;
         //インク残量の初期化
-        inkLeft = inkAmount;
+        _inkLeft = MaxInkAmount;
 
-        Debug.Log(inkLeft);
-        //インク回復量の初期化
-        inkRecovery = 0.5;
+        Debug.Log(_inkLeft);
+
      }
 
     // Update is called once per frame
