@@ -70,7 +70,8 @@ public class GM : MonoBehaviour
 
         {
             //インクを回復
-            inkLeft += Time.deltaTime * inkRecovery;
+            _inkLeft += Time.deltaTime * InkRecovery;
+
         }
     }
 
