@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GM : MonoBehaviour
 {
@@ -36,9 +37,30 @@ public class GM : MonoBehaviour
     //ゴールエリア侵入フラグ
     public int goalInFrag = 0;
 
+    //HP表示用
+    public Text HPtext;
+    //最大HP
+    [Range(1f,10f)]
+    public int MaxHP = 2;
+    //HP計算用
+    public int HP;
+
+    //無敵時間
+    [Range(0.0f, 5.0f)]
+    public double maxGodMode;
+    //無敵時間計算用
+    public double godModeCount;
+    //無敵時間フラグ
+    public int godModeFrag = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        //HP初期化
+        HP = MaxHP;
+        //HP表示初期化
+        HPtext.text = "HP:" + HP;
+
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
 
@@ -87,9 +109,25 @@ public class GM : MonoBehaviour
 
         }
 
-        if(goalInFrag == 1)
+        if (goalInFrag == 1 && godModeFrag == 0)
         {
-            Debug.Log("detectGoal");
+            //HP更新
+            HP  --;
+            //HP表示更新
+            HPtext.text = "HP:" + HP;
+            //無敵時間開始
+            godModeCount = 0;
+            godModeFrag = 1;
+        }
+
+        //無敵時間の経過時間を計測
+        //無敵時間開始時にリセットされる
+        godModeCount += Time.deltaTime;
+
+        //無敵時間が終わったか判定
+        if(godModeCount >= maxGodMode)
+        {
+            godModeFrag = 0;
         }
     }
 
