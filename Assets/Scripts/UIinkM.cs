@@ -68,6 +68,7 @@ public class UIinkMnager : MonoBehaviour
         sprites[18] = ink18;
         sprites[19] = ink19;
         sprites[20] = ink20;
+
 }
 
     // Update is called once per frame
