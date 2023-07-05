@@ -52,6 +52,9 @@ public class GM : MonoBehaviour
     //HP計算用
     public int HP;
 
+    //勝敗判定用
+    public Text winnnertext;
+
     //無敵時間
     [Range(0.0f, 5.0f)]
     public double maxGodMode;
@@ -106,7 +109,6 @@ public class GM : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Debug.Log(worldPosition.x);
             //インク残量があって、侵入不可エリア外なら
             if (_inkLeft > 0 && worldPosition.x >= -10.5+goalWidth+impenetrableWidth) 
             { 
@@ -148,6 +150,12 @@ public class GM : MonoBehaviour
         if(godModeCount >= maxGodMode)
         {
             godModeFrag = 0;
+        }
+
+        //勝敗判定
+        if(HP <= 0)
+        {
+            winnnertext.text = "Player Win !";
         }
     }
 
