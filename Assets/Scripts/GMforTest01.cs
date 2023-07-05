@@ -89,7 +89,7 @@ public class GM : MonoBehaviour
 
         if(goalInFrag == 1)
         {
-            Debug.Log("detect");
+            Debug.Log("detectGoal");
         }
     }
 
@@ -98,10 +98,16 @@ public class GM : MonoBehaviour
     {
         //空のゲームオブジェクト作成
         GameObject lineObj = new GameObject();
+        //オブジェクトにLineObjectMをアタッチ
+        lineObj.AddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
         lineObj.name = "Stroke";
         //lineObjにLineRendereコンポーネント追加
         lineObj.AddComponent<LineRenderer>();
+        //lineObjのLineRendererコンポーネントを取得
+        LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
+        //useWorldSpaceをtrueに
+        lineRenderer.useWorldSpace = true;
         //lineRendererリストにlineObjを追加
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
         //lineObjを自身の子要素に設定

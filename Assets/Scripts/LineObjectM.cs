@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,15 @@ public class LineObjectM : MonoBehaviour
 {
 
     public int moveFrag = 0;
-    public GameObject circle;
 
-    //Cubeのスクリプト取得用
+    //スクリプト取得用
     public GameObject DrawingCampas;
     GM script;
 
-    
+    //アタッチされたオブジェクトのLinerendere取得用
+    LineRenderer lineRenderer;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,21 +28,24 @@ public class LineObjectM : MonoBehaviour
         //GMのgoalwithを受け取る変数
         double goalWidth;
 
-        //CubeのスクリプトGMからインク総量を取得
+        //CubeのスクリプトGMからゴールエリアのサイズを取得
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
         goalWidth = script.goalWidth;
 
-        //LineRenderer lineRenderer = circle.GetComponent<LineRenderer>();
-        Transform transform = circle.transform;
+        
 
-        //for (int i= 0; i < lineRenderer.positionCount; i++)
-        //{
-        //    if (false)
-        //    {
-        //        Debug.Log("detect");
-        //    }
-        //}
+        GameObject lineObj2;
+        lineObj2 = GameObject.Find("Stroke");
+        LineRenderer lineRenderer = lineObj2.GetComponent<LineRenderer>();
+
+        Vector3[] linePoint = new Vector3[lineRenderer.positionCount];
+
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            linePoint[i] = lineRenderer.GetPosition(i);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -48,12 +54,21 @@ public class LineObjectM : MonoBehaviour
 
         if(moveFrag == 1)
         {
-            transform.position += new Vector3(-0.01f, 0.0f, 0.0f);
+            for (int i = 0; i < lineRenderer.positionCount; i++)
+            {
+                linePoint[i] += new Vector3(-0.01f, 0, 0);
+            }
+
+
+            lineRenderer.SetPositions(linePoint);
         }
 
-        if (transform.position.x <= -10.5f + (float)goalWidth)
+        for (int i = 0; i < lineRenderer.positionCount; i++)
         {
-           script.goalInFrag = 1;
+            if (linePoint[i].x < -10.5f + (float)goalWidth)
+            {
+                script.goalInFrag = 1;
+            }
         }
 
     }
