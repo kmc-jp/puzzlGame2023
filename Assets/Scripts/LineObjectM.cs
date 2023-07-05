@@ -8,10 +8,12 @@ public class LineObjectM : MonoBehaviour
 
     //注意：このスクリプトはプレイヤーが描いた各オブジェクトにアタッチされます
     //このスクリプトがアタッチされたオブジェクトを消去するときはgoalInFragをリセットする必要があります
+    //HP機能テスト用にspaceを押すとオブジェクトが左に動きだすようになっています
 
-    
+    //テスト用移動フラグ
     public int moveFrag = 0;
 
+    //自己破壊フラグ
     public int destroyFrag = 0;
 
     //スクリプト取得用

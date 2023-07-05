@@ -77,17 +77,7 @@ public class GM : MonoBehaviour
         //インク残量の初期化
         _inkLeft = MaxInkAmount;
 
-        //ゴールエリアの描画
-        //頂点の設定
-        Vector3[] goalTops = new Vector3[] { new Vector3(-10.5f, 5.0f, 0f), new Vector3(-10.5f, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0.0f), new Vector3(-10.5f, 5.0f, 0f) };
-        //描画
-        polygonLinerenderer(goalTops,"goalLine",lineMaterial,goalLineColor,lineWidth);
-
-        //侵入不可エリアの描画
-        //頂点の設定
-        Vector3[] impenetrableTops = new Vector3[] { new Vector3(-10.5f+(float)goalWidth+(float)lineWidth, 5.0f, 0f), new Vector3(-10.5f+(float)goalWidth+(float)lineWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth+(float)impenetrableWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth+(float)impenetrableWidth, 5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0f) };
-        //描画
-        polygonLinerenderer(impenetrableTops, "inpenetrableLine", lineMaterial, impenetrableLineColor, lineWidth);
+        setArea();
 
     }
 
@@ -258,5 +248,20 @@ public class GM : MonoBehaviour
             lineRenderers.Last().SetPosition(lineRenderers.Last().positionCount - 1,item);
         }
         
+    }
+
+    void setArea()
+    {
+        //ゴールエリアの描画
+        //頂点の設定
+        Vector3[] goalTops = new Vector3[] { new Vector3(-10.5f, 5.0f, 0f), new Vector3(-10.5f, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0.0f), new Vector3(-10.5f, 5.0f, 0f) };
+        //描画
+        polygonLinerenderer(goalTops, "goalLine", lineMaterial, goalLineColor, lineWidth);
+
+        //侵入不可エリアの描画
+        //頂点の設定
+        Vector3[] impenetrableTops = new Vector3[] { new Vector3(-10.5f + (float)goalWidth + (float)lineWidth, 5.0f, 0f), new Vector3(-10.5f + (float)goalWidth + (float)lineWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth + (float)impenetrableWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth + (float)impenetrableWidth, 5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0f) };
+        //描画
+        polygonLinerenderer(impenetrableTops, "inpenetrableLine", lineMaterial, impenetrableLineColor, lineWidth);
     }
 }
