@@ -14,10 +14,7 @@ public class GM : MonoBehaviour
     //線の太さ
     [Range(0.1f, 0.5f)]
     [SerializeField] float lineWidth;
-
-    //ゴールエリア枠線の色
-    [SerializeField] Color goalLineColor;
-
+    
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
@@ -30,6 +27,16 @@ public class GM : MonoBehaviour
     //ゴールエリアの幅
     [Range(0.5f, 10.0f)]
     public double goalWidth = 5;
+
+    //ゴールエリア枠線の色
+    [SerializeField] Color goalLineColor;
+
+    //侵入不可エリアの幅
+    [Range(0.5f, 10.0f)]
+    public double impenetrableWidth = 5;
+
+    //侵入不可エリア枠線の色
+    [SerializeField] Color impenetrableLineColor;
 
     //インク残量(秒)
     public double _inkLeft;
@@ -73,11 +80,23 @@ public class GM : MonoBehaviour
         //描画
         polygonLinerenderer(goalTops,"goalLine",lineMaterial,goalLineColor,lineWidth);
 
+        //侵入不可エリアの描画
+        //頂点の設定
+        Vector3[] impenetrableTops = new Vector3[] { new Vector3(-10.5f+(float)goalWidth+(float)lineWidth, 5.0f, 0f), new Vector3(-10.5f+(float)goalWidth+(float)lineWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth+(float)impenetrableWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth+(float)impenetrableWidth, 5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0f) };
+        //描画
+        polygonLinerenderer(impenetrableTops, "inpenetrableLine", lineMaterial, impenetrableLineColor, lineWidth);
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        //マウスポインタがあるスクリーン座標を取得
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f);
+
+        //スクリーン座標をワールド座標に変換
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
         if (Input.GetMouseButtonDown(0)) {
             //lineObjを生成し、初期化する
             _addLineObject();
@@ -86,9 +105,10 @@ public class GM : MonoBehaviour
         }
 
         if (Input.GetMouseButton(0))
-        { 
-            //インク残量があれば
-            if (_inkLeft > 0) 
+        {
+            Debug.Log(worldPosition.x);
+            //インク残量があって、侵入不可エリア外なら
+            if (_inkLeft > 0 && worldPosition.x >= -10.5+goalWidth+impenetrableWidth) 
             { 
                 //線を描画
                 _addPositionDataToLineRendererList(); 
