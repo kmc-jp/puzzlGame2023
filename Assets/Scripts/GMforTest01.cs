@@ -7,20 +7,24 @@ using UnityEngine.UI;
 
 public class GM : MonoBehaviour
 {
-    //線の材質
+    //標準の線の材質
     [SerializeField] Material lineMaterial;
-    //線の色
-    [SerializeField] Color lineColor;
-    //線の太さ
+   
+    //標準の線の太さ
     [Range(0.1f, 0.5f)]
     [SerializeField] float lineWidth;
-    
+
+    //プレイヤーが描画する線の色
+    [SerializeField] Color lineColor;
+
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
+    //インクの最大量(秒)
     [Range(0.0f, 100.0f)]
     public double MaxInkAmount = 2.0;
     
+    //インクの回復測度(秒/秒)
     [Range(0.0f, 100.0f)]
     public double InkRecovery = 0.5;
 
@@ -52,9 +56,6 @@ public class GM : MonoBehaviour
     //HP計算用
     public int HP;
 
-    //勝敗判定用
-    public Text winnnertext;
-
     //無敵時間
     [Range(0.0f, 5.0f)]
     public double maxGodMode;
@@ -62,6 +63,9 @@ public class GM : MonoBehaviour
     public double godModeCount;
     //無敵時間フラグ
     public int godModeFrag = 0;
+
+    //勝敗判定用
+    public Text winnnertext;
 
     // Start is called before the first frame update
     void Start()
@@ -77,6 +81,7 @@ public class GM : MonoBehaviour
         //インク残量の初期化
         _inkLeft = MaxInkAmount;
 
+        //ゴールエリアと侵入不可エリアを描画
         setArea();
 
     }
@@ -93,8 +98,6 @@ public class GM : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             //lineObjを生成し、初期化する
             _addLineObject();
-
-
         }
 
         if (Input.GetMouseButton(0))
@@ -121,6 +124,7 @@ public class GM : MonoBehaviour
 
         }
 
+        //オブジェクトがゴールエリアにあって無敵時間外なら
         if (goalInFrag == 1 && godModeFrag == 0)
         {
             //HP更新
@@ -210,6 +214,7 @@ public class GM : MonoBehaviour
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
 
+    //頂点のベクトルの配列・マテリアル・色・線の幅を受け取って、各頂点を結んだ与えられた名前の図形を描画する
     void polygonLinerenderer(Vector3[] tops,string name,Material material,Color color,float width)
     {
         //空のゲームオブジェクト作成
@@ -250,6 +255,7 @@ public class GM : MonoBehaviour
         
     }
 
+    //ゴールエリアと侵入不可エリアを描画
     void setArea()
     {
         //ゴールエリアの描画

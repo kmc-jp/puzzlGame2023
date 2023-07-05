@@ -21,8 +21,7 @@ public class LineObjectM : MonoBehaviour
     GM script;
 
     //アタッチされたオブジェクトのLinerendere取得用
-    LineRenderer lineRenderer;
-
+    public LineRenderer lineRenderer;
 
     // Start is called before the first frame update
     void Start()
@@ -40,22 +39,7 @@ public class LineObjectM : MonoBehaviour
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
         goalWidth = script.goalWidth;
-
         
-        //描いたオブジェクトの情報を取得
-        GameObject lineObj2;
-        lineObj2 = GameObject.Find("Stroke");
-        LineRenderer lineRenderer = lineObj2.GetComponent<LineRenderer>();
-
-        //描いたオブジェクトの位置を格納するための変数
-        Vector3[] linePoint = new Vector3[lineRenderer.positionCount];
-
-        //描いたオブジェクトの位置を格納
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            linePoint[i] = lineRenderer.GetPosition(i);
-        }
-
         //spaceキーが押されたら描いたオブジェクトを動かす
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -86,17 +70,38 @@ public class LineObjectM : MonoBehaviour
         }
 
         //描いたオブジェクトが全部画面外に出たらオブジェクトを消去する
-        destroyFrag = 1;
-        for (int i =0; i < lineRenderer.positionCount; i++)
+       
+    }
+
+    Vector3[] getLinePoint()
+    {
+        //描いたオブジェクトの情報を取得
+        lineRenderer = this.GetComponent<LineRenderer>();
+
+        //オブジェクトの位置を格納するための配列
+        Vector3[] linePoint = new Vector3[lineRenderer.positionCount];
+
+        //描いたオブジェクトの位置を格納
+        for (int i = 0; i < lineRenderer.positionCount; i++)
         {
-            
+            linePoint[i] = lineRenderer.GetPosition(i);
+        }
+
+        return linePoint;
+    }
+    void JudgeDestroy()
+    {
+        destroyFrag = 1;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+
             if (linePoint[i].x > -10.5f)
             {
                 destroyFrag = 0;
                 break;
-            } 
+            }
         }
-        if(destroyFrag == 1)
+        if (destroyFrag == 1)
         {
             script.goalInFrag = 0;
             Destroy(this.gameObject);
