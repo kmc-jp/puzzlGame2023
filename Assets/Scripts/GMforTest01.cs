@@ -26,11 +26,15 @@ public class GM : MonoBehaviour
     [Range(0.0f, 100.0f)]
     public double InkRecovery = 0.5;
 
+    //ゴールエリアの幅
     [Range(0.5f, 10.0f)]
     public double goalWidth = 5;
 
     //インク残量(秒)
     public double _inkLeft;
+
+    //ゴールエリア侵入フラグ
+    public int goalInFrag = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +85,11 @@ public class GM : MonoBehaviour
             //インクを回復
             _inkLeft += Time.deltaTime * InkRecovery;
 
+        }
+
+        if(goalInFrag == 1)
+        {
+            Debug.Log("detect");
         }
     }
 
