@@ -23,6 +23,7 @@ public class LineObjectM : MonoBehaviour
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +40,9 @@ public class LineObjectM : MonoBehaviour
         DrawingCampas = GameObject.Find("DrawingCanvas");
         script = DrawingCampas.GetComponent<GM>();
         goalWidth = script.goalWidth;
+
+        //描いたオブジェクトの位置を取得
+        Vector3[] linePoint = getLinePoint();
         
         //spaceキーが押されたら描いたオブジェクトを動かす
         if (Input.GetKeyDown(KeyCode.Space))
@@ -46,13 +50,12 @@ public class LineObjectM : MonoBehaviour
             moveFrag = 1;
         }
 
- 
-        if(moveFrag == 1)
+        //描いたオブジェクトを移動させる
+        if (moveFrag == 1)
         {
-            //描いたオブジェクトを移動させる
+             //移動させる位置を計算
             for (int i = 0; i < lineRenderer.positionCount; i++)
-            {
-                //移動させる位置を計算
+            {               
                 linePoint[i] += new Vector3(-0.01f, 0, 0);
             }
 
@@ -70,9 +73,10 @@ public class LineObjectM : MonoBehaviour
         }
 
         //描いたオブジェクトが全部画面外に出たらオブジェクトを消去する
-       
+       JudgeDestroy();
     }
 
+    //描いたオブジェクトの位置を取得
     Vector3[] getLinePoint()
     {
         //描いたオブジェクトの情報を取得
@@ -89,13 +93,15 @@ public class LineObjectM : MonoBehaviour
 
         return linePoint;
     }
+
+    //描いたオブジェクトが全部画面外に出たらオブジェクトを消去する
     void JudgeDestroy()
     {
         destroyFrag = 1;
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
 
-            if (linePoint[i].x > -10.5f)
+            if (getLinePoint()[i].x > -10.5f)
             {
                 destroyFrag = 0;
                 break;
