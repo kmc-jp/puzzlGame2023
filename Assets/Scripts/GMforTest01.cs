@@ -20,6 +20,9 @@ public class GM : MonoBehaviour
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
+    //描画中フラグ
+    public int drawFrag;
+
     //インクの最大量(秒)
     [Range(0.0f, 100.0f)]
     public double MaxInkAmount = 2.0;
@@ -95,15 +98,32 @@ public class GM : MonoBehaviour
         //スクリーン座標をワールド座標に変換
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
+        //マウスがクリックされたら
         if (Input.GetMouseButtonDown(0)) {
             //lineObjを生成し、初期化する
             _addLineObject();
+
+            //描画中フラグを立てる
+            drawFrag = 1;
         }
 
+        //マウスボタンが離されていれば
+        if (!Input.GetMouseButton(0))
+        {
+            drawFrag = 0;
+        }
+
+        //侵入不可内なら
+        if (worldPosition.x <= -10.5 + goalWidth + impenetrableWidth)
+        {
+            drawFrag = 0;
+        }
+
+        //マウスがクリックされているとき
         if (Input.GetMouseButton(0))
         {
-            //インク残量があって、侵入不可エリア外なら
-            if (_inkLeft > 0 && worldPosition.x >= -10.5+goalWidth+impenetrableWidth) 
+            //インク残量があって、描画中なら
+            if (_inkLeft > 0 && drawFrag == 1) 
             { 
                 //線を描画
                 _addPositionDataToLineRendererList(); 
@@ -115,7 +135,9 @@ public class GM : MonoBehaviour
            
         }
 
-        //マウスボタンが離されていれば
+       
+
+        //マウスボタンが離されていて、インクが最大より少なければ
         if (! Input.GetMouseButton(0) && _inkLeft <= 2)
 
         {
