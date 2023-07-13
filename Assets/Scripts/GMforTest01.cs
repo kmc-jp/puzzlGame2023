@@ -74,6 +74,8 @@ public class GM : MonoBehaviour
         //太さの初期化
         lineRenderers.Last().startWidth = lineWidth;
         lineRenderers.Last().endWidth = lineWidth;
+
+        linePoints.Clear();
     }
 
     void _addPositionDataToLineRendererList()
