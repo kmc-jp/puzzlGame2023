@@ -68,7 +68,7 @@ public class LineObjectM : MonoBehaviour
         {
             if (linePoint[i].x < -10.5f + (float)goalWidth)
             {
-                script.goalInFrag = 1;
+                script.goalInFlag = 1;
             }
         }
 
@@ -109,7 +109,7 @@ public class LineObjectM : MonoBehaviour
         }
         if (destroyFrag == 1)
         {
-            script.goalInFrag = 0;
+            script.goalInFlag = 0;
             Destroy(this.gameObject);
         }
         destroyFrag = 0;

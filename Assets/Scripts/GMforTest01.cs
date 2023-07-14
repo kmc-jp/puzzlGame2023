@@ -21,7 +21,7 @@ public class GM : MonoBehaviour
     List<LineRenderer> lineRenderers;
 
     //描画中フラグ
-    public int drawFrag;
+    public int drawFlag;
 
     //インクの最大量(秒)
     [Range(0.0f, 100.0f)]
@@ -49,7 +49,7 @@ public class GM : MonoBehaviour
     public double _inkLeft;
 
     //ゴールエリア侵入フラグ
-    public int goalInFrag = 0;
+    public int goalInFlag = 0;
 
     //HP表示用
     public Text HPtext;
@@ -65,7 +65,7 @@ public class GM : MonoBehaviour
     //無敵時間計算用
     public double godModeCount;
     //無敵時間フラグ
-    public int godModeFrag = 0;
+    public int godModeFlag = 0;
 
     //勝敗判定用
     public Text winnnertext;
@@ -104,26 +104,26 @@ public class GM : MonoBehaviour
             _addLineObject();
 
             //描画中フラグを立てる
-            drawFrag = 1;
+            drawFlag = 1;
         }
 
         //マウスボタンが離されていれば
         if (!Input.GetMouseButton(0))
         {
-            drawFrag = 0;
+            drawFlag = 0;
         }
 
         //侵入不可内なら
         if (worldPosition.x <= -10.5 + goalWidth + impenetrableWidth)
         {
-            drawFrag = 0;
+            drawFlag = 0;
         }
 
         //マウスがクリックされているとき
         if (Input.GetMouseButton(0))
         {
             //インク残量があって、描画中なら
-            if (_inkLeft > 0 && drawFrag == 1) 
+            if (_inkLeft > 0 && drawFlag == 1) 
             { 
                 //線を描画
                 _addPositionDataToLineRendererList(); 
@@ -147,7 +147,7 @@ public class GM : MonoBehaviour
         }
 
         //オブジェクトがゴールエリアにあって無敵時間外なら
-        if (goalInFrag == 1 && godModeFrag == 0)
+        if (goalInFlag == 1 && godModeFlag == 0)
         {
             //HP更新
             HP  --;
@@ -155,7 +155,7 @@ public class GM : MonoBehaviour
             HPtext.text = "HP:" + HP;
             //無敵時間開始
             godModeCount = 0;
-            godModeFrag = 1;
+            godModeFlag = 1;
         }
 
         //無敵時間の経過時間を計測
@@ -165,7 +165,7 @@ public class GM : MonoBehaviour
         //無敵時間が終わったか判定
         if(godModeCount >= maxGodMode)
         {
-            godModeFrag = 0;
+            godModeFlag = 0;
         }
 
         //勝敗判定
