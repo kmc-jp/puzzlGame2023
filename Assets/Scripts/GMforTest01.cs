@@ -21,6 +21,7 @@ public class GM : MonoBehaviour
     List<LineRenderer> lineRenderers;
 
     //描画中フラグ
+    [Tooltip("描画中フラグ")]
     public int drawFlag;
 
     //インクの最大量(秒)
