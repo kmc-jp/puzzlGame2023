@@ -240,27 +240,18 @@ public class GM : MonoBehaviour
     //頂点のベクトルの配列・マテリアル・色・線の幅を受け取って、各頂点を結んだ与えられた名前の図形を描画する
     void polygonLinerenderer(Vector3[] tops,string name,Material material,Color color,float width)
     {
-        //空のゲームオブジェクト作成
+        //新しいオブジェクト作成
         GameObject lineObj = new GameObject();
-        //オブジェクトの名前を変更
         lineObj.name = name;
-        //オブジェクトのレイヤーを指定
-        lineObj.layer = 2;
-        //lineObjにLineRendereコンポーネント追加
+        lineObj.layer = 2;//レイヤーを指定
         lineObj.AddComponent<LineRenderer>();
-        //lineRendererリストにlineObjを追加
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
-        //lineObjを自身の子要素に設定
         lineObj.transform.SetParent(transform);
 
         //lineObj初期化処理
-        //線をつなぐ点を0に初期化
         lineRenderers.Last().positionCount = 0;
-        //マテリアルを初期化
         lineRenderers.Last().material = material;
-        //色の初期化
         lineRenderers.Last().material.color = color;
-        //太さの初期化
         lineRenderers.Last().startWidth = width;
         lineRenderers.Last().endWidth = width;
 
