@@ -325,6 +325,7 @@ MonoBehaviour:
   lineMaterial: {fileID: 2100000, guid: 048c25e935bc7dc4380dee85649c36c6, type: 2}
   lineWidth: 0.25
   lineColor: {r: 0, g: 0, b: 0, a: 0}
+  drawFlag: 0
   MaxInkAmount: 2
   InkRecovery: 0.5
   goalWidth: 5
@@ -332,13 +333,13 @@ MonoBehaviour:
   impenetrableWidth: 5
   impenetrableLineColor: {r: 0.037973117, g: 0.24971743, b: 0.6037736, a: 0}
   _inkLeft: 0
-  goalInFrag: 0
+  goalInFlag: 0
   HPtext: {fileID: 1264171903}
   MaxHP: 2
   HP: 0
   maxGodMode: 1.5399999618530273
   godModeCount: 0
-  godModeFrag: 0
+  godModeFlag: 0
   winnnertext: {fileID: 145412821}
 --- !u!1 &465845668
 GameObject:
