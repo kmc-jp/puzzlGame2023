@@ -139,7 +139,7 @@ public class GM : MonoBehaviour
        
 
         //マウスボタンが離されていて、インクが最大より少なければ
-        if (! Input.GetMouseButton(0) && _inkLeft <= 2)
+        if (! Input.GetMouseButton(0) && _inkLeft <= MaxInkAmount)
 
         {
             //インクを回復
