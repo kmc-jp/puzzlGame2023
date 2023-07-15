@@ -31,21 +31,7 @@ public class GM : MonoBehaviour
     //インクの回復測度(秒/秒)
     [Range(0.0f, 100.0f)]
     public double InkRecovery = 0.5;
-
-    //ゴールエリアの幅
-    [Range(0.5f, 10.0f)]
-    public double goalWidth = 5;
-
-    //ゴールエリア枠線の色
-    [SerializeField] Color goalLineColor;
-
-    //侵入不可エリアの幅
-    [Range(0.5f, 10.0f)]
-    public double impenetrableWidth = 5;
-
-    //侵入不可エリア枠線の色
-    [SerializeField] Color impenetrableLineColor;
-
+   
     //インク残量(秒)
     public double _inkLeft;
 
@@ -71,6 +57,10 @@ public class GM : MonoBehaviour
     //勝敗判定用
     public Text winnnertext;
 
+    //スクリプト取得用
+    public GameObject DrawingCampas;
+    StageMnager StageMnager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,10 +74,6 @@ public class GM : MonoBehaviour
 
         //インク残量の初期化
         _inkLeft = MaxInkAmount;
-
-        //ゴールエリアと侵入不可エリアを描画
-        setArea();
-
     }
 
     // Update is called once per frame
@@ -98,6 +84,15 @@ public class GM : MonoBehaviour
 
         //スクリーン座標をワールド座標に変換
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
+        DrawingCampas = GameObject.Find("DrawingCanvas");
+        StageMnager = DrawingCampas.GetComponent<StageMnager>();
+        //GMのgoalwithを受け取る変数
+        double goalWidth;
+        goalWidth = StageMnager.goalWidth;
+        double impenetrableWidth;
+        impenetrableWidth = StageMnager.impenetrableWidth;
 
         //マウスがクリックされたら
         if (Input.GetMouseButtonDown(0)) {
@@ -235,53 +230,5 @@ public class GM : MonoBehaviour
 
         //あとから描いた線が上に来るように調整
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
-    }
-
-    //頂点のベクトルの配列・マテリアル・色・線の幅を受け取って、各頂点を結んだ与えられた名前の図形を描画する
-    void polygonLinerenderer(Vector3[] tops,string name,Material material,Color color,float width)
-    {
-        //新しいオブジェクト作成
-        GameObject lineObj = new GameObject();
-        lineObj.name = name;
-        lineObj.layer = 2;//レイヤーを指定
-        lineObj.AddComponent<LineRenderer>();
-        lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
-        lineObj.transform.SetParent(transform);
-
-        //lineObj初期化処理
-        lineRenderers.Last().positionCount = 0;
-        lineRenderers.Last().material = material;
-        lineRenderers.Last().material.color = color;
-        lineRenderers.Last().startWidth = width;
-        lineRenderers.Last().endWidth = width;
-
-        foreach (var item in tops)
-        {
-            //lineRenderersに頂点を追加
-            lineRenderers.Last().transform.localPosition = item;
-
-            //lineObjの線と線をつなぐ点の数を更新
-            lineRenderers.Last().positionCount += 1;
-
-            //LineRendererコンポーネントリストを更新→描画される
-            lineRenderers.Last().SetPosition(lineRenderers.Last().positionCount - 1,item);
-        }
-        
-    }
-
-    //ゴールエリアと侵入不可エリアを描画
-    void setArea()
-    {
-        //ゴールエリアの描画
-        //頂点の設定
-        Vector3[] goalTops = new Vector3[] { new Vector3(-10.5f, 5.0f, 0f), new Vector3(-10.5f, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0.0f), new Vector3(-10.5f, 5.0f, 0f) };
-        //描画
-        polygonLinerenderer(goalTops, "goalLine", lineMaterial, goalLineColor, lineWidth);
-
-        //侵入不可エリアの描画
-        //頂点の設定
-        Vector3[] impenetrableTops = new Vector3[] { new Vector3(-10.5f + (float)goalWidth + (float)lineWidth, 5.0f, 0f), new Vector3(-10.5f + (float)goalWidth + (float)lineWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth + (float)impenetrableWidth, -5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth + (float)impenetrableWidth, 5.0f, 0.0f), new Vector3(-10.5f + (float)goalWidth, 5.0f, 0f) };
-        //描画
-        polygonLinerenderer(impenetrableTops, "inpenetrableLine", lineMaterial, impenetrableLineColor, lineWidth);
     }
 }

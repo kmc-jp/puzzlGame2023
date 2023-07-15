@@ -18,7 +18,8 @@ public class LineObjectM : MonoBehaviour
 
     //スクリプト取得用
     public GameObject DrawingCampas;
-    GM script;
+    StageMnager StageMnager;
+    GM GM;
 
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
@@ -36,10 +37,14 @@ public class LineObjectM : MonoBehaviour
         //GMのgoalwithを受け取る変数
         double goalWidth;
 
-        //CubeのスクリプトGMからゴールエリアのサイズを取得
+        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
         DrawingCampas = GameObject.Find("DrawingCanvas");
-        script = DrawingCampas.GetComponent<GM>();
-        goalWidth = script.goalWidth;
+        StageMnager = DrawingCampas.GetComponent<StageMnager>();
+        goalWidth = StageMnager.goalWidth;
+
+        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
+        DrawingCampas = GameObject.Find("DrawingCanvas");
+        GM = DrawingCampas.GetComponent<GM>();
 
         //描いたオブジェクトの位置を取得
         Vector3[] linePoint = getLinePoint();
@@ -68,7 +73,7 @@ public class LineObjectM : MonoBehaviour
         {
             if (linePoint[i].x < -10.5f + (float)goalWidth)
             {
-                script.goalInFlag = 1;
+                GM.goalInFlag = 1;
             }
         }
 
@@ -109,7 +114,7 @@ public class LineObjectM : MonoBehaviour
         }
         if (destroyFrag == 1)
         {
-            script.goalInFlag = 0;
+            GM.goalInFlag = 0;
             Destroy(this.gameObject);
         }
         destroyFrag = 0;
