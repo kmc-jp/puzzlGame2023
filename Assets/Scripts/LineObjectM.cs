@@ -42,7 +42,7 @@ public class LineObjectM : MonoBehaviour
         StageMnager = DrawingCampas.GetComponent<StageMnager>();
         goalWidth = StageMnager.goalWidth;
 
-        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
+        //CubeのスクリプトGameMnagerからゴールエリアのサイズを取得
         DrawingCampas = GameObject.Find("DrawingCanvas");
         GM = DrawingCampas.GetComponent<GM>();
 

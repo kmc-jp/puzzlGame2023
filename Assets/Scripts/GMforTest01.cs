@@ -38,25 +38,6 @@ public class GM : MonoBehaviour
     //ゴールエリア侵入フラグ
     public int goalInFlag = 0;
 
-    //HP表示用
-    public Text HPtext;
-    //最大HP
-    [Range(1f,10f)]
-    public int MaxHP = 2;
-    //HP計算用
-    public int HP;
-
-    //無敵時間
-    [Range(0.0f, 5.0f)]
-    public double maxGodMode;
-    //無敵時間計算用
-    public double godModeCount;
-    //無敵時間フラグ
-    public int godModeFlag = 0;
-
-    //勝敗判定用
-    public Text winnnertext;
-
     //スクリプト取得用
     public GameObject DrawingCampas;
     StageMnager StageMnager;
@@ -64,11 +45,6 @@ public class GM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //HP初期化
-        HP = MaxHP;
-        //HP表示初期化
-        HPtext.text = "HP:" + HP;
-
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
 
@@ -95,7 +71,8 @@ public class GM : MonoBehaviour
         impenetrableWidth = StageMnager.impenetrableWidth;
 
         //マウスがクリックされたら
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0))
+        {
             //lineObjを生成し、初期化する
             _addLineObject();
 
@@ -119,22 +96,22 @@ public class GM : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             //インク残量があって、描画中なら
-            if (_inkLeft > 0 && drawFlag == 1) 
-            { 
+            if (_inkLeft > 0 && drawFlag == 1)
+            {
                 //線を描画
-                _addPositionDataToLineRendererList(); 
+                _addPositionDataToLineRendererList();
 
-               //インク残量を減らす
-               _inkLeft -= Time.deltaTime;
+                //インク残量を減らす
+                _inkLeft -= Time.deltaTime;
 
             }
-           
+
         }
 
-       
+
 
         //マウスボタンが離されていて、インクが最大より少なければ
-        if (! Input.GetMouseButton(0) && _inkLeft <= MaxInkAmount)
+        if (!Input.GetMouseButton(0) && _inkLeft <= MaxInkAmount)
 
         {
             //インクを回復
@@ -142,33 +119,6 @@ public class GM : MonoBehaviour
 
         }
 
-        //オブジェクトがゴールエリアにあって無敵時間外なら
-        if (goalInFlag == 1 && godModeFlag == 0)
-        {
-            //HP更新
-            HP  --;
-            //HP表示更新
-            HPtext.text = "HP:" + HP;
-            //無敵時間開始
-            godModeCount = 0;
-            godModeFlag = 1;
-        }
-
-        //無敵時間の経過時間を計測
-        //無敵時間開始時にリセットされる
-        godModeCount += Time.deltaTime;
-
-        //無敵時間が終わったか判定
-        if(godModeCount >= maxGodMode)
-        {
-            godModeFlag = 0;
-        }
-
-        //勝敗判定
-        if(HP <= 0)
-        {
-            winnnertext.text = "Player Win !";
-        }
     }
 
     //クリックしたら発動

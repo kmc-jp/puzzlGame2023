@@ -36,6 +36,13 @@ public class StageMnager : MonoBehaviour
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
+    //勝敗判定用
+    public Text winnnertext;
+
+    //スクリプト取得用
+    public GameObject DrawingCampas;
+    PlayerManager PlayerManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +55,19 @@ public class StageMnager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //他スクリプトの情報を受けとる変数
+        int HP;
+
+        //他スクリプトから情報を取得
+        DrawingCampas = GameObject.Find("Player");
+        PlayerManager = DrawingCampas.GetComponent<PlayerManager>();
+        HP = PlayerManager.HP;
+
+        //勝敗判定
+        if (HP <= 0)
+        {
+            winnnertext.text = "Player Win !";
+        }
     }
 
 
