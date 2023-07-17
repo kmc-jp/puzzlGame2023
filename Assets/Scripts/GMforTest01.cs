@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GM : MonoBehaviour
@@ -13,8 +12,6 @@ public class GM : MonoBehaviour
     //線の太さ
     [Range(0.1f, 0.5f)]
     [SerializeField] float lineWidth;
-
-    GameObject lineObj;
 
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
@@ -50,7 +47,7 @@ public class GM : MonoBehaviour
     void _addLineObject()
     {
         //空のゲームオブジェクト作成
-        lineObj = new GameObject();
+        GameObject lineObj = new GameObject();
         //オブジェクトの名前をStrokeに変更
         lineObj.name = "Stroke";
         //lineObjにLineRendereコンポーネント追加
