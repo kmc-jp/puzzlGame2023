@@ -60,10 +60,10 @@ public class GM : MonoBehaviour
         //lineObjを自身の子要素に設定
         lineObj.transform.SetParent(transform);
 
+        //colliderContainerを初期化
         colliderContainer = new GameObject();
         colliderContainer.name = "ColliderContainer";
-        //colliderContainer.transform.SetParent(lineObj.transform);
-        //colliderContainer.transform.position = Vector3.zero;
+
         //lineObj初期化処理
         _initRenderers();
     }
@@ -121,6 +121,5 @@ public class GM : MonoBehaviour
         lineRenderers.Last().BakeMesh(mesh);
         colliderContainer.GetComponent<MeshCollider>().sharedMesh = mesh;
         colliderContainer.transform.SetParent(lineRenderers.Last().transform);
-        //colliderContainer.GetComponent<MeshCollider>().contactOffset = 0.0f;
     }
 }
