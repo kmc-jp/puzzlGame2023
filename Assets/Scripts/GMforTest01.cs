@@ -62,8 +62,8 @@ public class GM : MonoBehaviour
 
         colliderContainer = new GameObject();
         colliderContainer.name = "ColliderContainer";
-        colliderContainer.transform.SetParent(lineObj.transform);
-        colliderContainer.transform.position = Vector3.zero;
+        //colliderContainer.transform.SetParent(lineObj.transform);
+        //colliderContainer.transform.position = Vector3.zero;
         //lineObj初期化処理
         _initRenderers();
     }
@@ -120,6 +120,7 @@ public class GM : MonoBehaviour
         Mesh mesh = new Mesh();
         lineRenderers.Last().BakeMesh(mesh);
         colliderContainer.GetComponent<MeshCollider>().sharedMesh = mesh;
+        colliderContainer.transform.SetParent(lineRenderers.Last().transform);
         //colliderContainer.GetComponent<MeshCollider>().contactOffset = 0.0f;
     }
 }
