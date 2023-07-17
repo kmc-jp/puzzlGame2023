@@ -14,17 +14,18 @@ public class GM : MonoBehaviour
     [Range(0.1f, 0.5f)]
     [SerializeField] float lineWidth;
 
+    GameObject lineObj;
+
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
-    List<Vector2> linePoints;
+    GameObject colliderContainer;
 
     // Start is called before the first frame update
     void Start()
     {
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
-        linePoints = new List<Vector2>();
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class GM : MonoBehaviour
     void _addLineObject()
     {
         //空のゲームオブジェクト作成
-        GameObject lineObj = new GameObject();
+        lineObj = new GameObject();
         //オブジェクトの名前をStrokeに変更
         lineObj.name = "Stroke";
         //lineObjにLineRendereコンポーネント追加
@@ -58,6 +59,11 @@ public class GM : MonoBehaviour
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
         //lineObjを自身の子要素に設定
         lineObj.transform.SetParent(transform);
+
+        colliderContainer = new GameObject();
+        colliderContainer.name = "ColliderContainer";
+        colliderContainer.transform.SetParent(lineObj.transform);
+        colliderContainer.transform.position = Vector3.zero;
         //lineObj初期化処理
         _initRenderers();
     }
@@ -75,7 +81,10 @@ public class GM : MonoBehaviour
         lineRenderers.Last().startWidth = lineWidth;
         lineRenderers.Last().endWidth = lineWidth;
 
-        linePoints.Clear();
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f);
+
+        //スクリーン座標をワールド座標に変換
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
     }
 
     void _addPositionDataToLineRendererList()
@@ -98,18 +107,19 @@ public class GM : MonoBehaviour
         //LineRendererコンポーネントリストを更新
         lineRenderers.Last().SetPosition(lineRenderers.Last().positionCount - 1, worldPosition);
 
-        linePoints.Add(worldPosition);
-
         //あとから描いた線が上に来るように調整
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
     }
 
     void _completeLineObject() {
-        _attachColiderToLineObject();
+        _createMeshCollider();
     }
 
-    void _attachColiderToLineObject() {
-        var edgeCollider = lineRenderers.Last().AddComponent<EdgeCollider2D>();
-        edgeCollider.SetPoints(linePoints);
+    void _createMeshCollider() { 
+        colliderContainer.AddComponent<MeshCollider>();
+        Mesh mesh = new Mesh();
+        lineRenderers.Last().BakeMesh(mesh);
+        colliderContainer.GetComponent<MeshCollider>().sharedMesh = mesh;
+        //colliderContainer.GetComponent<MeshCollider>().contactOffset = 0.0f;
     }
 }
