@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,27 @@ public class GM : MonoBehaviour
 
     GameObject colliderContainer;
 
+    [Range(0.0f, 100.0f)]
+    public double MaxInkAmount = 2.0;
+    
+    [Range(0.0f, 100.0f)]
+    public double InkRecovery = 0.5;
+
+    //インク残量(秒)
+    public double _inkLeft;
+
     // Start is called before the first frame update
     void Start()
     {
         //Listの初期化
         lineRenderers = new List<LineRenderer>();
-    }
+
+        //インク残量の初期化
+        _inkLeft = MaxInkAmount;
+
+        Debug.Log(_inkLeft);
+
+     }
 
     // Update is called once per frame
     void Update()
@@ -31,15 +47,33 @@ public class GM : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             //lineObjを生成し、初期化する
             _addLineObject();
+
+            Debug.Log(_inkLeft);
+
         }
 
-        if (Input.GetMouseButton(0)) {
-            Debug.Log("on");
-            _addPositionDataToLineRendererList();
+        if (Input.GetMouseButton(0))
+        { 
+            //インク残量があれば
+            if (_inkLeft > 0) 
+            { 
+                //線を描画
+                _addPositionDataToLineRendererList(); 
+
+               //インク残量を減らす
+               _inkLeft -= Time.deltaTime;
+
+            }
+           
         }
 
-        if (Input.GetMouseButtonUp(0)) {
-            _completeLineObject();
+        //マウスボタンが離されていれば
+        if (! Input.GetMouseButton(0) && _inkLeft <= 2)
+
+        {
+            //インクを回復
+            _inkLeft += Time.deltaTime * InkRecovery;
+
         }
     }
 
