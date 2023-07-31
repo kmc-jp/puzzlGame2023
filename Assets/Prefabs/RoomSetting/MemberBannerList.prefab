@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4277372051031177220}
   - component: {fileID: 194928781187106949}
   m_Layer: 5
-  m_Name: Member Banner List
+  m_Name: MemberBannerList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 7865190964355898390}
   - component: {fileID: 2726036261278195226}
   m_Layer: 5
-  m_Name: Team Name
+  m_Name: TeamName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
