@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 2013557460434011885}
   - component: {fileID: 2921712787734405456}
   m_Layer: 5
-  m_Name: OpenRoomBanner
+  m_Name: RoomBanner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 5683382929019717825}
   - component: {fileID: 811866232297987378}
   m_Layer: 5
-  m_Name: Join
+  m_Name: Text (Legacy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 6156941817751122300}
   - component: {fileID: 5131420513034132594}
   m_Layer: 5
-  m_Name: ServerIp
+  m_Name: ServerAddress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,4 +359,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30B5\u30FC\u30D0IP"
+  m_Text: "\u30B5\u30FC\u30D0\u30A2\u30C9\u30EC\u30B9"

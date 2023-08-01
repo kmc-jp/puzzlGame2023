@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 253602693}
   - component: {fileID: 253602692}
   m_Layer: 5
-  m_Name: CreateRoom
+  m_Name: Text (Legacy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 425947793}
   - component: {fileID: 425947794}
   m_Layer: 5
-  m_Name: OpenRoomBanners
+  m_Name: RoomBannersParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 692155886}
   - component: {fileID: 692155885}
   m_Layer: 5
-  m_Name: Back
+  m_Name: Text (Legacy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 2005779008}
   - component: {fileID: 2005779009}
   m_Layer: 5
-  m_Name: OpenRoomList
+  m_Name: RoomList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
