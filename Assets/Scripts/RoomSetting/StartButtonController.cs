@@ -18,10 +18,16 @@ namespace RoomSetting {
             gameObject.SetActive(showOrNot);
         }
 
-        void CallServerChangeScene() {
-            // NetworkRoomManager.ServerChangeScene automatically synchronizes all clients to load a game scene.
-            NetworkRoomManager networkRoomManager = NetworkManager.singleton as NetworkRoomManager;
-            networkRoomManager.ServerChangeScene(networkRoomManager.GameplayScene);
+        public void CallServerChangeScene() {
+            // NOTE:
+            // ServerChangeScene must be called on the SERVER, but StartButtonDisplay controls so that start button only shows on the host.
+            // Checking the server context is so in fact not necessary in Unity
+            // but this method is signified as public so that UnityEvent can call this and so it works to prevent from be called by other scripts.
+            if (NetworkServer.activeHost) {
+                // NetworkRoomManager.ServerChangeScene automatically synchronizes all clients to load a game scene.
+                NetworkRoomManagerRoomSettingExt networkRoomManager = NetworkManager.singleton as NetworkRoomManagerRoomSettingExt;
+                networkRoomManager.ServerChangeScene(networkRoomManager.GameplayScene);
+            }
         }
     }
 }
