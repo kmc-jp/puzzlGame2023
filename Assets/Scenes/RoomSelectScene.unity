@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 2005779008}
   - component: {fileID: 2005779009}
   m_Layer: 5
-  m_Name: RoomList
+  m_Name: RoomBannerList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
