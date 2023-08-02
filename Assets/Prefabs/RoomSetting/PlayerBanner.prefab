@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 3541350532112430592}
   - component: {fileID: 8579292785516681203}
   m_Layer: 5
-  m_Name: ClientIp
+  m_Name: Address
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 9113145675107696469}
   - component: {fileID: 7096893798110195120}
   m_Layer: 5
-  m_Name: ReadyButton
+  m_Name: Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
