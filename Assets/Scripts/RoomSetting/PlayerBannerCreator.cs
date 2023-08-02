@@ -20,12 +20,6 @@ namespace RoomSetting {
             ChangeDisplayPosition(playerIndex);
         }
 
-        public override void OnStartLocalPlayer() {
-            base.OnStartLocalPlayer();
-
-            ShowReady();
-        }
-
         void SetAddress() {
             GameObject address = transform.Find("Address").gameObject;
             Text addressText = address.GetComponent<Text>();
@@ -59,16 +53,6 @@ namespace RoomSetting {
                     rectTransform.localPosition = new Vector3(-480, 0);
                     break;
             }
-        }
-
-        // REVIEW:
-        // I think that controller scripts have to have the responsibility of only INPUT.
-        // Whether ready button is displayed or not does not depends on input so I wrote this method here
-        // but in fact there is ReadyButtonController.HideButton, which is called when pushed.
-        // Should I move ShowReady to ReadyButtonController or leave it here?
-        void ShowReady() {
-            GameObject ready = transform.Find("Ready").gameObject;
-            ready.SetActive(true);
         }
     }
 }
