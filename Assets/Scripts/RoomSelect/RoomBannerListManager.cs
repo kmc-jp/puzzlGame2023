@@ -1,3 +1,4 @@
+using System;
 using Mirror.Discovery;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,15 +11,16 @@ namespace RoomSelect {
 
         public void UpdateBanner(ServerResponse info) {
             string address = info.EndPoint.Address.ToString();
+            Uri uri = info.uri;
             DeleteBannerifExist(address);
-            CreateBanner(address);
+            CreateBanner(address, uri);
         }
 
         void Start() {
             _roomBannersParent = transform.Find("RoomBannersParent");
         }
 
-        void CreateBanner(string dedicatedServerOrHostAddress) {
+        void CreateBanner(string dedicatedServerOrHostAddress, Uri uriOfDedicatedServerOrHost) {
             GameObject roomBanner = Instantiate(_roomBannerPrefab);
             roomBanner.transform.SetParent(_roomBannersParent);
 
@@ -28,7 +30,8 @@ namespace RoomSelect {
 
             GameObject joinButton = roomBanner.transform.Find("JoinButton").gameObject;
             Button joinButtonButton = joinButton.GetComponent<Button>();
-            // joinButtonButton.onClick.AddListener();
+            JoinButtonController joinButtonJoinButtonController = joinButton.GetComponent<JoinButtonController>();
+            joinButtonButton.onClick.AddListener(() => joinButtonJoinButtonController.CallStartClient(uriOfDedicatedServerOrHost));
         }
 
         void DeleteBannerifExist(string dedicatedServerOrHostAddress) {
