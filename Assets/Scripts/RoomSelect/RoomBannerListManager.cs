@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace RoomSelect {
 
     public class RoomBannerListManager : MonoBehaviour {
+#if !UNITY_SERVER
         [SerializeField] private GameObject _roomBannerPrefab;
         private Transform _roomBannersParent;
 
@@ -28,10 +29,10 @@ namespace RoomSelect {
             Text addressText = address.GetComponent<Text>();
             addressText.text = dedicatedServerOrHostAddress;
 
-            GameObject joinButton = roomBanner.transform.Find("JoinButton").gameObject;
-            Button joinButtonButton = joinButton.GetComponent<Button>();
-            JoinButtonController joinButtonJoinButtonController = joinButton.GetComponent<JoinButtonController>();
-            joinButtonButton.onClick.AddListener(() => joinButtonJoinButtonController.CallStartClient(uriOfDedicatedServerOrHost));
+            GameObject join = roomBanner.transform.Find("Join").gameObject;
+            Button joinButton = join.GetComponent<Button>();
+            JoinButtonController joinJoinButtonController = joinButton.GetComponent<JoinButtonController>();
+            joinButton.onClick.AddListener(() => joinJoinButtonController.CallStartClient(uriOfDedicatedServerOrHost));
         }
 
         void DeleteBannerifExist(string dedicatedServerOrHostAddress) {
@@ -47,5 +48,6 @@ namespace RoomSelect {
                 }
             }
         }
+#endif
     }
 }
