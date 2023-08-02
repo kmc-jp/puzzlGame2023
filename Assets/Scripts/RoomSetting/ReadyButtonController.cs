@@ -11,20 +11,10 @@ namespace RoomSetting {
         [Obsolete]
         public NetworkRoomPlayer LocalPlayer;
 
-        // This wrapper ensures that CallCmdChangeReadyState is called once per connection. 
-        public void SendReadyToServer() {
-            CallCmdChangeReadyState(true);
-            HideButton();
-        }
-
-        void CallCmdChangeReadyState(bool readyState) {
+        public void CallCmdChangeReadyState(bool readyState) {
             GameObject roomPlayer = NetworkClient.localPlayer.gameObject;
             NetworkRoomPlayer roomPlayerNetworkRoomPlayer = roomPlayer.GetComponent<NetworkRoomPlayer>();
             roomPlayerNetworkRoomPlayer.CmdChangeReadyState(readyState);
-        }
-
-        void HideButton() {
-            gameObject.SetActive(false);
         }
     }
 }

@@ -1,4 +1,5 @@
 using Mirror;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RoomSetting {
@@ -7,8 +8,6 @@ namespace RoomSetting {
     // XXXButtonDisplay has the responsibility of controlling to show, to hide, or to become interactable.
     // To visualize other clients' state, the control have to be synchronized by RPC.
     public class ReadyButtonDisplay : NetworkBehaviour {
-        public static ReadyButtonDisplay Singleton { get; private set; }
-
         [ClientRpc]
         public void RpcSetInteractableIfHost(bool value) {
             if (NetworkServer.activeHost) {
@@ -24,10 +23,10 @@ namespace RoomSetting {
         }
 
         void Start() {
-            if (Singleton ==  null) {
-                Singleton = this;
-            } else {
-                Destroy(gameObject);
+            if (authority) {
+                GameObject roomPlayer = NetworkClient.localPlayer.gameObject;
+                NetworkRoomPlayerRoomSettingExt roomPlayerNetworkRoomPlayerRoomSettingExt = roomPlayer.GetComponent<NetworkRoomPlayerRoomSettingExt>();
+                roomPlayerNetworkRoomPlayerRoomSettingExt.LocalReadyButtonDisplay = this;
             }
         }
     }
