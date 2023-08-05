@@ -1,3 +1,4 @@
+using K.NetworkDiscoveryExt;
 using LobbyScene.RoomBanner;
 using Mirror;
 using RoomScene.StartButton;
@@ -14,6 +15,12 @@ namespace K.NetworkRoomManagerExt {
     // with a focus on the usage of network management, but it does not seem to be the best best choice. Is there any better naming?
     [DisallowMultipleComponent]
     public class MatchNetworkRoomManager : NetworkRoomManager {
+        public override void OnRoomStartHost() {
+            base.OnRoomStartHost();
+
+            MatchNetworkDiscoveryHandler.Singleton.CallAdvertiseServer();
+        }
+
         public override void OnRoomServerConnect(NetworkConnectionToClient conn) {
             base.OnRoomServerPlayersReady();
 

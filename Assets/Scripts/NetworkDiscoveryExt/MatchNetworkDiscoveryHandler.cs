@@ -9,6 +9,8 @@ namespace K.NetworkDiscoveryExt {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(MatchNetworkDiscovery))]
     public class MatchNetworkDiscoveryHandler : MonoBehaviour {
+        public static MatchNetworkDiscoveryHandler Singleton { get; private set; }
+
 #if UNITY_EDITOR
         private MatchNetworkDiscovery _discovery;
 #endif
@@ -36,6 +38,13 @@ namespace K.NetworkDiscoveryExt {
 #endif
 
         void Start() {
+            if (Singleton == null) {
+                Singleton = this;
+            } else {
+                Debug.LogWarning("MatchNetworkDiscovery is a singleton. This component is removed since there are multiple components in the scene.");
+                Destroy(this);
+            }
+
             // NOTE:
             // NetworkDiscovery will only work if the GameObject which it is attached to is COMPLETELY IDENTICAL both for the server and clients
             // (more precisely, a GameObject cloned by ParrelSync). Therefore, NetworkDiscovery cannot placed on a different GameObject in different scenes.
