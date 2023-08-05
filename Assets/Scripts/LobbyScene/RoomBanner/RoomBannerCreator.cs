@@ -1,18 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomBannerCreator : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace K.LobbyScene.RoomBanner {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [DisallowMultipleComponent]
+    public class RoomBannerCreator : MonoBehaviour {
+        public static RoomBannerCreator Singleton { get; private set; }
+
+        [SerializeField] private GameObject _bannerPrefab;
+
+        public GameObject Create() {
+            GameObject banner = Instantiate(_bannerPrefab);
+            return banner;
+        }
+
+        void Start() {
+            if (Singleton == null) {
+                Singleton = this;
+            } else {
+                Debug.LogWarning("RoomBannerCreator is a singleton. This component is removed since there are multiple components in the scene.");
+                Destroy(this);
+            }
+
+            if (_bannerPrefab == null) {
+                Debug.LogError("_bannerPrefab is not assigned.");
+            }
+        }
     }
 }
