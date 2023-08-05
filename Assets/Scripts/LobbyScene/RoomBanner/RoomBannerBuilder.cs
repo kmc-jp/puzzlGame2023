@@ -3,7 +3,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace K.LobbyScene.RoomBanner {
+namespace LobbyScene.RoomBanner {
 
     // NOTE:
     // This class does not work for anything at the moment.

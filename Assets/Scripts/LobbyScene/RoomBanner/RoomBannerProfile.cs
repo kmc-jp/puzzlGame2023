@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace K.LobbyScene.RoomBanner {
+namespace LobbyScene.RoomBanner {
 
     // Networking related information such as the server address is initialized in MatchNetworkRoomManager and should not be changed after this.
     // The public properties are tentatively determined by the RoomBannerCreator.

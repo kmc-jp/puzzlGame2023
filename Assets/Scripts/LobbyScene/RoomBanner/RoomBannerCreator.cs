@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace K.LobbyScene.RoomBanner {
+namespace LobbyScene.RoomBanner {
 
     [DisallowMultipleComponent]
     public class RoomBannerCreator : MonoBehaviour {

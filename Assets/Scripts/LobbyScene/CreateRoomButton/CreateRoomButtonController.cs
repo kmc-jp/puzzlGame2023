@@ -2,7 +2,7 @@ using Mirror;
 using UnityEngine;
 using K.NetworkRoomManagerExt;
 
-namespace K.LobbyScene {
+namespace LobbyScene.CreateRoomButton {
 
     [DisallowMultipleComponent]
     public class CreateRoomButtonController : MonoBehaviour {

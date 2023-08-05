@@ -1,4 +1,6 @@
+using LobbyScene.RoomBanner;
 using Mirror;
+using RoomScene.StartButton;
 using UnityEngine;
 
 namespace K.NetworkRoomManagerExt {
@@ -12,6 +14,25 @@ namespace K.NetworkRoomManagerExt {
     // with a focus on the usage of network management, but it does not seem to be the best best choice. Is there any better naming?
     [DisallowMultipleComponent]
     public class MatchNetworkRoomManager : NetworkRoomManager {
+        public override void OnRoomServerConnect(NetworkConnectionToClient conn) {
+            base.OnRoomServerPlayersReady();
 
+            var banner = RoomBannerCreator.Singleton.Create();
+            banner.GetComponent<RoomBannerProfile>().Address = conn.address;
+
+            NetworkServer.Spawn(banner);
+        }
+
+        public override void OnRoomServerPlayersReady() {
+            // base.OnRoomServerPlayersReady();
+
+            StartButtonDisplay.Singleton.TargetShow(StartButtonDisplay.Singleton.connectionToClient);
+        }
+
+        public override void OnRoomServerPlayersNotReady() {
+            base.OnRoomServerPlayersNotReady();
+
+            StartButtonDisplay.Singleton.TargetHide(StartButtonDisplay.Singleton.connectionToClient);
+        }
     }
 }
