@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 425947793}
   - component: {fileID: 425947794}
   m_Layer: 5
-  m_Name: RoomBannersParent
+  m_Name: BannersParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -534,7 +534,7 @@ GameObject:
   - component: {fileID: 1741511303}
   - component: {fileID: 1741511302}
   m_Layer: 5
-  m_Name: CreateRoom
+  m_Name: CreateRoomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +656,7 @@ GameObject:
   - component: {fileID: 1864979435}
   - component: {fileID: 1864979434}
   m_Layer: 5
-  m_Name: Back
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
