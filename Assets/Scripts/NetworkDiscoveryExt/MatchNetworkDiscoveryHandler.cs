@@ -1,7 +1,7 @@
 using Mirror;
 using UnityEngine;
 
-namespace K.NetworkDiscoveryExt {
+namespace NetworkDiscoveryExt {
 
     // NOTE:
     // This class should be the only one that can access to MatchNetworkDiscovery in case in the future

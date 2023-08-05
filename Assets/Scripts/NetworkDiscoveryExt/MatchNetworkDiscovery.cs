@@ -3,7 +3,7 @@ using System.Net;
 using Mirror.Discovery;
 using UnityEngine;
 
-namespace K.NetworkDiscoveryExt {
+namespace NetworkDiscoveryExt {
 
     // NOTE:
     // MatchNetworkDiscovery, MatchServerRequest, and MatchServerResponse are complete clones of NetworkDiscovery, ServerRequest, ServerResponse at the moment

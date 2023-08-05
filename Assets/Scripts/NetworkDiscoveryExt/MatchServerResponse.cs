@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using Mirror;
 
-namespace K.NetworkDiscoveryExt {
+namespace NetworkDiscoveryExt {
 
     // NOTE:
     // NetworkDiscoveryExt, ServerRequestExt, and ServerResponseExt are complete clones of NetworkDiscovery, ServerRequest, ServerResponse at the moment

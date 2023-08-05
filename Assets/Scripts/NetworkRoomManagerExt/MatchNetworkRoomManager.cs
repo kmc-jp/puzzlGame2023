@@ -1,8 +1,8 @@
-using K.NetworkDiscoveryExt;
-using LobbyScene.RoomBanner;
 using Mirror;
-using RoomScene.StartButton;
 using UnityEngine;
+using NetworkDiscoveryExt;
+using RoomScene.PlayerBanner;
+using RoomScene.StartButton;
 
 namespace K.NetworkRoomManagerExt {
 
@@ -24,8 +24,8 @@ namespace K.NetworkRoomManagerExt {
         public override void OnRoomServerConnect(NetworkConnectionToClient conn) {
             base.OnRoomServerPlayersReady();
 
-            var banner = RoomBannerCreator.Singleton.Create();
-            banner.GetComponent<RoomBannerProfile>().Address = conn.address;
+            var banner = PlayerBannerCreator.Singleton.Create();
+            banner.GetComponent<PlayerBannerProfile>().Address = conn.address;
 
             NetworkServer.Spawn(banner);
         }
