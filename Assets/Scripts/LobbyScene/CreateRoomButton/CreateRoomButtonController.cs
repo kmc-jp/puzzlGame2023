@@ -1,5 +1,6 @@
 using Mirror;
 using UnityEngine;
+using K.NetworkRoomManagerExt;
 
 namespace K.LobbyScene {
 
