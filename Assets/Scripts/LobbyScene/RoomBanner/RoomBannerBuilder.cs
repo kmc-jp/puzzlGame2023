@@ -12,13 +12,9 @@ namespace LobbyScene.RoomBanner {
     public class RoomBannerBuilder : MonoBehaviour {
         private RoomBannerProfile profile;
 
-#if UNITY_EDITOR
-        void OnValidate() {
-            profile = GetComponent<RoomBannerProfile>();
-        }
-#endif
-
         void Start() {
+            profile = GetComponent<RoomBannerProfile>();
+
             // In Start, information related to networking (that is, constatnt information) is only assigned. 
             var address = transform.Find("Address").GetComponent<Text>();
             address.text = profile.Address;

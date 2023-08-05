@@ -4,7 +4,7 @@ using NetworkDiscoveryExt;
 using RoomScene.PlayerBanner;
 using RoomScene.StartButton;
 
-namespace K.NetworkRoomManagerExt {
+namespace NetworkRoomManagerExt {
 
     /// <summary>
     /// Manages network processing related to lobby, room, and gameplay.
@@ -22,17 +22,17 @@ namespace K.NetworkRoomManagerExt {
         }
 
         public override void OnRoomServerConnect(NetworkConnectionToClient conn) {
-            base.OnRoomServerPlayersReady();
+            base.OnRoomServerConnect(conn);
 
             var banner = PlayerBannerCreator.Singleton.Create();
             banner.GetComponent<PlayerBannerProfile>().Address = conn.address;
 
-            NetworkServer.Spawn(banner);
+            NetworkServer.Spawn(banner, conn);
         }
 
         public override void OnRoomServerPlayersReady() {
             // base.OnRoomServerPlayersReady();
-
+            
             StartButtonDisplay.Singleton.TargetShow(StartButtonDisplay.Singleton.connectionToClient);
         }
 

@@ -502,7 +502,7 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
-  sendRate: 30
+  sendRate: 2
   offlineScene: Assets/Scenes/LobbyScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
   transport: {fileID: 699517372}
@@ -512,7 +512,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 7055768713214143515, guid: b7da951b99ea7f449a7426ecea50bdfb, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 1617138921596438242, guid: bc4e8c8643b571b4da7431373270740f, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -935,6 +936,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1957003157}
   - component: {fileID: 1957003159}
+  - component: {fileID: 1957003160}
   - component: {fileID: 1957003158}
   m_Layer: 0
   m_Name: MatchNetworkDiscovery
@@ -986,11 +988,47 @@ MonoBehaviour:
   BroadcastAddress: 
   serverBroadcastListenPort: 47777
   ActiveDiscoveryInterval: 3
-  transport: {fileID: 0}
+  transport: {fileID: 1957003160}
   OnServerFound:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2143405088}
+        m_TargetAssemblyTypeName: LobbyScene.RoomBanner.RoomBannerCreator, Assembly-CSharp
+        m_MethodName: A
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   secretHandshake: -3614502054326637596
+--- !u!114 &1957003160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957003156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7778
+  NoDelay: 1
+  SendTimeout: 5000
+  ReceiveTimeout: 30000
+  serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
+  serverSendQueueLimitPerConnection: 10000
+  serverReceiveQueueLimitPerConnection: 10000
+  clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
+  clientSendQueueLimit: 10000
+  clientReceiveQueueLimit: 10000
 --- !u!1 &2001354793
 GameObject:
   m_ObjectHideFlags: 0

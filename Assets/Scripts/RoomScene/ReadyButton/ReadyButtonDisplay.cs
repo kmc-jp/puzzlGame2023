@@ -1,5 +1,6 @@
 using Mirror;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RoomScene.ReadyButton {
 
@@ -9,7 +10,8 @@ namespace RoomScene.ReadyButton {
         public static ReadyButtonDisplay Singleton { get; private set; }
 
         public void Hide() {
-            gameObject.SetActive(false);
+            var button = gameObject.GetComponent<Button>();
+            button.interactable = false;
         }
 
         void Start() {

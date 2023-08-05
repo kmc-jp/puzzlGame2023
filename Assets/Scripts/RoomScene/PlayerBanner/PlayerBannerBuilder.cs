@@ -11,13 +11,9 @@ namespace RoomScene.PlayerBanner {
     public class PlayerBannerBuilder : MonoBehaviour {
         private PlayerBannerProfile profile;
 
-#if UNITY_EDITOR
-        void OnValidate() {
-            profile = GetComponent<PlayerBannerProfile>();
-        }
-#endif
-
         void Start() {
+            profile = GetComponent<PlayerBannerProfile>();
+
             // In Start, information related to networking (that is, constatnt information) is only assigned. 
             var address = transform.Find("Address").GetComponent<Text>();
             address.text = profile.Address;

@@ -1,6 +1,6 @@
 using Mirror;
 using UnityEngine;
-using K.NetworkRoomManagerExt;
+using NetworkRoomManagerExt;
 
 namespace LobbyScene.CreateRoomButton {
 

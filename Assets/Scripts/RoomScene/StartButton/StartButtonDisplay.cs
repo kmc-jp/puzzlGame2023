@@ -1,5 +1,6 @@
 using Mirror;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RoomScene.StartButton {
 
@@ -10,12 +11,14 @@ namespace RoomScene.StartButton {
         
         [TargetRpc]
         public void TargetShow(NetworkConnectionToClient roomOwner) {
-            gameObject.SetActive(true);
+            var button = gameObject.GetComponent<Button>();
+            button.interactable = true;
         }
 
         [TargetRpc]
         public void TargetHide(NetworkConnectionToClient roomOwner) {
-            gameObject?.SetActive(false);
+            var button = gameObject.GetComponent<Button>();
+            button.interactable = false;
         }
 
         void Start() {

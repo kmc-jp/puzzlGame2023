@@ -26,7 +26,7 @@ namespace NetworkDiscoveryExt {
         // NOTE:
         // In lobby, Client attribute has no effect because every device is stand-alone, not a server or a client.
         // StartDiscovery called in server context causes to call Shutdown, which leads to stop listening to clients.
-        [Client]
+        // [Client]
         void CallStartDiscovery() {
             _discovery.StartDiscovery();
         }
