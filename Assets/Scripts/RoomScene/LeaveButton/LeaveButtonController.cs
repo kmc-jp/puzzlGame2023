@@ -15,7 +15,7 @@ namespace RoomScene.LeaveButton {
             if (NetworkClient.activeHost) {
                 manager.StopHost();
             } else {
-                manager.StartClient();
+                manager.StopClient();
             }
         }
 

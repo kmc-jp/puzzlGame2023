@@ -382,8 +382,6 @@ namespace Mirror.Discovery
         /// </summary>
         public void BroadcastDiscoveryRequest()
         {
-            Debug.Log("Broadcast");
-
             if (clientUdpClient == null)
                 return;
 

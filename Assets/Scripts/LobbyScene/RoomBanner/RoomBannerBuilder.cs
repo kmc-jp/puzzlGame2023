@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +19,7 @@ namespace LobbyScene.RoomBanner {
             address.text = profile.Address;
 
             var joinButton = transform.Find("JoinButton").GetComponent<Button>();
-            joinButton.onClick.AddListener(() => NetworkManager.singleton.StartClient(new Uri(profile.Address)));
+            joinButton.onClick.AddListener(() => NetworkManager.singleton.StartClient(profile.ServerUri));
         }
     }
 }

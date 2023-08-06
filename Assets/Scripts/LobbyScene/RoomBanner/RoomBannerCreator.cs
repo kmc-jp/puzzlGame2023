@@ -17,6 +17,7 @@ namespace LobbyScene.RoomBanner {
 
             var profile = banner.GetComponent<RoomBannerProfile>();
             profile.Address = info.EndPoint.Address.ToString();
+            profile.ServerUri = info.uri;
 
             banner.transform.SetParent(GameObject.Find("BannersParent").transform);
         }

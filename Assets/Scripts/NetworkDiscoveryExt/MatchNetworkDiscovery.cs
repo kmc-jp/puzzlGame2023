@@ -11,6 +11,8 @@ namespace NetworkDiscoveryExt {
     // such as room name, number of participants, game mode, etc.
     [DisallowMultipleComponent]
     public class MatchNetworkDiscovery : NetworkDiscoveryBase<MatchServerRequest, MatchServerResponse> {
+        public static MatchNetworkDiscovery Singleton { get; private set; }
+
         protected override MatchServerResponse ProcessRequest(MatchServerRequest request, IPEndPoint endpoint) {
 
             try {
@@ -37,5 +39,13 @@ namespace NetworkDiscoveryExt {
             OnServerFound.Invoke(response);
         }
 
+        public override void Start() {
+            if (Singleton == null) {
+                Singleton = this;
+            } else {
+                Debug.LogWarning("MatchNetworkRoomDiscovery is a singleton. This component is removed since there are multiple components in the scene.");
+                Destroy(this);
+            }
+        }
     }
 }

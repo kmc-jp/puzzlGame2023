@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace LobbyScene.RoomBanner {
@@ -14,7 +15,11 @@ namespace LobbyScene.RoomBanner {
     public class RoomBannerProfile : MonoBehaviour {
         private bool _was_address_assigned;
         private string _address;
-        
+
+        private bool _was_server_uri_assigned;
+        private Uri _server_uri;
+
+
         public string Address {
             get { return _address; }
             set {
@@ -23,6 +28,18 @@ namespace LobbyScene.RoomBanner {
                 } else {
                     _was_address_assigned = true;
                     _address = value;
+                }
+            }
+        }
+
+        public Uri ServerUri {
+            get { return _server_uri; }
+            set {
+                if ( _was_server_uri_assigned) {
+                    Debug.LogError("ServerUri disallows reassignment. Was its first time assignment done by MatchNetworkRoomManager?");
+                } else {
+                    _was_server_uri_assigned = true;
+                    _server_uri = value;
                 }
             }
         }
