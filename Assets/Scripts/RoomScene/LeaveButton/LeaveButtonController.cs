@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using UnityEngine;
 using NetworkRoomManagerExt;
@@ -24,15 +23,14 @@ namespace RoomScene.LeaveButton {
 
 #if UNITY_EDITOR
         void OnValidate() {
-            if (Singleton == null) {
-                Singleton = this;
-            } else {
+            if (Singleton != null) {
                 Debug.LogWarning(
                     "LeaveButtonController is a singleton." +
-                    "This component is removed since there are multiple LeaveButtonController components in Scenes."
+                    "This component must be removed since there are multiple LeaveButtonController components in Scenes."
                 );
-                DestroyImmediate(this);
             }
+
+            Singleton = this;
         }
 #endif
     }

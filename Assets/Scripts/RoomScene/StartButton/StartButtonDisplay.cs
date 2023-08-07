@@ -11,15 +11,14 @@ namespace RoomScene.StartButton {
 
 #if UNITY_EDITOR
         protected override void OnValidate() {
-            if (Singleton == null) {
-                Singleton = this;
-            } else {
+            if (Singleton != null) {
                 Debug.LogWarning(
                     "StartButtonDisplay is a singleton." +
-                    "This component is removed since there are multiple StartButtonDisplay components in Scenes."
+                    "This component must be removed since there are multiple StartButtonDisplay components in Scenes."
                 );
-                DestroyImmediate(this);
             }
+
+            Singleton = this;
         }
 #endif
         

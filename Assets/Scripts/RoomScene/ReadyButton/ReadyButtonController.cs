@@ -14,15 +14,14 @@ namespace RoomScene.ReadyButton {
 
 #if UNITY_EDITOR
         void OnValidate() {
-            if (Singleton == null) {
-                Singleton = this;
-            } else {
+            if (Singleton != null) {
                 Debug.LogWarning(
                     "ReadyButtonController is a singleton." +
-                    "This component is removed since there are multiple ReadyButtonController components in Scenes."
+                    "This component must be removed since there are multiple ReadyButtonController components in Scenes."
                 );
-                DestroyImmediate(this);
             }
+
+            Singleton = this;
         }
 #endif
     }

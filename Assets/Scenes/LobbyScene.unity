@@ -438,8 +438,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 699517371}
-  - component: {fileID: 699517373}
   - component: {fileID: 699517372}
+  - component: {fileID: 699517373}
   m_Layer: 0
   m_Name: MatchNetworkRoomManager
   m_TagString: Untagged
@@ -502,14 +502,14 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
-  sendRate: 2
+  sendRate: 30
   offlineScene: Assets/Scenes/LobbyScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
   transport: {fileID: 699517372}
   networkAddress: localhost
   maxConnections: 2
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 7055768713214143515, guid: b7da951b99ea7f449a7426ecea50bdfb, type: 3}
+  playerPrefab: {fileID: 0}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
@@ -527,7 +527,7 @@ MonoBehaviour:
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 2
-  roomPlayerPrefab: {fileID: 6905044669676142055, guid: 0b2a489c3bf80fd4d80e08a9f1b56417, type: 3}
+  roomPlayerPrefab: {fileID: 0}
   RoomScene: Assets/Scenes/RoomScene.unity
   GameplayScene: Assets/Scenes/GameplayScene.unity
   _allPlayersReady: 0
@@ -935,9 +935,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1957003157}
-  - component: {fileID: 1957003159}
   - component: {fileID: 1957003160}
-  - component: {fileID: 1957003158}
+  - component: {fileID: 1957003161}
   m_Layer: 0
   m_Name: MatchNetworkDiscovery
   m_TagString: Untagged
@@ -960,51 +959,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1957003158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1957003156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab33d719e111d444983b5a1ed5b62c08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1957003159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1957003156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30996118c2b47c342b7ab20164e4f31f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableActiveDiscovery: 1
-  BroadcastAddress: 
-  serverBroadcastListenPort: 47777
-  ActiveDiscoveryInterval: 3
-  transport: {fileID: 1957003160}
-  OnServerFound:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2143405088}
-        m_TargetAssemblyTypeName: LobbyScene.RoomBanner.RoomBannerCreator, Assembly-CSharp
-        m_MethodName: A
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  secretHandshake: -3614502054326637596
 --- !u!114 &1957003160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,6 +983,39 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
+--- !u!114 &1957003161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957003156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30996118c2b47c342b7ab20164e4f31f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 1957003160}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2143405088}
+        m_TargetAssemblyTypeName: LobbyScene.RoomBanner.RoomBannerCreator, Assembly-CSharp
+        m_MethodName: ServerFoundCallback
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  secretHandshake: 0
 --- !u!1 &2001354793
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,15 +16,14 @@ namespace NetworkDiscoveryExt {
 
 #if UNITY_EDITOR
         public override void OnValidate() {
-            if (Singleton == null) {
-                Singleton = this;
-            } else {
+            if (Singleton != null) {
                 Debug.LogWarning(
                     "MatchNetworkDiscovery is a singleton." +
-                    "This component is removed since there are multiple MatchNetworkDiscovery components in Scenes."
+                    "This component must be removed since there are multiple MatchNetworkDiscovery components in Scenes."
                 );
-                DestroyImmediate(this);
             }
+            
+            Singleton = this;
         }
 #endif
 
