@@ -1,4 +1,4 @@
-using NetworkDiscoveryExt;
+using System;
 using UnityEngine;
 
 namespace LobbyScene.RoomBanner {
@@ -9,21 +9,13 @@ namespace LobbyScene.RoomBanner {
 
         [SerializeField] private GameObject _bannerPrefab;
 
-        // FIXME:
-        // RoomBannerCreator is a logic so should not depend on UI design but this class does, for being made as first aid.
-        // I was too tired, please help me.
-        public void A(MatchServerResponse info) {
-            var banner = Create();
+        public GameObject Create(string clientAddress, Uri serverUri) {
+            GameObject banner = Instantiate(_bannerPrefab);
 
             var profile = banner.GetComponent<RoomBannerProfile>();
-            profile.Address = info.EndPoint.Address.ToString();
-            profile.ServerUri = info.uri;
+            profile.address = clientAddress;
+            profile.uri = serverUri;
 
-            banner.transform.SetParent(GameObject.Find("BannersParent").transform);
-        }
-
-        public GameObject Create() {
-            GameObject banner = Instantiate(_bannerPrefab);
             return banner;
         }
 

@@ -4,22 +4,22 @@ using UnityEngine.UI;
 
 namespace LobbyScene.RoomBanner {
 
-    // NOTE:
-    // This class does not work for anything at the moment.
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RoomBannerProfile))]
     public class RoomBannerBuilder : MonoBehaviour {
-        private RoomBannerProfile profile;
+        private RoomBannerProfile _profile;
 
         void Start() {
-            profile = GetComponent<RoomBannerProfile>();
+            _profile = GetComponent<RoomBannerProfile>();
 
-            // In Start, information related to networking (that is, constatnt information) is only assigned. 
             var address = transform.Find("Address").GetComponent<Text>();
-            address.text = profile.Address;
+            address.text = _profile.address;
 
             var joinButton = transform.Find("JoinButton").GetComponent<Button>();
-            joinButton.onClick.AddListener(() => NetworkManager.singleton.StartClient(profile.ServerUri));
+            joinButton.onClick.AddListener(() => NetworkManager.singleton.StartClient(_profile.uri));
+
+            var parent = GameObject.Find("BannersParent").transform;
+            transform.SetParent(parent);
         }
     }
 }

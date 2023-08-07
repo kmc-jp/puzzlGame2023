@@ -17,7 +17,6 @@ namespace RoomScene.LeaveButton {
         // NOTE:
         // Experimentally, CallStopHost is currently employed because the prototype is supposed to use LAN network hosted.
         // However, after dedicated server has been applied, clients will not need to stop the server in client context.
-        [Obsolete("Use CallStopClient instead.")]
         public void CallStopHost() {
             var manager = NetworkManager.singleton as MatchNetworkRoomManager;
             manager.StopHost();

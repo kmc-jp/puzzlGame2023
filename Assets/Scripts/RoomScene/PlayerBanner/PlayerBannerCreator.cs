@@ -8,8 +8,12 @@ namespace RoomScene.PlayerBanner {
 
         [SerializeField] private GameObject _bannerPrefab;
 
-        public GameObject Create() {
+        public GameObject Create(string clientAddress) {
             GameObject banner = Instantiate(_bannerPrefab);
+
+            var profile = banner.GetComponent<PlayerBannerProfile>();
+            profile.address = clientAddress;
+
             return banner;
         }
 
