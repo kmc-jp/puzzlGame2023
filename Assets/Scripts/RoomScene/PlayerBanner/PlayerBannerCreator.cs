@@ -13,17 +13,18 @@ namespace RoomScene.PlayerBanner {
             return banner;
         }
 
-        void Start() {
+#if UNITY_EDITOR
+        void OnValidate() {
             if (Singleton == null) {
                 Singleton = this;
             } else {
-                Debug.LogWarning("PlayerBannerCreator is a singleton. This component is removed since there are multiple components in the scene.");
+                Debug.LogWarning(
+                    "PlayerBannerCreator is a singleton." +
+                    "This component is removed since there are multiple PlayerBannerCreator components in Scenes."
+                );
                 Destroy(this);
             }
-
-            if (_bannerPrefab == null) {
-                Debug.LogError("_bannerPrefab is not assigned.");
-            }
         }
+#endif
     }
 }

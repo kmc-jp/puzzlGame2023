@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 using NetworkRoomManagerExt;
@@ -8,24 +9,32 @@ namespace RoomScene.LeaveButton {
     public class LeaveButtonController : MonoBehaviour {
         public static LeaveButtonController Singleton { get; private set; }
 
-        [Client]
-        public void CallStopHostOrClient() {
+        public void CallStopClient() {
             var manager = NetworkManager.singleton as MatchNetworkRoomManager;
-            
-            if (NetworkClient.activeHost) {
-                manager.StopHost();
-            } else {
-                manager.StopClient();
-            }
+            manager.StopClient();
         }
 
-        void Start() {
+        // NOTE:
+        // Experimentally, CallStopHost is currently employed because the prototype is supposed to use LAN network hosted.
+        // However, after dedicated server has been applied, clients will not need to stop the server in client context.
+        [Obsolete("Use CallStopClient instead.")]
+        public void CallStopHost() {
+            var manager = NetworkManager.singleton as MatchNetworkRoomManager;
+            manager.StopHost();
+        }
+
+#if UNITY_EDITOR
+        void OnValidate() {
             if (Singleton == null) {
                 Singleton = this;
             } else {
-                Debug.LogWarning("LeaveButtonController is a singleton. This component is removed since there are multiple components in the scene.");
+                Debug.LogWarning(
+                    "LeaveButtonController is a singleton." +
+                    "This component is removed since there are multiple LeaveButtonController components in Scenes."
+                );
                 Destroy(this);
             }
         }
+#endif
     }
 }

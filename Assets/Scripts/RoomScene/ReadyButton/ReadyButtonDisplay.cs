@@ -1,11 +1,10 @@
-using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RoomScene.ReadyButton {
 
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(NetworkIdentity), typeof(ReadyButtonController))]
+    [RequireComponent(typeof(ReadyButtonController))]
     public class ReadyButtonDisplay : MonoBehaviour {
         public static ReadyButtonDisplay Singleton { get; private set; }
 
@@ -14,13 +13,18 @@ namespace RoomScene.ReadyButton {
             button.interactable = false;
         }
 
-        void Start() {
+#if UNITY_EDITOR
+        void OnValidate() {
             if (Singleton == null) {
                 Singleton = this;
             } else {
-                Debug.LogWarning("ReadyButtonDisplay is a singleton. This component is removed since there are multiple components in the scene.");
+                Debug.LogWarning(
+                    "ReadyButtonDisplay is a singleton." +
+                    "This component is removed since there are multiple ReadyButtonDisplay components in Scenes."
+                );
                 Destroy(this);
             }
         }
+#endif
     }
 }
