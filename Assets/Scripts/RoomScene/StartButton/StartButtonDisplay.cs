@@ -18,7 +18,7 @@ namespace RoomScene.StartButton {
                     "StartButtonDisplay is a singleton." +
                     "This component is removed since there are multiple StartButtonDisplay components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
             }
         }
 #endif

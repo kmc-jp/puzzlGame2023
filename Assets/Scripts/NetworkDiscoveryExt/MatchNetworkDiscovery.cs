@@ -23,7 +23,7 @@ namespace NetworkDiscoveryExt {
                     "MatchNetworkDiscovery is a singleton." +
                     "This component is removed since there are multiple MatchNetworkDiscovery components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
             }
         }
 #endif

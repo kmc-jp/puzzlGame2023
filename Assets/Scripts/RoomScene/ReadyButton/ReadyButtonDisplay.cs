@@ -22,7 +22,7 @@ namespace RoomScene.ReadyButton {
                     "ReadyButtonDisplay is a singleton." +
                     "This component is removed since there are multiple ReadyButtonDisplay components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
             }
         }
 #endif

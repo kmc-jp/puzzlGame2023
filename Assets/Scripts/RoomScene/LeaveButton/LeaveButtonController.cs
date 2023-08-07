@@ -31,7 +31,7 @@ namespace RoomScene.LeaveButton {
                     "LeaveButtonController is a singleton." +
                     "This component is removed since there are multiple LeaveButtonController components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
             }
         }
 #endif

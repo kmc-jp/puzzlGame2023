@@ -24,7 +24,7 @@ namespace LobbyScene.RoomBanner {
                 Singleton = this;
             } else {
                 Debug.LogWarning("RoomBannerCreator is a singleton. This component is removed since there are multiple components in the scene.");
-                Destroy(this);
+                DestroyImmediate(this);
             }
 
             if (_bannerPrefab == null) {

@@ -26,7 +26,11 @@ namespace RoomScene.PlayerBanner {
                     "PlayerBannerCreator is a singleton." +
                     "This component is removed since there are multiple PlayerBannerCreator components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
+            }
+
+            if (_bannerPrefab == null) {
+                Debug.LogError("_bannerPrefab is not assigned.");
             }
         }
 #endif

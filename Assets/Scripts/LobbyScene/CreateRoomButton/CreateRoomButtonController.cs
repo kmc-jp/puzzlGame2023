@@ -28,7 +28,7 @@ namespace LobbyScene.CreateRoomButton {
                     "CreateRoomButtonController is a singleton." +
                     "This component is removed since there are multiple CreateRoomButtonController components in Scenes."
                 );
-                Destroy(this);
+                DestroyImmediate(this);
             }
         }
 #endif
