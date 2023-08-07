@@ -5,9 +5,9 @@ using Mirror;
 namespace NetworkDiscoveryExt {
 
     // NOTE:
-    // NetworkDiscoveryExt, ServerRequestExt, and ServerResponseExt are complete clones of NetworkDiscovery, ServerRequest, ServerResponse at the moment
-    // and they all do not have unique feature at all. This seems to be verbose but they are there for scalability in case more information is required
-    // such as a room name, a number of participants, a room name or so on.
+    // MatchServerRequest and MatchServerResponse are currently both complete clones of ServerRequest and ServerResponse, respectively.
+    // This may seem redundant but is intended to be changed easily when required more information of room such as room name,
+    // maximum number of players, game mode, etc.
     public struct MatchServerResponse : NetworkMessage {
         public IPEndPoint EndPoint { get; set; }
         public Uri uri;

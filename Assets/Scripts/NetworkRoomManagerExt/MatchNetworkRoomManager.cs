@@ -1,45 +1,47 @@
 using Mirror;
 using UnityEngine;
 using NetworkDiscoveryExt;
-using RoomScene.PlayerBanner;
 using RoomScene.StartButton;
 
 namespace NetworkRoomManagerExt {
 
-    /// <summary>
-    /// Manages network processing related to lobby, room, and gameplay.
-    /// </summary>
-    // REVIEW:
-    // The network managing GameObject which this component attaches to supposes to manage the network over three scenes, 
-    // lobby, room, and gameplay, but it is not the only case necessary for network management. Therefore, I named this class MatchNetworkRoomManager 
-    // with a focus on the usage of network management, but it does not seem to be the best best choice. Is there any better naming?
     [DisallowMultipleComponent]
     public class MatchNetworkRoomManager : NetworkRoomManager {
-        public override void OnRoomStartHost() {
-            base.OnRoomStartHost();
+        public override void OnRoomClientConnect() {
+            base.OnRoomClientConnect();
 
-            MatchNetworkDiscoveryHandler.Singleton.CallAdvertiseServer();
+            MatchNetworkDiscovery.Singleton.StopDiscovery();
         }
 
-        public override void OnRoomServerConnect(NetworkConnectionToClient conn) {
-            base.OnRoomServerConnect(conn);
+        public override void OnRoomClientDisconnect() {
+            base.OnRoomClientDisconnect();
 
-            var banner = PlayerBannerCreator.Singleton.Create();
-            banner.GetComponent<PlayerBannerProfile>().Address = conn.address;
+            MatchNetworkDiscovery.Singleton.StartDiscovery();
+        }
 
-            NetworkServer.Spawn(banner, conn);
+        public override void OnRoomStartServer() {
+            base.OnRoomStartServer();
+
+            MatchNetworkDiscovery.Singleton.AdvertiseServer();
         }
 
         public override void OnRoomServerPlayersReady() {
+            // NOTE:
+            // NetworkRoomManager's OnRoomServerPlayersReady immediately calls ServerChangeScene.
+            // Since the game wants to make the transition to the gameplay scene as soon as one of the players triggers the start of the game,
+            // the corresponding method of the base class is not called.
+
             // base.OnRoomServerPlayersReady();
-            
-            StartButtonDisplay.Singleton.TargetShow(StartButtonDisplay.Singleton.connectionToClient);
+
+            var buttonOwner = StartButtonDisplay.Singleton.connectionToClient;
+            StartButtonDisplay.Singleton.TargetShow(buttonOwner);
         }
 
         public override void OnRoomServerPlayersNotReady() {
             base.OnRoomServerPlayersNotReady();
 
-            StartButtonDisplay.Singleton.TargetHide(StartButtonDisplay.Singleton.connectionToClient);
+            var buttonOwner = StartButtonDisplay.Singleton.connectionToClient;
+            StartButtonDisplay.Singleton.TargetHide(buttonOwner);
         }
     }
 }
