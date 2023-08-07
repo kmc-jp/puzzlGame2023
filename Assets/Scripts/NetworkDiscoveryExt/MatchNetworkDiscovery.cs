@@ -29,6 +29,8 @@ namespace NetworkDiscoveryExt {
 
         public override void Start() {
             DontDestroyOnLoad(this);
+
+            StartDiscovery();
         }
 
         // NOTE:

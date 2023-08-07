@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5836336870408647232}
   - component: {fileID: 6576000274481158739}
   - component: {fileID: 2488982766142220352}
-  - component: {fileID: 2150373774518228031}
   m_Layer: 5
   m_Name: PlayerBanner
   m_TagString: Untagged
@@ -110,6 +109,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2292bb1f7fa16bd4fab256de693a9219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  address: 
 --- !u!114 &2488982766142220352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,21 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea063b154e1d224a90d4614eb58a7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2150373774518228031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1617138921596438242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8adc1e06ff307ce4bb507c53191e2fae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
 --- !u!1 &6851221974862903719
 GameObject:
   m_ObjectHideFlags: 0

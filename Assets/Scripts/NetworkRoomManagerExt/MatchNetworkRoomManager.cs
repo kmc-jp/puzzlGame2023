@@ -25,6 +25,12 @@ namespace NetworkRoomManagerExt {
             MatchNetworkDiscovery.Singleton.AdvertiseServer();
         }
 
+        public override void OnRoomStartHost() {
+            base.OnRoomStartHost();
+
+            MatchNetworkDiscovery.Singleton.AdvertiseServer();
+        }
+
         public override void OnRoomServerPlayersReady() {
             // NOTE:
             // NetworkRoomManager's OnRoomServerPlayersReady immediately calls ServerChangeScene.
