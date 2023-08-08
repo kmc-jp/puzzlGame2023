@@ -304,7 +304,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880038943}
-  - component: {fileID: 880038944}
   m_Layer: 0
   m_Name: PlayerBannerCreator
   m_TagString: Untagged
@@ -327,19 +326,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &880038944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880038942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da95c52c5b7593141a57fc1725051433, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bannerPrefab: {fileID: 1617138921596438242, guid: bc4e8c8643b571b4da7431373270740f, type: 3}
 --- !u!1 &1699487211
 GameObject:
   m_ObjectHideFlags: 0

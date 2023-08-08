@@ -439,7 +439,6 @@ GameObject:
   m_Component:
   - component: {fileID: 699517371}
   - component: {fileID: 699517372}
-  - component: {fileID: 699517373}
   m_Layer: 0
   m_Name: MatchNetworkRoomManager
   m_TagString: Untagged
@@ -486,53 +485,6 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &699517373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699517370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c2439d2342a5ea44a71c8d665479ce9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  autoStartServerBuild: 1
-  autoConnectClientBuild: 0
-  sendRate: 30
-  offlineScene: Assets/Scenes/LobbyScene.unity
-  onlineScene: Assets/Scenes/RoomScene.unity
-  transport: {fileID: 699517372}
-  networkAddress: localhost
-  maxConnections: 2
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 7055768713214143515, guid: b7da951b99ea7f449a7426ecea50bdfb, type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 1617138921596438242, guid: bc4e8c8643b571b4da7431373270740f, type: 3}
-  snapshotSettings:
-    bufferTimeMultiplier: 2
-    catchupNegativeThreshold: -1
-    catchupPositiveThreshold: 1
-    catchupSpeed: 0.019999999552965164
-    slowdownSpeed: 0.03999999910593033
-    driftEmaDuration: 1
-    dynamicAdjustment: 1
-    dynamicAdjustmentTolerance: 1
-    deliveryTimeEmaDuration: 2
-  timeInterpolationGui: 0
-  showRoomGUI: 0
-  minPlayers: 2
-  roomPlayerPrefab: {fileID: 6905044669676142055, guid: 0b2a489c3bf80fd4d80e08a9f1b56417, type: 3}
-  RoomScene: Assets/Scenes/RoomScene.unity
-  GameplayScene: Assets/Scenes/GameplayScene.unity
-  _allPlayersReady: 0
-  roomSlots: []
-  clientIndex: 0
 --- !u!1 &1049864314
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,7 +587,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1431619030}
   - component: {fileID: 1431619029}
-  - component: {fileID: 1431619028}
   m_Layer: 0
   m_Name: MatchNetworkDiscovery
   m_TagString: Untagged
@@ -643,39 +594,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1431619028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431619027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30996118c2b47c342b7ab20164e4f31f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableActiveDiscovery: 1
-  BroadcastAddress: 
-  serverBroadcastListenPort: 47777
-  ActiveDiscoveryInterval: 3
-  transport: {fileID: 1431619029}
-  OnServerFound:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2143405088}
-        m_TargetAssemblyTypeName: LobbyScene.RoomBanner.RoomBannerCreator, Assembly-CSharp
-        m_MethodName: ServerFoundCallback
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  secretHandshake: 0
 --- !u!114 &1431619029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,7 +645,6 @@ GameObject:
   - component: {fileID: 1741511304}
   - component: {fileID: 1741511303}
   - component: {fileID: 1741511302}
-  - component: {fileID: 1741511305}
   m_Layer: 5
   m_Name: CreateRoomButton
   m_TagString: Untagged
@@ -799,20 +716,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1741511303}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1741511305}
-        m_TargetAssemblyTypeName: LobbyScene.CreateRoomButton.CreateRoomButtonController,
-          Assembly-CSharp
-        m_MethodName: CallStartHost
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1741511303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -851,18 +755,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741511300}
   m_CullTransparentMesh: 1
---- !u!114 &1741511305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741511300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 369b5c5fdbbef7749b55f3bd6873bf46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1767096924
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,7 +1221,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2143405087}
-  - component: {fileID: 2143405088}
   m_Layer: 0
   m_Name: RoomBannerCreator
   m_TagString: Untagged
@@ -1352,16 +1243,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2143405088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143405086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4087260667d7d8f40944a498c35f76e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bannerPrefab: {fileID: 3207400037911615680, guid: 6f5e93e0a20685b48bbbf85fce543fd9, type: 3}
