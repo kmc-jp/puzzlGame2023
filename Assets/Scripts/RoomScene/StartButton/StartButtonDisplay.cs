@@ -7,13 +7,13 @@ namespace RoomScene.StartButton {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity), typeof(StartButtonController))]
     public class StartButtonDisplay : NetworkBehaviour {
-        [TargetRpc]
+        // s[TargetRpc]
         public void TargetShow(NetworkConnectionToClient roomOwner) {
             var button = gameObject.GetComponent<Button>();
             button.interactable = true;
         }
 
-        [TargetRpc]
+        // [TargetRpc]
         public void TargetHide(NetworkConnectionToClient roomOwner) {
             var button = gameObject.GetComponent<Button>();
             button.interactable = false;

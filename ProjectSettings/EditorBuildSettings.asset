@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/RoomSelect.unity
+    path: Assets/Scenes/LobbyScene.unity
     guid: 985aff741b4f04f489285266ffb1f1aa
   - enabled: 1
-    path: Assets/Scenes/RoomSettingScene.unity
-    guid: dbca7955257e04c4d9c06bdab21b2324
+    path: Assets/Scenes/RoomScene.unity
+    guid: 06f7cc275cf943e4db2447cabad2c800
   - enabled: 1
-    path: Assets/Scenes/BattlefieldScene.unity
-    guid: 95821d47b07729548a7f3a87ce7769c3
+    path: Assets/Scenes/GameplayScene.unity
+    guid: fc5593d0982ada541ba5e6002a46f10d
   m_configObjects: {}

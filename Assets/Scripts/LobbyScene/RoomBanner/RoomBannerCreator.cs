@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using NetworkDiscoveryExt;
 
@@ -8,11 +9,21 @@ namespace LobbyScene.RoomBanner {
     public class RoomBannerCreator : MonoBehaviour {
         [SerializeField] private GameObject _bannerPrefab;
 
-        public void ServerFoundCallback(MatchServerResponse info) {
-            var clientAddress = info.EndPoint.Address.ToString();
-            var serverUri = info.uri;
+        private Dictionary<long, MatchServerResponse> discoveredServers;
 
-            Create(clientAddress, serverUri);
+        public void ServerFoundCallback(MatchServerResponse info) {
+            if (!discoveredServers.ContainsKey(info.serverId)) {
+                discoveredServers[info.serverId] = info;
+                
+                var clientAddress = info.EndPoint.Address.ToString();
+                var serverUri = info.uri;
+
+                Create(clientAddress, serverUri);
+            }
+        }
+
+        void Start() {
+            discoveredServers = new Dictionary<long, MatchServerResponse>();
         }
 
         void Create(string clientAddress, Uri serverUri) {

@@ -16,7 +16,13 @@ namespace NetworkRoomManagerExt {
         public override void OnRoomClientConnect() {
             base.OnRoomClientConnect();
 
-            _discovery.StopDiscovery();
+            // FIXME:
+            // Since now that the LAN hosted networking are employed,
+            // OnRoomClientConnect and OnRoomStartHost are both called when the host starts the server.
+            // This potentially calls AdvertiseServer first, and after that calls StopDiscovery, but this prevents from normal working of AdvertiseServer.
+            // This phenomenon probablly solved by setting ScriptOrder, but it is no more than the first aid. Is there any more good idea?
+
+            // _discovery.StopDiscovery();
         }
 
         public override void OnRoomClientDisconnect() {
@@ -25,8 +31,8 @@ namespace NetworkRoomManagerExt {
             _discovery.StartDiscovery();
         }
 
-        public override void OnRoomStartHost() {
-            base.OnRoomStartHost();
+        public override void OnRoomStartServer() {
+            base.OnRoomStartServer();
 
             _discovery.AdvertiseServer();
         }
@@ -41,7 +47,7 @@ namespace NetworkRoomManagerExt {
 
             var startButton = GameObject.Find("StartButton");
             var display = startButton.GetComponent<StartButtonDisplay>();
-            var buttonOwner = display.connectionToClient;
+            var buttonOwner = NetworkClient.connection as NetworkConnectionToClient;
             display.TargetShow(buttonOwner);
         }
 
@@ -50,7 +56,7 @@ namespace NetworkRoomManagerExt {
 
             var startButton = GameObject.Find("StartButton");
             var display = startButton.GetComponent<StartButtonDisplay>();
-            var buttonOwner = display.connectionToClient;
+            var buttonOwner = NetworkClient.connection as NetworkConnectionToClient;
             display.TargetHide(buttonOwner);
         }
     }
