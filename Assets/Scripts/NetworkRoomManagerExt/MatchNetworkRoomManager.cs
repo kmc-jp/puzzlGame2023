@@ -7,28 +7,28 @@ namespace NetworkRoomManagerExt {
 
     [DisallowMultipleComponent]
     public class MatchNetworkRoomManager : NetworkRoomManager {
+        private MatchNetworkDiscovery _discovery;
+
+        public override void Start() {
+            _discovery = GameObject.Find("MatchNetworkDiscovery").GetComponent<MatchNetworkDiscovery>();
+        }
+
         public override void OnRoomClientConnect() {
             base.OnRoomClientConnect();
 
-            MatchNetworkDiscovery.Singleton.StopDiscovery();
+            _discovery.StopDiscovery();
         }
 
         public override void OnRoomClientDisconnect() {
             base.OnRoomClientDisconnect();
 
-            MatchNetworkDiscovery.Singleton.StartDiscovery();
-        }
-
-        public override void OnRoomStartServer() {
-            base.OnRoomStartServer();
-
-            MatchNetworkDiscovery.Singleton.AdvertiseServer();
+            _discovery.StartDiscovery();
         }
 
         public override void OnRoomStartHost() {
             base.OnRoomStartHost();
 
-            MatchNetworkDiscovery.Singleton.AdvertiseServer();
+            _discovery.AdvertiseServer();
         }
 
         public override void OnRoomServerPlayersReady() {
@@ -39,15 +39,19 @@ namespace NetworkRoomManagerExt {
 
             // base.OnRoomServerPlayersReady();
 
-            var buttonOwner = StartButtonDisplay.Singleton.connectionToClient;
-            StartButtonDisplay.Singleton.TargetShow(buttonOwner);
+            var startButton = GameObject.Find("StartButton");
+            var display = startButton.GetComponent<StartButtonDisplay>();
+            var buttonOwner = display.connectionToClient;
+            display.TargetShow(buttonOwner);
         }
 
         public override void OnRoomServerPlayersNotReady() {
             base.OnRoomServerPlayersNotReady();
 
-            var buttonOwner = StartButtonDisplay.Singleton.connectionToClient;
-            StartButtonDisplay.Singleton.TargetHide(buttonOwner);
+            var startButton = GameObject.Find("StartButton");
+            var display = startButton.GetComponent<StartButtonDisplay>();
+            var buttonOwner = display.connectionToClient;
+            display.TargetHide(buttonOwner);
         }
     }
 }

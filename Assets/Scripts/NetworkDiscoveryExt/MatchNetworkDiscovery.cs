@@ -12,21 +12,6 @@ namespace NetworkDiscoveryExt {
     // it is not possible to place components of different NetworkDiscoveryBase inherited classes in the lobby and room, so they are handled by a common class.
     [DisallowMultipleComponent]
     public class MatchNetworkDiscovery : NetworkDiscoveryBase<MatchServerRequest, MatchServerResponse> {
-        public static MatchNetworkDiscovery Singleton { get; private set; }
-
-#if UNITY_EDITOR
-        public override void OnValidate() {
-            if (Singleton != null) {
-                Debug.LogWarning(
-                    "MatchNetworkDiscovery is a singleton." +
-                    "This component must be removed since there are multiple MatchNetworkDiscovery components in Scenes."
-                );
-            }
-            
-            Singleton = this;
-        }
-#endif
-
         public override void Start() {
             DontDestroyOnLoad(this);
 

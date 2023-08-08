@@ -6,8 +6,6 @@ namespace RoomScene.LeaveButton {
 
     [DisallowMultipleComponent]
     public class LeaveButtonController : MonoBehaviour {
-        public static LeaveButtonController Singleton { get; private set; }
-
         public void CallStopClient() {
             var manager = NetworkManager.singleton as MatchNetworkRoomManager;
             manager.StopClient();
@@ -20,18 +18,5 @@ namespace RoomScene.LeaveButton {
             var manager = NetworkManager.singleton as MatchNetworkRoomManager;
             manager.StopHost();
         }
-
-#if UNITY_EDITOR
-        void OnValidate() {
-            if (Singleton != null) {
-                Debug.LogWarning(
-                    "LeaveButtonController is a singleton." +
-                    "This component must be removed since there are multiple LeaveButtonController components in Scenes."
-                );
-            }
-
-            Singleton = this;
-        }
-#endif
     }
 }
