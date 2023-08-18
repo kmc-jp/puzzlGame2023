@@ -17,6 +17,8 @@ public class GM : MonoBehaviour
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
+    GameObject colliderContainer;
+
     [Range(0.0f, 100.0f)]
     public double MaxInkAmount = 2.0;
     
@@ -42,7 +44,8 @@ public class GM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0))
+        {
             //lineObjを生成し、初期化する
             _addLineObject();
 
@@ -64,10 +67,13 @@ public class GM : MonoBehaviour
             }
            
         }
+        if (Input.GetMouseButtonUp(0))
+        {
+            _completeLineObject();
+        }
 
         //マウスボタンが離されていれば
-        if (! Input.GetMouseButton(0) && _inkLeft <= 2)
-
+        if (!Input.GetMouseButton(0) && _inkLeft <= 2)
         {
             //インクを回復
             _inkLeft += Time.deltaTime * InkRecovery;
@@ -88,6 +94,11 @@ public class GM : MonoBehaviour
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
         //lineObjを自身の子要素に設定
         lineObj.transform.SetParent(transform);
+
+        //colliderContainerを初期化
+        colliderContainer = lineObj;
+        //colliderContainer.name = "ColliderContainer";
+
         //lineObj初期化処理
         _initRenderers();
     }
@@ -104,21 +115,28 @@ public class GM : MonoBehaviour
         //太さの初期化
         lineRenderers.Last().startWidth = lineWidth;
         lineRenderers.Last().endWidth = lineWidth;
+
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f);
+
+        //スクリーン座標をワールド座標に変換
+        //Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
     }
 
     void _addPositionDataToLineRendererList()
     {
         //マウスポインタがあるスクリーン座標を取得
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f);
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.0f);
 
         //スクリーン座標をワールド座標に変換
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        worldPosition.z = 0.0f;
 
         //ワールド座標をローカル座標に変換
-        Vector3 localPosition = transform.InverseTransformPoint(worldPosition.x, worldPosition.y, -1.0f);
+        Vector3 localPosition = transform.InverseTransformPoint(worldPosition.x, worldPosition.y, 0.0f);
 
         //lineRenderersの最後のlineObjのローカルポジションを上記のローカルポジションに設定
-        lineRenderers.Last().transform.localPosition = localPosition;
+        //TODO: Calculate a final object position when line is completed
+        //lineRenderers.Last().transform.localPosition = localPosition;
 
         //lineObjの線と線をつなぐ点の数を更新
         lineRenderers.Last().positionCount += 1;
@@ -128,5 +146,17 @@ public class GM : MonoBehaviour
 
         //あとから描いた線が上に来るように調整
         lineRenderers.Last().sortingOrder = lineRenderers.Count;
+    }
+
+    void _completeLineObject() {
+        _createMeshCollider();
+    }
+
+    void _createMeshCollider() { 
+        colliderContainer.AddComponent<MeshCollider>();
+        Mesh mesh = new Mesh();
+        lineRenderers.Last().BakeMesh(mesh);
+        colliderContainer.GetComponent<MeshCollider>().sharedMesh = mesh;
+        colliderContainer.transform.SetParent(lineRenderers.Last().transform);
     }
 }
