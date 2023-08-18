@@ -39,8 +39,8 @@ public class GM : MonoBehaviour
     public int goalInFlag = 0;
 
     //スクリプト取得用
-    public GameObject DrawingCampas;
-    StageMnager StageMnager;
+    public GameObject DrawingCanvas;
+    StageManager StageManager;
 
     // Start is called before the first frame update
     void Start()
@@ -62,13 +62,13 @@ public class GM : MonoBehaviour
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
         //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
-        DrawingCampas = GameObject.Find("DrawingCanvas");
-        StageMnager = DrawingCampas.GetComponent<StageMnager>();
+        DrawingCanvas = GameObject.Find("DrawingCanvas");
+        StageManager = DrawingCanvas.GetComponent<StageManager>();
         //GMのgoalwithを受け取る変数
         double goalWidth;
-        goalWidth = StageMnager.goalWidth;
+        goalWidth = StageManager.goalWidth;
         double impenetrableWidth;
-        impenetrableWidth = StageMnager.impenetrableWidth;
+        impenetrableWidth = StageManager.impenetrableWidth;
 
         //マウスがクリックされたら
         if (Input.GetMouseButtonDown(0))

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class StageMnager : MonoBehaviour
+public class StageManager : MonoBehaviour
 {
 
     //標準の線の材質
@@ -40,7 +40,7 @@ public class StageMnager : MonoBehaviour
     public Text winnnertext;
 
     //スクリプト取得用
-    public GameObject DrawingCampas;
+    public GameObject DrawingCanvas;
     PlayerManager PlayerManager;
 
     // Start is called before the first frame update
@@ -59,8 +59,8 @@ public class StageMnager : MonoBehaviour
         int HP;
 
         //他スクリプトから情報を取得
-        DrawingCampas = GameObject.Find("Player");
-        PlayerManager = DrawingCampas.GetComponent<PlayerManager>();
+        DrawingCanvas = GameObject.Find("Player");
+        PlayerManager = DrawingCanvas.GetComponent<PlayerManager>();
         HP = PlayerManager.HP;
 
         //勝敗判定
