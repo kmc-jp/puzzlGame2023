@@ -3,30 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GM : MonoBehaviour
 {
-    //線の材質
+    //標準の線の材質
     [SerializeField] Material lineMaterial;
-    //線の色
-    [SerializeField] Color lineColor;
-    //線の太さ
+   
+    //標準の線の太さ
     [Range(0.1f, 0.5f)]
     [SerializeField] float lineWidth;
+
+    //プレイヤーが描画する線の色
+    [SerializeField] Color lineColor;
 
     //LineRdenerer型のリスト宣言
     List<LineRenderer> lineRenderers;
 
     GameObject colliderContainer;
 
+    //描画中フラグ
+    [Tooltip("描画中フラグ")]
+    public int drawFlag;
+
+    //インクの最大量(秒)
     [Range(0.0f, 100.0f)]
     public double MaxInkAmount = 2.0;
     
+    //インクの回復測度(秒/秒)
     [Range(0.0f, 100.0f)]
     public double InkRecovery = 0.5;
-
+   
     //インク残量(秒)
     public double _inkLeft;
+
+    //ゴールエリア侵入フラグ
+    public int goalInFlag = 0;
+
+    //スクリプト取得用
+    public GameObject DrawingCanvas;
+    StageManager StageManager;
 
     // Start is called before the first frame update
     void Start()
@@ -36,49 +52,79 @@ public class GM : MonoBehaviour
 
         //インク残量の初期化
         _inkLeft = MaxInkAmount;
-
-        Debug.Log(_inkLeft);
-
-     }
+    }
 
     // Update is called once per frame
     void Update()
     {
+        //マウスポインタがあるスクリーン座標を取得
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f);
+
+        //スクリーン座標をワールド座標に変換
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
+        DrawingCanvas = GameObject.Find("DrawingCanvas");
+        StageManager = DrawingCanvas.GetComponent<StageManager>();
+        //GMのgoalwithを受け取る変数
+        double goalWidth;
+        goalWidth = StageManager.goalWidth;
+        double impenetrableWidth;
+        impenetrableWidth = StageManager.impenetrableWidth;
+
+        //マウスがクリックされたら
         if (Input.GetMouseButtonDown(0))
         {
             //lineObjを生成し、初期化する
             _addLineObject();
 
-            Debug.Log(_inkLeft);
-
+            //描画中フラグを立てる
+            drawFlag = 1;
         }
 
-        if (Input.GetMouseButton(0))
-        { 
-            //インク残量があれば
-            if (_inkLeft > 0) 
-            { 
-                //線を描画
-                _addPositionDataToLineRendererList(); 
+        //マウスボタンが離されていれば
+        if (!Input.GetMouseButton(0))
+        {
+            drawFlag = 0;
+        }
 
-               //インク残量を減らす
-               _inkLeft -= Time.deltaTime;
+        //侵入不可内なら
+        if (worldPosition.x <= -10.5 + goalWidth + impenetrableWidth)
+        {
+            drawFlag = 0;
+        }
+
+        //マウスがクリックされているとき
+        if (Input.GetMouseButton(0))
+        {
+            //インク残量があって、描画中なら
+            if (_inkLeft > 0 && drawFlag == 1)
+            {
+                //線を描画
+                _addPositionDataToLineRendererList();
+
+                //インク残量を減らす
+                _inkLeft -= Time.deltaTime;
 
             }
-           
+
         }
         if (Input.GetMouseButtonUp(0))
         {
             _completeLineObject();
         }
 
-        //マウスボタンが離されていれば
-        if (!Input.GetMouseButton(0) && _inkLeft <= 2)
+
+
+        //マウスボタンが離されていて、インクが最大より少なければ
+        if (!Input.GetMouseButton(0) && _inkLeft <= MaxInkAmount)
+
         {
             //インクを回復
             _inkLeft += Time.deltaTime * InkRecovery;
 
         }
+
     }
 
     //クリックしたら発動
@@ -86,10 +132,16 @@ public class GM : MonoBehaviour
     {
         //空のゲームオブジェクト作成
         GameObject lineObj = new GameObject();
+        //オブジェクトにLineObjectMをアタッチ
+        lineObj.AddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
         lineObj.name = "Stroke";
         //lineObjにLineRendereコンポーネント追加
         lineObj.AddComponent<LineRenderer>();
+        //lineObjのLineRendererコンポーネントを取得
+        LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
+        //useWorldSpaceをtrueに
+        lineRenderer.useWorldSpace = true;
         //lineRendererリストにlineObjを追加
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
         //lineObjを自身の子要素に設定
