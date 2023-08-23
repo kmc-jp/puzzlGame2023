@@ -72,8 +72,8 @@ public class GM : MonoBehaviour
         double impenetrableWidth;
         impenetrableWidth = StageManager.impenetrableWidth;
 
-        //マウスがクリックされたら
-        if (Input.GetMouseButtonDown(0))
+        //マウスがクリックされ、侵入可能エリアだったら
+        if (Input.GetMouseButtonDown(0) && !(worldPosition.x <= -10.5 + goalWidth + impenetrableWidth))
         {
             //lineObjを生成し、初期化する
             _addLineObject();
@@ -82,14 +82,13 @@ public class GM : MonoBehaviour
             drawFlag = 1;
         }
 
-        //マウスボタンが離されていれば
-        if (!Input.GetMouseButton(0))
-        {
+        //侵入不可内なら
+        if (worldPosition.x <= -10.5 + goalWidth + impenetrableWidth) {
             drawFlag = 0;
         }
 
-        //侵入不可内なら
-        if (worldPosition.x <= -10.5 + goalWidth + impenetrableWidth)
+        //マウスボタンが離されていれば
+        if (!Input.GetMouseButton(0))
         {
             drawFlag = 0;
         }
