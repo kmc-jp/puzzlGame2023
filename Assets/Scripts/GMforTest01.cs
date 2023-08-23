@@ -43,6 +43,7 @@ public class GM : MonoBehaviour
     //スクリプト取得用
     public GameObject DrawingCanvas;
     StageManager StageManager;
+    PlayerManager PlayerManager;
 
     // Start is called before the first frame update
     void Start()
@@ -66,17 +67,24 @@ public class GM : MonoBehaviour
         //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
         DrawingCanvas = GameObject.Find("DrawingCanvas");
         StageManager = DrawingCanvas.GetComponent<StageManager>();
-        //GMのgoalwithを受け取る変数
+        PlayerManager = DrawingCanvas.GetComponent <PlayerManager>();
+
+        //ステージマネージャーのgoalwithを受け取る変数
         double goalWidth;
         goalWidth = StageManager.goalWidth;
         double impenetrableWidth;
         impenetrableWidth = StageManager.impenetrableWidth;
 
+        //プレイヤーマネージャーのplayerNmaeを受け取る変数
+        string playerNumber;
+        playerNumber = PlayerManager.playerNumber;
+
+
         //マウスがクリックされ、侵入可能エリアだったら
         if (Input.GetMouseButtonDown(0) && !(worldPosition.x <= -10.5 + goalWidth + impenetrableWidth))
         {
             //lineObjを生成し、初期化する
-            _addLineObject();
+            _addLineObject(playerNumber);
 
             //描画中フラグを立てる
             drawFlag = 1;
@@ -127,7 +135,7 @@ public class GM : MonoBehaviour
     }
 
     //クリックしたら発動
-    void _addLineObject()
+    void _addLineObject(string playerNumber)
     {
         //空のゲームオブジェクト作成
         GameObject lineObj = new GameObject();
@@ -135,6 +143,8 @@ public class GM : MonoBehaviour
         lineObj.AddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
         lineObj.name = "Stroke";
+        //オブジェクトにプレイヤーナンバーのタグを付与
+        lineObj.tag = playerNumber;
         //lineObjにLineRendereコンポーネント追加
         lineObj.AddComponent<LineRenderer>();
         //lineObjのLineRendererコンポーネントを取得

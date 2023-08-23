@@ -21,6 +21,9 @@ public class LineObjectM : MonoBehaviour
     StageManager StageManager;
     GM GM;
 
+    //GMのgoalwithを受け取る変数
+    public double goalWidth;
+
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
 
@@ -28,15 +31,6 @@ public class LineObjectM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //GMのgoalwithを受け取る変数
-        double goalWidth;
-
         //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
         DrawingCanvas = GameObject.Find("DrawingCanvas");
         StageManager = DrawingCanvas.GetComponent<StageManager>();
@@ -45,7 +39,11 @@ public class LineObjectM : MonoBehaviour
         //CubeのスクリプトGameMnagerからゴールエリアのサイズを取得
         DrawingCanvas = GameObject.Find("DrawingCanvas");
         GM = DrawingCanvas.GetComponent<GM>();
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
         //描いたオブジェクトの位置を取得
         Vector3[] linePoint = getLinePoint();
         

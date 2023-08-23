@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerManager : MonoBehaviour
 {
+    //プレイヤーナンバー
+    public string playerNumber;
+
     //HP表示用
     public Text HPtext;
     //最大HP
@@ -32,6 +36,12 @@ public class PlayerManager : MonoBehaviour
         HP = MaxHP;
         //HP表示初期化
         HPtext.text = "HP:" + HP;
+
+        //プレイヤー番号初期化
+        playerNumber = "Player1";
+
+        //プレイヤー名のタグを追加
+       
     }
 
     // Update is called once per frame
