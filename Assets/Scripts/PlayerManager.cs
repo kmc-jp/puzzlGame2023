@@ -5,6 +5,28 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
+    /*
+     * アニマ関連
+     */
+    //インクの最大量(秒)
+    [Range(0.0f, 100.0f)]
+    public double MaxInkAmount = 2.0;
+
+    //インクの回復測度(秒/秒)
+    [Range(0.0f, 100.0f)]
+    public double InkRecovery = 0.5;
+
+    //インク残量(秒)
+    private double _inkLeft;
+    public double InkLeft
+    {
+        get { return _inkLeft; }
+        set { _inkLeft = value; }
+    }
+
+    /*
+     * その他
+     */
     //HP表示用
     public Text HPtext;
     //最大HP
@@ -12,6 +34,8 @@ public class PlayerManager : MonoBehaviour
     public int MaxHP = 2;
     //HP計算用
     public int HP;
+
+    
 
     //無敵時間
     [Range(0.0f, 5.0f)]
