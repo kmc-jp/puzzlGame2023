@@ -21,6 +21,8 @@ public class LineObjectM : MonoBehaviour
     StageManager StageManager;
     GM GM;
 
+    int completeDrawFlag = 0;
+
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
 
@@ -28,55 +30,24 @@ public class LineObjectM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
-
     // Update is called once per frame
     void Update()
     {
-        //GMのgoalwithを受け取る変数
-        double goalWidth;
-
-        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
-        DrawingCanvas = GameObject.Find("DrawingCanvas");
-        StageManager = DrawingCanvas.GetComponent<StageManager>();
-        goalWidth = StageManager.goalWidth;
-
-        //CubeのスクリプトGameMnagerからゴールエリアのサイズを取得
-        DrawingCanvas = GameObject.Find("DrawingCanvas");
-        GM = DrawingCanvas.GetComponent<GM>();
-
-        //描いたオブジェクトの位置を取得
-        Vector3[] linePoint = getLinePoint();
-        
-        //spaceキーが押されたら描いたオブジェクトを動かす
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButtonUp(0))
         {
-            moveFrag = 1;
-        }
-
-        //描いたオブジェクトを移動させる
-        if (moveFrag == 1)
-        {
-             //移動させる位置を計算
-            for (int i = 0; i < lineRenderer.positionCount; i++)
-            {               
-                linePoint[i] += new Vector3(-0.01f, 0, 0);
-            }
-
-            //移動後の位置に描画
-            lineRenderer.SetPositions(linePoint);
-        }
-
-        //ゴールエリアに描いたオブジェクトの一部が入っていたらゴールフラグを立てる
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            if (linePoint[i].x < -10.5f + (float)goalWidth)
+            if(completeDrawFlag == 0)
             {
-                GM.goalInFlag = 1;
+                completeLineObject();
+                completeDrawFlag = 1;
             }
+            
         }
 
+        //ゴール判定
+        judgeGoal();
+        //テスト用のオブジェクト移動機能
+        moveObj();
         //描いたオブジェクトが全部画面外に出たらオブジェクトを消去する
        JudgeDestroy();
     }
@@ -118,5 +89,64 @@ public class LineObjectM : MonoBehaviour
             Destroy(this.gameObject);
         }
         destroyFrag = 0;
+    }
+
+    //ゴール判定
+    void judgeGoal()
+    {
+        //描いたオブジェクトの位置を取得
+        Vector3[] linePoint = getLinePoint();
+
+        //GMのgoalwithを受け取る変数
+        double goalWidth;
+
+        //CubeのスクリプトStageMnagerからゴールエリアのサイズを取得
+        DrawingCanvas = GameObject.Find("DrawingCanvas");
+        StageManager = DrawingCanvas.GetComponent<StageManager>();
+        goalWidth = StageManager.goalWidth;
+
+        //GMを取得
+        DrawingCanvas = GameObject.Find("DrawingCanvas");
+        GM = DrawingCanvas.GetComponent<GM>();
+
+        //ゴールエリアに描いたオブジェクトの一部が入っていたらゴールフラグを立てる
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            if (linePoint[i].x < -10.5f + (float)goalWidth)
+            {
+                GM.goalInFlag = 1;
+            }
+        }
+    }
+
+    //テスト用のオブジェクト移動機能
+    void moveObj()
+    {
+        //描いたオブジェクトの位置を取得
+        Vector3[] linePoint = getLinePoint();
+
+        //spaceキーが押されたら描いたオブジェクトを動かす
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            moveFrag = 1;
+        }
+
+        //描いたオブジェクトを移動させる
+        if (moveFrag == 1)
+        {
+            //移動させる位置を計算
+            for (int i = 0; i < lineRenderer.positionCount; i++)
+            {
+                linePoint[i] += new Vector3(-0.01f, 0, 0);
+            }
+
+            //移動後の位置に描画
+            lineRenderer.SetPositions(linePoint);
+        }
+    }
+
+    void completeLineObject()
+    {
+        this.gameObject.AddComponent<BlueAnimaMovementBehaviour>();
     }
 }
