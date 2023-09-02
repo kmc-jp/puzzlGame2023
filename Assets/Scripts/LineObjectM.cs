@@ -21,8 +21,6 @@ public class LineObjectM : MonoBehaviour
     StageManager StageManager;
     GM GM;
 
-    int completeDrawFlag = 0;
-
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
 
@@ -34,16 +32,6 @@ public class LineObjectM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            if(completeDrawFlag == 0)
-            {
-                completeLineObject();
-                completeDrawFlag = 1;
-            }
-            
-        }
-
         //ゴール判定
         judgeGoal();
         //テスト用のオブジェクト移動機能
@@ -143,10 +131,5 @@ public class LineObjectM : MonoBehaviour
             //移動後の位置に描画
             lineRenderer.SetPositions(linePoint);
         }
-    }
-
-    void completeLineObject()
-    {
-        this.gameObject.AddComponent<BlueAnimaMovementBehaviour>();
     }
 }
