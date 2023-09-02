@@ -10,11 +10,20 @@ public class StageInputController : MonoBehaviour
     /*
      * アニマ関連
      */
-    public delegate void OnAnimaDrawingStartFunc(Vector3 startPosition);
+    public delegate void OnAnimaDrawingStartFunc(Vector3 startPositionWorld);
     public event OnAnimaDrawingStartFunc OnAnimaDrawingStart;
 
-    public delegate void OnAnimaDrawingEndFunc(Vector3 endPosition, bool cancel);
+    public delegate void OnAnimaDrawingEndFunc(Vector3 endPositionWorld, bool cancel);
     public event OnAnimaDrawingEndFunc OnAnimaDrawingEnd;
+
+    /*
+     * CursorInteractable関連
+     */
+    public delegate void OnCursorInteractionStartFunc(Vector3 startPositionWorld);
+    public event OnCursorInteractionStartFunc OnCursorInteractionStart;
+
+    public delegate void OnCursorInteractionEndFunc(Vector3 endPositionWorld);
+    public event OnCursorInteractionEndFunc OnCursorInteractionEnd;
 
     /*
      * ステート管理
@@ -23,12 +32,13 @@ public class StageInputController : MonoBehaviour
     private enum ControllerState
     {
         None = 0,
-        Drawing = 1,
-        PreventDrawing = 2,
-        DrawingColor1 = 4,
-        DrawingColor2 = 8,
-        DrawingColor3 = 16,
-        CursorInteraction = 32
+        Drawing                  = 1 << 0,
+        DrawingEnabled           = 1 << 1,
+        DrawingColor1            = 1 << 2,
+        DrawingColor2            = 1 << 3,
+        DrawingColor3            = 1 << 4,
+        CursorInteraction        = 1 << 5,
+        CursorInteractionEnabled = 1 << 6,
     }
 
     private ControllerState _state = ControllerState.None;
@@ -44,31 +54,44 @@ public class StageInputController : MonoBehaviour
         return worldPosition;
     }
 
+    public Vector3 GetCursorInteractionPositionScreen()
+    {
+        return Input.mousePosition;
+    }
+
+    public Vector3 GetCursorInteractionPositionWorld()
+    {
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-
+        //TODO: Temporarily allow drawing at all times
+        _state |= ControllerState.DrawingEnabled;
     }
 
     // Update is called once per frame
     void Update()
     {
         //TODO: Update based on possible player inputs
-        if (Input.GetMouseButtonDown(0))
+        /*
+         * Anima
+         */
+        if (_isDrawingAllowed() && Input.GetMouseButtonDown(0))
         {
             if ((_state & ControllerState.Drawing) != ControllerState.Drawing)
             {
-                OnAnimaDrawingStart(GetAnimaDrawingPositionWorld());
                 _state |= ControllerState.Drawing;
+                OnAnimaDrawingStart(GetAnimaDrawingPositionWorld());
             }
         }
-
-        if (Input.GetMouseButtonUp(0))
+        else if (!_isDrawingAllowed() || Input.GetMouseButtonUp(0))
         {
             if ((_state & ControllerState.Drawing) == ControllerState.Drawing)
             {
-                _state &= ~ControllerState.Drawing;
                 OnAnimaDrawingEnd(GetAnimaDrawingPositionWorld(), false);
+                _state &= ~ControllerState.Drawing;
             }
         }
 
@@ -92,6 +115,28 @@ public class StageInputController : MonoBehaviour
             }
         }
 
-        //TODO: Move cursor interactable controller to this class
+        /*
+         * Cursor Interaction
+         */
+        if (_isCursorInteractionAllowed() && Input.GetMouseButtonDown(1))
+        {
+            _state |= ControllerState.CursorInteraction;
+            OnCursorInteractionStart(GetCursorInteractionPositionWorld());
+        }
+        else if (!_isCursorInteractionAllowed() || Input.GetMouseButtonUp(1))
+        {
+            OnCursorInteractionEnd(GetCursorInteractionPositionWorld());
+            _state &= ~ControllerState.CursorInteraction;
+        }
+    }
+
+    private bool _isDrawingAllowed()
+    {
+        return (_state & ControllerState.DrawingEnabled) == ControllerState.DrawingEnabled;
+    }
+
+    private bool _isCursorInteractionAllowed()
+    {
+        return (_state & ControllerState.CursorInteractionEnabled) == ControllerState.CursorInteractionEnabled;
     }
 }
