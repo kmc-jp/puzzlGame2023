@@ -10,6 +10,7 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
     List<Vector2> colliderPoints;
     List<Vector3> linePoints;
 
+    GameObject colliderContainer;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,9 +19,10 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
         colliderPoints = new List<Vector2>();
         linePoints = new List<Vector3>();
 
-        //_addRigidBody();
-
-        //_addEdgeCollider();
+        
+       
+        _addRigidBody();
+        _addEdgeCollider();
     }
 
     // Update is called once per frame
@@ -54,6 +56,8 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
         rb.mass = 100;
         rb.simulated = true;
     }
+
+ 
     Vector3[] getLinePoint()
     {
         //描いたオブジェクトの情報を取得

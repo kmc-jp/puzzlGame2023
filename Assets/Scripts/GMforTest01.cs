@@ -201,7 +201,7 @@ public class GM : MonoBehaviour
     }
 
     void _completeLineObject() {
-        _createMeshCollider();
+        //_createMeshCollider();
     }
 
     void _createMeshCollider() { 
