@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimaCanvas : MonoBehaviour
@@ -14,8 +15,14 @@ public class AnimaCanvas : MonoBehaviour
     [Range(0.1f, 0.5f)]
     [SerializeField] float DefaultLineWidth;
 
+    [SerializeField] PhysicsMaterial2D DefaultPhysicsMaterial;
+
     //プレイヤーが描画する線の色
     [SerializeField] Color DefaultLineColor;
+
+    [SerializeField] float SimplifyColliderTolerance = 50.0f;
+
+    public Color[] LineColors;
 
     public PlayerManager Player;
 
@@ -31,12 +38,19 @@ public class AnimaCanvas : MonoBehaviour
 
     private GameObject tempDrawingObject = null;
     private LineRenderer tempDrawingLineRenderer = null;
+    private Color curDrawingColor = Color.black;
 
-    public void BeginDraw(Vector3 startPosition)
+    public void BeginDraw(Vector3 startPosition, int color)
     {
         Debug.Assert((_state & AnimaCanvasState.Drawing) != AnimaCanvasState.Drawing);
 
         _state |= AnimaCanvasState.Drawing;
+
+        curDrawingColor = DefaultLineColor;
+        if (LineColors.Length > color)
+        {
+            curDrawingColor = LineColors[color];
+        }
 
         tempDrawingObject = new GameObject();
         tempDrawingObject.name = "TempStroke";
@@ -46,21 +60,24 @@ public class AnimaCanvas : MonoBehaviour
         tempDrawingLineRenderer = tempDrawingObject.AddComponent<LineRenderer>();
         tempDrawingLineRenderer.useWorldSpace = true;
         tempDrawingLineRenderer.material = DefaultLineMaterial;
-        tempDrawingLineRenderer.material.color = DefaultLineColor;
+        tempDrawingLineRenderer.material.color = curDrawingColor;
         tempDrawingLineRenderer.startWidth = DefaultLineWidth;
         tempDrawingLineRenderer.endWidth = DefaultLineWidth;
     }
 
     public void EndDraw(Vector3 endPosition, bool cancel)
     {
-        Debug.Assert((_state & AnimaCanvasState.Drawing) == AnimaCanvasState.Drawing);
+        if ((_state & AnimaCanvasState.Drawing) != AnimaCanvasState.Drawing)
+        {
+            return;
+        }
 
         _state &= ~AnimaCanvasState.Drawing;
 
         if (!cancel)
         {
             // Create the Anima object from the LineRenderer
-            //TODO:
+            _createAnimaObject();
         }
 
         GameObject.Destroy(tempDrawingObject);
@@ -85,9 +102,11 @@ public class AnimaCanvas : MonoBehaviour
             Vector3 mousePosition = InputController.GetAnimaDrawingPositionWorld();
 
             //TODO: Verify the point is within the bounds of the canvas
-
-            //線を描画
-            _addPositionDataToLineRenderer(mousePosition);
+            if (_positionInBounds(mousePosition))
+            {
+                //線を描画
+                _addPositionDataToLineRenderer(mousePosition);
+            }
         }
     }
 
@@ -103,5 +122,53 @@ public class AnimaCanvas : MonoBehaviour
 
         //あとから描いた線が上に来るように調整
         tempDrawingLineRenderer.sortingOrder = 1;
+    }
+
+    bool _positionInBounds(Vector3 worldPosition)
+    {
+        // Layer: Canvas = 1 << 8
+        RaycastHit2D[] results = Physics2D.RaycastAll(worldPosition, Vector2.zero, 0, 1 << 8);
+        foreach (RaycastHit2D i in results)
+        {
+            AnimaCanvas foundCanvas = i.transform.gameObject.GetComponent<AnimaCanvas>();
+            if (foundCanvas && ReferenceEquals(foundCanvas, this))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void _createAnimaObject()
+    {
+        //TODO: Build from a prefab?
+
+        //空のゲームオブジェクト作成
+        GameObject newLineObj = new GameObject();
+        //オブジェクトにLineObjectMをアタッチ
+        //newLineObj.AddComponent<LineObjectM>();
+        //オブジェクトの名前をStrokeに変更
+        newLineObj.name = "Stroke";
+        //lineObjを自身の子要素に設定
+        newLineObj.transform.SetParent(transform);
+
+        //LineRendererをMesh化して、新しいラインオブジェクトに付く
+        MeshFilter newFilter = newLineObj.AddComponent<MeshFilter>();
+        tempDrawingLineRenderer.BakeMesh(newFilter.mesh);
+
+        MeshRenderer newRenderer = newLineObj.AddComponent<MeshRenderer>();
+        newRenderer.material = DefaultLineMaterial;
+        newRenderer.material.color = curDrawingColor;
+
+        //コライダーを付く
+        tempDrawingLineRenderer.Simplify(SimplifyColliderTolerance);
+        Mesh colliderMesh = new Mesh();
+        tempDrawingLineRenderer.BakeMesh(colliderMesh);
+        MeshCollider newCollider = newLineObj.AddComponent<MeshCollider>();
+        newCollider.sharedMesh = colliderMesh;
+
+        //Rigidbody2Dを付く
+        Rigidbody2D newRigidbody = newLineObj.AddComponent<Rigidbody2D>();
+        newRigidbody.sharedMaterial = DefaultPhysicsMaterial;
     }
 }

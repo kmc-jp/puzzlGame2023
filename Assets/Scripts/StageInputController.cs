@@ -10,7 +10,7 @@ public class StageInputController : MonoBehaviour
     /*
      * アニマ関連
      */
-    public delegate void OnAnimaDrawingStartFunc(Vector3 startPositionWorld);
+    public delegate void OnAnimaDrawingStartFunc(Vector3 startPositionWorld, int color);
     public event OnAnimaDrawingStartFunc OnAnimaDrawingStart;
 
     public delegate void OnAnimaDrawingEndFunc(Vector3 endPositionWorld, bool cancel);
@@ -54,6 +54,24 @@ public class StageInputController : MonoBehaviour
         return worldPosition;
     }
 
+    public int GetAnimaDrawingColor()
+    {
+        //TODO: Revise when the color system is developed
+        if ((_state & ControllerState.DrawingColor1) == ControllerState.DrawingColor1)
+        {
+            return 1;
+        }
+        else if ((_state & ControllerState.DrawingColor2) == ControllerState.DrawingColor2)
+        {
+            return 2;
+        }
+        else if ((_state & ControllerState.DrawingColor3) == ControllerState.DrawingColor3)
+        {
+            return 3;
+        }
+        return 0;
+    }
+
     public Vector3 GetCursorInteractionPositionScreen()
     {
         return Input.mousePosition;
@@ -83,7 +101,7 @@ public class StageInputController : MonoBehaviour
             if ((_state & ControllerState.Drawing) != ControllerState.Drawing)
             {
                 _state |= ControllerState.Drawing;
-                OnAnimaDrawingStart(GetAnimaDrawingPositionWorld());
+                OnAnimaDrawingStart(GetAnimaDrawingPositionWorld(), GetAnimaDrawingColor());
             }
         }
         else if (!_isDrawingAllowed() || Input.GetMouseButtonUp(0))
