@@ -3,7 +3,10 @@ guid: 5dc1f47a37c5dfd40861f206f185edc0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - BlueAnimaPhysic: {fileID: 6200000, guid: 5560f481b35f6184a840887902c6f801, type: 2}
+  - lineMaterial: {instanceID: 0}
+  - DrawingCanvas: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

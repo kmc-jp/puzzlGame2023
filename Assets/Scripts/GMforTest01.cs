@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GM : MonoBehaviour
 {
+    //アニマごとのphysicsMaterial
+    [SerializeField] PhysicsMaterial2D BlueAnimaPhysic;
+
     //標準の線の材質
     [SerializeField] Material lineMaterial;
    
@@ -141,7 +145,7 @@ public class GM : MonoBehaviour
         //lineObjのLineRendererコンポーネントを取得
         LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
         //useWorldSpaceをtrueに
-        lineRenderer.useWorldSpace = true;
+        lineRenderer.useWorldSpace = false;
         //lineRendererリストにlineObjを追加
         lineRenderers.Add(lineObj.GetComponent<LineRenderer>());
         //lineObjを自身の子要素に設定
@@ -201,7 +205,8 @@ public class GM : MonoBehaviour
     }
 
     void _completeLineObject() {
-        _createMeshCollider();
+        //_createMeshCollider();
+        _AnimaMovementBehaviour("blue");
     }
 
     void _createMeshCollider() { 
@@ -210,5 +215,15 @@ public class GM : MonoBehaviour
         lineRenderers.Last().BakeMesh(mesh);
         colliderContainer.GetComponent<MeshCollider>().sharedMesh = mesh;
         colliderContainer.transform.SetParent(lineRenderers.Last().transform);
+    }
+
+    void _AnimaMovementBehaviour(string color)
+    {
+        if(color == "blue") {
+            lineRenderers.Last().AddComponent<BlueAnimaMovementBehaviour>();
+            //var collider2d = lineRenderers.Last().GetComponent<Collider2D>(); //colliderの実装待ち
+            //collider2d.sharedMaterial = BlueAnimaPhysic; 
+
+        }
     }
 }
