@@ -59,7 +59,7 @@ public class StageManager : MonoBehaviour
         int HP;
 
         //他スクリプトから情報を取得
-        DrawingCanvas = GameObject.Find("Player");
+        DrawingCanvas = GameObject.Find("DrawingCanvas");
         PlayerManager = DrawingCanvas.GetComponent<PlayerManager>();
         HP = PlayerManager.HP;
 
