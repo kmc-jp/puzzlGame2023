@@ -4,7 +4,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(PolygonCollider2D))]
-internal class AnimaPolygonCollider2dBuilder : MonoBehaviour {
+internal sealed class AnimaPolygonCollider2dBuilder : MonoBehaviour {
     private void Awake() {
         BuildPolygonCollider2dPaths();
     }
