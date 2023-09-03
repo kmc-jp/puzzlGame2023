@@ -210,25 +210,38 @@ public class AnimaCanvas : MonoBehaviour
     {
         //Note: This modifies tempDrawingLineRenderer
         tempDrawingLineRenderer.Simplify(SimplifyColliderTolerance);
-        Mesh colliderMesh = new Mesh();
 
-        tempDrawingLineRenderer.BakeMesh(colliderMesh);
-        PolygonCollider2D newCollider = lineObject.AddComponent<PolygonCollider2D>();
-        List<Vector3> vertices = new List<Vector3>();
-        colliderMesh.GetVertices(vertices);
-        int[] triangles = colliderMesh.GetTriangles(0);
-        newCollider.pathCount = triangles.Length;
+        // NOTE:
+        // BakeMesh takes a snapshot of the mesh that LineRenderer will use for rendering at the time it is called.
+        // In this project, since the camera's projection type is orthographic, snapshots are independent of the camera's position whenever they are taken.
+        var mesh = new Mesh();
+        tempDrawingLineRenderer.BakeMesh(mesh);
 
-        for (int i = 0; i <  triangles.Length / 3; i++)
+        var vertices = new List<Vector3>();
+        mesh.GetVertices(vertices);
+
+        var triangles = mesh.GetTriangles(0);
+
+        // NOTE:
+        // A path refers to a single closed path that constitutes a polygon.
+        // In this implementation, one path is equated with one triangle, and LineRenderer's mesh information is diverted to the collider.
+
+        PolygonCollider2D polygonCollider2d = lineObject.AddComponent<PolygonCollider2D>();
+
+        // NOTE:
+        // pathCount must be explicitly assigned or it will assert an IndexOutOfRange exception.
+        polygonCollider2d.pathCount = triangles.Length;
+
+        for (int triangleIndex = 0; triangleIndex < triangles.Length / 3; triangleIndex++)
         {
-            Vector2[] points = new Vector2[] {
-                vertices[triangles[i * 3]],
-                vertices[triangles[i * 3 + 1]],
-                vertices[triangles[i * 3 + 2]]
-            };
-            newCollider.SetPath(i, points);
+            var firstPoint = vertices[triangles[triangleIndex * 3]];
+            var secondPoint = vertices[triangles[triangleIndex * 3 + 1]];
+            var thirdPoint = vertices[triangles[triangleIndex * 3 + 2]];
+            var points = new Vector2[] { firstPoint, secondPoint, thirdPoint };
+
+            polygonCollider2d.SetPath(triangleIndex, points);
         }
 
-        Destroy(colliderMesh);
+        Destroy(mesh);
     }
 }
