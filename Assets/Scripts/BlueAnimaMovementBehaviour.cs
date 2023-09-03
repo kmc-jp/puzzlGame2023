@@ -1,15 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlueAnimaMovementBehaviour : MonoBehaviour
 {
-    Physics2D Physics2D;
     // Start is called before the first frame update
     void Start()
     {
-        _addRigidBody();
+        ApplyPhysicsParameters();
     }
 
     // Update is called once per frame
@@ -20,18 +16,19 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
 
     
 
-    void _addRigidBody()
+    void ApplyPhysicsParameters()
     {
-        this.gameObject.AddComponent<Rigidbody>();
+        this.gameObject.AddComponent<Rigidbody2D>();
         var rb = this.GetComponent<Rigidbody2D>();
 
         //重さの調整
         rb.useAutoMass = true;
-        float massValue = rb.mass;
-        rb.useAutoMass = false;
-        rb.mass = massValue;
+
+        //var collider2d = GetComponent<Collider2D>(); //colliderの実装待ち
+        //collider2d.density = 1.1f; // 値は適当です。
+
 
         rb.angularDrag = 10;     
-        rb.simulated = true;
+        rb.drag = 10;
     }
 }

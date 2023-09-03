@@ -221,7 +221,7 @@ public class GM : MonoBehaviour
     {
         if(color == "blue") {
             lineRenderers.Last().AddComponent<BlueAnimaMovementBehaviour>();
-            //var collider2d = GetComponent<Collider2D>(); //colliderの実装待ち
+            //var collider2d = lineRenderers.Last().GetComponent<Collider2D>(); //colliderの実装待ち
             //collider2d.sharedMaterial = BlueAnimaPhysic; 
 
         }
