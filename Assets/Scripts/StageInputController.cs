@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class StageInputController : MonoBehaviour
 {
     public PlayerManager Player;
@@ -87,6 +88,9 @@ public class StageInputController : MonoBehaviour
     {
         //TODO: Temporarily allow drawing at all times
         _state |= ControllerState.DrawingEnabled;
+
+        //TODO: Temporarily allow cursor interaction at all times
+        _state |= ControllerState.CursorInteractionEnabled;
     }
 
     // Update is called once per frame
@@ -113,23 +117,13 @@ public class StageInputController : MonoBehaviour
             }
         }
 
-        //インク残量を減らす・回復する
-        //TODO: Move this logic into a proper player state management class
+        //インク残量が0になったら、drawingを強制終了
         if ((_state & ControllerState.Drawing) == ControllerState.Drawing)
         {
-            Player.InkLeft -= Time.deltaTime;
             if (Player.InkLeft <= 0.0f)
             {
-                Player.InkLeft = 0.0f;
-                _state &= ~ControllerState.Drawing;
                 OnAnimaDrawingEnd(GetAnimaDrawingPositionWorld(), false);
-            }
-        }
-        else
-        {
-            if (Player.InkLeft < Player.MaxInkAmount)
-            {
-                Player.InkLeft += Time.deltaTime * Player.InkRecovery;
+                _state &= ~ControllerState.Drawing;
             }
         }
 

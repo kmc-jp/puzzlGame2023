@@ -390,9 +390,7 @@ GameObject:
   - component: {fileID: 203479000}
   - component: {fileID: 203478999}
   - component: {fileID: 203479003}
-  - component: {fileID: 203479004}
-  - component: {fileID: 203479005}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: DrawingCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,60 +493,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 203478998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dc1f47a37c5dfd40861f206f185edc0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5368878b1e1f3c44bb5c9c5150470723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 048c25e935bc7dc4380dee85649c36c6, type: 2}
-  lineWidth: 0.25
-  lineColor: {r: 0, g: 0, b: 0, a: 0}
-  drawFlag: 0
-  MaxInkAmount: 2
-  InkRecovery: 0.5
-  _inkLeft: 0
-  goalInFlag: 0
-  DrawingCanvas: {fileID: 0}
---- !u!114 &203479004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203478998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88c3cb93265eac64bac9d1b6dbc947b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: 048c25e935bc7dc4380dee85649c36c6, type: 2}
-  lineWidth: 0.5
-  lineColor: {r: 0, g: 0, b: 0, a: 0}
-  goalWidth: 5
-  goalLineColor: {r: 0, g: 0, b: 0, a: 0}
-  impenetrableWidth: 5
-  impenetrableLineColor: {r: 0, g: 0, b: 0, a: 0}
-  winnnertext: {fileID: 145412821}
-  DrawingCanvas: {fileID: 203478998}
---- !u!114 &203479005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 203478998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebffc2caf05d929448c27cbc0eb10a7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxInkAmount: 2
-  InkRecovery: 0.5
-  HPtext: {fileID: 1264171903}
-  MaxHP: 2
-  HP: 0
-  maxGodMode: 0
-  godModeCount: 0
-  godModeFlag: 0
-  DrawingCampas: {fileID: 203478998}
+  InputController: {fileID: 1320736788}
+  DefaultLineMaterial: {fileID: 2100000, guid: 048c25e935bc7dc4380dee85649c36c6, type: 2}
+  DefaultLineWidth: 0.5
+  DefaultPhysicsMaterial: {fileID: 6200000, guid: 00fae495e002f8548995e4f96b63b351, type: 2}
+  DefaultLineColor: {r: 0, g: 0, b: 0, a: 0}
+  SimplifyColliderTolerance: 0.362
+  DrawFrequency: 60
+  LineColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0.046581507, a: 0}
+  - {r: 0, g: 0.10499692, b: 1, a: 0}
+  Player: {fileID: 1699865210}
 --- !u!1 &371052569
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,50 +809,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18920bf6f24161f41b6190fefaa1781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ink0: {fileID: 21300000, guid: fad9dabd9f6b7f444a1028e126d2d08e, type: 3}
-  ink1: {fileID: 21300000, guid: 00ca9ac33ff65734dbefe6154df772a4, type: 3}
-  ink2: {fileID: 21300000, guid: f9b2d48e335c71e469700d89dbb98a4a, type: 3}
-  ink3: {fileID: 21300000, guid: 97e95a3bc54e45e4cb299f29e168d5a3, type: 3}
-  ink4: {fileID: 21300000, guid: 02b71eb43802d2548889eace2e5f967f, type: 3}
-  ink5: {fileID: 21300000, guid: c37298d0500617440985dcb109c7450d, type: 3}
-  ink6: {fileID: 21300000, guid: 4fd2f1c1d835600479a7ad3ba09213f2, type: 3}
-  ink7: {fileID: 21300000, guid: ad4eb3a33993b54418fde975f866599a, type: 3}
-  ink8: {fileID: 21300000, guid: eabfabb933cff1246b95524366cdbb34, type: 3}
-  ink9: {fileID: 21300000, guid: 162f74f367b0f9749acc9030ffab5357, type: 3}
-  ink10: {fileID: 21300000, guid: e6f73ea7c64d8a544ac2242289dda24a, type: 3}
-  ink11: {fileID: 21300000, guid: db71654dc6140d742bdfcd439dfc2349, type: 3}
-  ink12: {fileID: 21300000, guid: bbd69a2b96cf99f418c5fdbb6aa601aa, type: 3}
-  ink13: {fileID: 21300000, guid: 8abb57aa22e7de24da01ec394e66ab6d, type: 3}
-  ink14: {fileID: 21300000, guid: d3ef8c3612988c2418eadaa27faef437, type: 3}
-  ink15: {fileID: 21300000, guid: 5194645c791262f4d8606ba525279436, type: 3}
-  ink16: {fileID: 21300000, guid: 06e01ed432444af4d80f365173df2297, type: 3}
-  ink17: {fileID: 21300000, guid: 7cd68da888e8d294386d60bf2feea423, type: 3}
-  ink18: {fileID: 21300000, guid: 31e30ce0970011a46994ce44cf963560, type: 3}
-  ink19: {fileID: 21300000, guid: bd45fbd70607e38428e757f8d9367972, type: 3}
-  ink20: {fileID: 21300000, guid: ce12071beb1e2274eb630c37074998f0, type: 3}
   sprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  DrawingCampas: {fileID: 0}
+  - {fileID: 21300000, guid: fad9dabd9f6b7f444a1028e126d2d08e, type: 3}
+  - {fileID: 21300000, guid: 00ca9ac33ff65734dbefe6154df772a4, type: 3}
+  - {fileID: 21300000, guid: f9b2d48e335c71e469700d89dbb98a4a, type: 3}
+  - {fileID: 21300000, guid: 97e95a3bc54e45e4cb299f29e168d5a3, type: 3}
+  - {fileID: 21300000, guid: 02b71eb43802d2548889eace2e5f967f, type: 3}
+  - {fileID: 21300000, guid: c37298d0500617440985dcb109c7450d, type: 3}
+  - {fileID: 21300000, guid: 4fd2f1c1d835600479a7ad3ba09213f2, type: 3}
+  - {fileID: 21300000, guid: ad4eb3a33993b54418fde975f866599a, type: 3}
+  - {fileID: 21300000, guid: eabfabb933cff1246b95524366cdbb34, type: 3}
+  - {fileID: 21300000, guid: 162f74f367b0f9749acc9030ffab5357, type: 3}
+  - {fileID: 21300000, guid: e6f73ea7c64d8a544ac2242289dda24a, type: 3}
+  - {fileID: 21300000, guid: db71654dc6140d742bdfcd439dfc2349, type: 3}
+  - {fileID: 21300000, guid: bbd69a2b96cf99f418c5fdbb6aa601aa, type: 3}
+  - {fileID: 21300000, guid: 8abb57aa22e7de24da01ec394e66ab6d, type: 3}
+  - {fileID: 21300000, guid: d3ef8c3612988c2418eadaa27faef437, type: 3}
+  - {fileID: 21300000, guid: 5194645c791262f4d8606ba525279436, type: 3}
+  - {fileID: 21300000, guid: 06e01ed432444af4d80f365173df2297, type: 3}
+  - {fileID: 21300000, guid: 7cd68da888e8d294386d60bf2feea423, type: 3}
+  - {fileID: 21300000, guid: 31e30ce0970011a46994ce44cf963560, type: 3}
+  - {fileID: 21300000, guid: bd45fbd70607e38428e757f8d9367972, type: 3}
+  - {fileID: 21300000, guid: ce12071beb1e2274eb630c37074998f0, type: 3}
+  Player: {fileID: 1699865210}
 --- !u!1 &853969412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,13 +1911,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxInkAmount: 2
   InkRecovery: 0.5
-  HPtext: {fileID: 0}
+  HPtext: {fileID: 1264171903}
   MaxHP: 2
   HP: 0
   maxGodMode: 0
   godModeCount: 0
   godModeFlag: 0
-  DrawingCampas: {fileID: 0}
+  InputController: {fileID: 1320736788}
 --- !u!4 &1699865211
 Transform:
   m_ObjectHideFlags: 0
