@@ -40,6 +40,10 @@ public class StageInputController : MonoBehaviour
         DrawingColor3            = 1 << 4,
         CursorInteraction        = 1 << 5,
         CursorInteractionEnabled = 1 << 6,
+
+        // Debug colors
+        DrawingColor4            = 1 << 29,
+        DrawingColor5            = 1 << 30,
     }
 
     private ControllerState _state = ControllerState.None;
@@ -70,6 +74,19 @@ public class StageInputController : MonoBehaviour
         {
             return 3;
         }
+
+        if (Debug.isDebugBuild)
+        {
+            if ((_state & ControllerState.DrawingColor4) == ControllerState.DrawingColor4)
+            {
+                return 4;
+            }
+            else if ((_state & ControllerState.DrawingColor5) == ControllerState.DrawingColor5)
+            {
+                return 5;
+            }
+        }
+
         return 0;
     }
 
@@ -86,6 +103,9 @@ public class StageInputController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Default color
+        _state |= ControllerState.DrawingColor1;
+
         //TODO: Temporarily allow drawing at all times
         _state |= ControllerState.DrawingEnabled;
 
@@ -127,6 +147,35 @@ public class StageInputController : MonoBehaviour
             }
         }
 
+        //アニマの色を切り替え
+        if (_isDrawingAllowed())
+        {
+            if (Input.GetButtonDown("Anima1")) {
+                _setAnimaColor(1);
+            }
+            else if (Input.GetButtonDown("Anima2"))
+            {
+                _setAnimaColor(2);
+            }
+            else if (Input.GetButtonDown("Anima3"))
+            {
+                _setAnimaColor(3);
+            }
+
+            // Allow switching up to 5 for debug
+            if (Debug.isDebugBuild)
+            {
+                if (Input.GetButtonDown("Anima4"))
+                {
+                    _setAnimaColor(4);
+                }
+                else if (Input.GetButtonDown("Anima5"))
+                {
+                    _setAnimaColor(5);
+                }
+            }
+        }
+
         /*
          * Cursor Interaction
          */
@@ -150,5 +199,37 @@ public class StageInputController : MonoBehaviour
     private bool _isCursorInteractionAllowed()
     {
         return (_state & ControllerState.CursorInteractionEnabled) == ControllerState.CursorInteractionEnabled;
+    }
+
+    private void _setAnimaColor(int color)
+    {
+        ControllerState allColors =
+            ControllerState.DrawingColor1 |
+            ControllerState.DrawingColor2 |
+            ControllerState.DrawingColor3 |
+            ControllerState.DrawingColor4 |
+            ControllerState.DrawingColor5;
+
+        _state &= ~allColors;
+        switch (color)
+        {
+            case 1:
+                _state |= ControllerState.DrawingColor1;
+                break;
+            case 2:
+                _state |= ControllerState.DrawingColor2;
+                break;
+            case 3:
+                _state |= ControllerState.DrawingColor3;
+                break;
+            case 4:
+                _state |= ControllerState.DrawingColor4;
+                break;
+            case 5:
+                _state |= ControllerState.DrawingColor5;
+                break;
+            default:
+                break;
+        }
     }
 }

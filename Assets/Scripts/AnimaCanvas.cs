@@ -9,6 +9,8 @@ public class AnimaCanvas : MonoBehaviour
 {
     [SerializeField] StageInputController InputController;
 
+    [SerializeField] PlayerManager Player;
+
     //標準の線の材質
     [SerializeField] Material DefaultLineMaterial;
 
@@ -18,19 +20,13 @@ public class AnimaCanvas : MonoBehaviour
 
     [SerializeField] PhysicsMaterial2D DefaultPhysicsMaterial;
 
-    //プレイヤーが描画する線の色
-    [SerializeField] Color DefaultLineColor;
-
     [SerializeField, Range(0.0f, 1.0f)]
     float SimplifyColliderTolerance = 0.1f;
 
     [SerializeField, Tooltip("Points drawn per second")]
     int DrawFrequency = 48;
 
-    public Color[] LineColors;
-
-    public PlayerManager Player;
-
+    [SerializeField] GameObject[] AnimaColorPrefabs;
 
     [Flags]
     private enum AnimaCanvasState
@@ -43,21 +39,23 @@ public class AnimaCanvas : MonoBehaviour
 
     private GameObject tempDrawingObject = null;
     private LineRenderer tempDrawingLineRenderer = null;
-    private Color curDrawingColor = Color.black;
+    private int curDrawingColorIndex;
     private float drawFrequencyTimer = 0.0f;
     private float drawFrequencyInverted;
+    private float drawTimer;
 
     public void BeginDraw(Vector3 startPosition, int color)
     {
+        // StageInputController color is 1-based
+        color -= 1;
+
         Debug.Assert((_state & AnimaCanvasState.Drawing) != AnimaCanvasState.Drawing);
+        Debug.Assert(color < AnimaColorPrefabs.Length);
+        Debug.Assert(AnimaColorPrefabs[color].GetComponent<AnimaObject>() != null);
 
         _state |= AnimaCanvasState.Drawing;
 
-        curDrawingColor = DefaultLineColor;
-        if (LineColors.Length > color)
-        {
-            curDrawingColor = LineColors[color];
-        }
+        curDrawingColorIndex = color;
 
         tempDrawingObject = new GameObject();
         tempDrawingObject.name = "TempStroke";
@@ -68,12 +66,13 @@ public class AnimaCanvas : MonoBehaviour
         tempDrawingLineRenderer = tempDrawingObject.AddComponent<LineRenderer>();
         tempDrawingLineRenderer.useWorldSpace = true;
         tempDrawingLineRenderer.material = DefaultLineMaterial;
-        tempDrawingLineRenderer.material.color = curDrawingColor;
+        tempDrawingLineRenderer.material.color = AnimaColorPrefabs[curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
         tempDrawingLineRenderer.startWidth = DefaultLineWidth;
         tempDrawingLineRenderer.endWidth = DefaultLineWidth;
         tempDrawingLineRenderer.positionCount = 0;
 
         drawFrequencyTimer = 0.0f;
+        drawTimer = 0.0f;
     }
 
     public void EndDraw(Vector3 endPosition, bool cancel)
@@ -128,6 +127,8 @@ public class AnimaCanvas : MonoBehaviour
             {
                 drawFrequencyTimer -= Time.deltaTime;
             }
+
+            drawTimer += Time.deltaTime;
         }
     }
 
@@ -169,10 +170,11 @@ public class AnimaCanvas : MonoBehaviour
 
         //TODO: Build from a prefab?
 
+
         //空のゲームオブジェクト作成
-        GameObject newLineObj = new GameObject();
+        GameObject newLineObj = Instantiate(AnimaColorPrefabs[curDrawingColorIndex]);
         //オブジェクトにLineObjectMをアタッチ
-        //newLineObj.AddComponent<LineObjectM>();
+        //newLineObj.GetOrAddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
         newLineObj.name = "Stroke";
 
@@ -183,27 +185,28 @@ public class AnimaCanvas : MonoBehaviour
         newLineObj.transform.localScale = Vector3.one;
 
         //LineRendererをMesh化して、新しいラインオブジェクトに付く
-        MeshFilter newFilter = newLineObj.AddComponent<MeshFilter>();
+        //TODO: GetOrAddComponent doesn't work?
+        MeshFilter newFilter = newLineObj.GetOrAddComponent<MeshFilter>();
         tempDrawingLineRenderer.BakeMesh(newFilter.mesh);
 
-        MeshRenderer newRenderer = newLineObj.AddComponent<MeshRenderer>();
+        MeshRenderer newRenderer = newLineObj.GetOrAddComponent<MeshRenderer>();
         newRenderer.material = DefaultLineMaterial;
-        newRenderer.material.color = curDrawingColor;
+        newRenderer.material.color = AnimaColorPrefabs[curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
 
         //コライダーを付く
         _createCollider(newLineObj);
 
         //Rigidbody2Dを付く
-        Rigidbody2D newRigidbody = newLineObj.AddComponent<Rigidbody2D>();
+        Rigidbody2D newRigidbody = newLineObj.GetOrAddComponent<Rigidbody2D>();
         newRigidbody.sharedMaterial = DefaultPhysicsMaterial;
-        //TODO: Calculate mass
+        //TODO: Calculate mass?
 
-        //TODO: Attach AnimaObject based on color
         //AnimaObjectを付く
-        //AnimaObject newAnima = newLineObj.AddComponent<AnimaObject>();
+        AnimaObject animaComponent = newLineObj.GetComponent<AnimaObject>();
+        animaComponent.InkUsed = drawTimer;
 
         //TODO: Allow movement with cursor for now. Remove once anima effects are implemented.
-        newLineObj.AddComponent<CursorInteractable>();
+        newLineObj.GetOrAddComponent<CursorInteractable>();
     }
 
     void _createCollider(GameObject lineObject)
@@ -226,7 +229,7 @@ public class AnimaCanvas : MonoBehaviour
         // A path refers to a single closed path that constitutes a polygon.
         // In this implementation, one path is equated with one triangle, and LineRenderer's mesh information is diverted to the collider.
 
-        PolygonCollider2D polygonCollider2d = lineObject.AddComponent<PolygonCollider2D>();
+        PolygonCollider2D polygonCollider2d = lineObject.GetOrAddComponent<PolygonCollider2D>();
 
         // NOTE:
         // pathCount must be explicitly assigned or it will assert an IndexOutOfRange exception.
@@ -243,5 +246,10 @@ public class AnimaCanvas : MonoBehaviour
         }
 
         Destroy(mesh);
+    }
+
+    void _createAnimaColor(GameObject lineObject)
+    {
+        
     }
 }
