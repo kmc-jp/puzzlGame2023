@@ -168,9 +168,6 @@ public class AnimaCanvas : MonoBehaviour
             return;
         }
 
-        //TODO: Build from a prefab?
-
-
         //空のゲームオブジェクト作成
         GameObject newLineObj = Instantiate(AnimaColorPrefabs[curDrawingColorIndex]);
         //オブジェクトにLineObjectMをアタッチ
@@ -246,10 +243,5 @@ public class AnimaCanvas : MonoBehaviour
         }
 
         Destroy(mesh);
-    }
-
-    void _createAnimaColor(GameObject lineObject)
-    {
-        
     }
 }

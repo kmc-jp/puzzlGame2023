@@ -17,6 +17,9 @@ public class StageInputController : MonoBehaviour
     public delegate void OnAnimaDrawingEndFunc(Vector3 endPositionWorld, bool cancel);
     public event OnAnimaDrawingEndFunc OnAnimaDrawingEnd;
 
+    public delegate void OnAnimaColorChangeFunc(int newColor);
+    public event OnAnimaColorChangeFunc OnAnimaColorChange;
+
     /*
      * CursorInteractable関連
      */
@@ -61,7 +64,6 @@ public class StageInputController : MonoBehaviour
 
     public int GetAnimaDrawingColor()
     {
-        //TODO: Revise when the color system is developed
         if ((_state & ControllerState.DrawingColor1) == ControllerState.DrawingColor1)
         {
             return 1;
@@ -116,7 +118,6 @@ public class StageInputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO: Update based on possible player inputs
         /*
          * Anima
          */
@@ -125,14 +126,14 @@ public class StageInputController : MonoBehaviour
             if ((_state & ControllerState.Drawing) != ControllerState.Drawing)
             {
                 _state |= ControllerState.Drawing;
-                OnAnimaDrawingStart(GetAnimaDrawingPositionWorld(), GetAnimaDrawingColor());
+                OnAnimaDrawingStart?.Invoke(GetAnimaDrawingPositionWorld(), GetAnimaDrawingColor());
             }
         }
         else if (!_isDrawingAllowed() || Input.GetMouseButtonUp(0))
         {
             if ((_state & ControllerState.Drawing) == ControllerState.Drawing)
             {
-                OnAnimaDrawingEnd(GetAnimaDrawingPositionWorld(), false);
+                OnAnimaDrawingEnd?.Invoke(GetAnimaDrawingPositionWorld(), false);
                 _state &= ~ControllerState.Drawing;
             }
         }
@@ -142,7 +143,7 @@ public class StageInputController : MonoBehaviour
         {
             if (Player.InkLeft <= 0.0f)
             {
-                OnAnimaDrawingEnd(GetAnimaDrawingPositionWorld(), false);
+                OnAnimaDrawingEnd?.Invoke(GetAnimaDrawingPositionWorld(), false);
                 _state &= ~ControllerState.Drawing;
             }
         }
@@ -182,11 +183,11 @@ public class StageInputController : MonoBehaviour
         if (_isCursorInteractionAllowed() && Input.GetMouseButtonDown(1))
         {
             _state |= ControllerState.CursorInteraction;
-            OnCursorInteractionStart(GetCursorInteractionPositionWorld());
+            OnCursorInteractionStart?.Invoke(GetCursorInteractionPositionWorld());
         }
         else if (!_isCursorInteractionAllowed() || Input.GetMouseButtonUp(1))
         {
-            OnCursorInteractionEnd(GetCursorInteractionPositionWorld());
+            OnCursorInteractionEnd?.Invoke(GetCursorInteractionPositionWorld());
             _state &= ~ControllerState.CursorInteraction;
         }
     }
@@ -229,7 +230,10 @@ public class StageInputController : MonoBehaviour
                 _state |= ControllerState.DrawingColor5;
                 break;
             default:
+                Debug.LogError(string.Format("Invalid Anima color: {0}", color));
                 break;
         }
+
+        OnAnimaColorChange?.Invoke(color);
     }
 }
