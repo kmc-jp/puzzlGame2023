@@ -86,16 +86,13 @@ internal sealed class QualiaIntensity : IDisposable {
         _intensity = intensity;
     }
 
-    ~QualiaIntensity() {
-        if (_autoRecoveryCts != null) {
-            _autoRecoveryCts.Cancel();
-            _autoRecoveryCts.Dispose();
-        }
-    }
-
     public void Dispose() {
         foreach (var updateScheduleCts in _updateScheduleCtsList) {
             updateScheduleCts.Cancel();
+        }
+
+        if (_autoRecoveryCts != null) {
+            _autoRecoveryCts.Cancel();
         }
     }
 
@@ -144,7 +141,17 @@ internal sealed class QualiaIntensity : IDisposable {
         }
 
         _autoRecoveryCts = new CancellationTokenSource();
-        EnableAutoRecoveryAsync(amountPerSecond, _autoRecoveryCts.Token);
+
+        try {
+            EnableAutoRecoveryAsync(amountPerSecond, _autoRecoveryCts.Token);
+        }
+        catch (OperationCanceledException) {
+
+        }
+        finally {
+            _autoRecoveryCts.Dispose();
+            _autoRecoveryCts = null;
+        }
     }
 
     internal void DisableAutoRecovery() {
@@ -153,20 +160,23 @@ internal sealed class QualiaIntensity : IDisposable {
         }
 
         _autoRecoveryCts.Cancel();
-        _autoRecoveryCts.Dispose();
-        _autoRecoveryCts = null;
     }
 
     private void IncreasePatternChecked(float amount, IntensityUpdatePattern pattern) {
-        float intensityRateCache = IntensityRate;
+        float intensityRateCache;
+        float intensityRateUpdated;
 
-        float intensityUpdated = _intensity + amount;
-        if (intensityUpdated > _maxIntensity) {
-            intensityUpdated = _maxIntensity;
+        lock (null) {
+            intensityRateCache = IntensityRate;
+
+            float intensityUpdated = _intensity + amount;
+            if (intensityUpdated > _maxIntensity) {
+                intensityUpdated = _maxIntensity;
+            }
+            _intensity = intensityUpdated;
+
+            intensityRateUpdated = IntensityRate;
         }
-        _intensity = intensityUpdated;
-
-        float intensityRateUpdated = IntensityRate;
 
         switch (pattern) {
             case IntensityUpdatePattern.Discrete:
@@ -207,15 +217,20 @@ internal sealed class QualiaIntensity : IDisposable {
     }
 
     private void DecreasePatternChecked(float amount, IntensityUpdatePattern pattern) {
-        float intensityRateCache = IntensityRate;
+        float intensityRateCache;
+        float intensityRateUpdated;
 
-        float intensityUpdated = _intensity - amount;
-        if (intensityUpdated < _minIntensity) {
-            intensityUpdated = _minIntensity;
+        lock (null) {
+            intensityRateCache = IntensityRate;
+
+            float intensityUpdated = _intensity - amount;
+            if (intensityUpdated < _minIntensity) {
+                intensityUpdated = _minIntensity;
+            }
+            _intensity = intensityUpdated;
+
+            intensityRateUpdated = IntensityRate;
         }
-        _intensity = intensityUpdated;
-
-        float intensityRateUpdated = IntensityRate;
 
         switch (pattern) {
             case IntensityUpdatePattern.Discrete:
@@ -257,13 +272,19 @@ internal sealed class QualiaIntensity : IDisposable {
 
     private async Task IncreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
         try {
-            int totalIncreaseCount = (int)(timeToReach * _updateTimesPerSecond);
+            int totalIncreaseCount;
+            int increaseInterval;
+            float amountPerUpdate;
 
-            int secondToMillisecond = 1000;
-            int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+            lock (null) {
+                totalIncreaseCount = (int)(timeToReach * _updateTimesPerSecond);
 
-            float amountPerSecond = amount / timeToReach;
-            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+                int secondToMillisecond = 1000;
+                increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+
+                float amountPerSecond = amount / timeToReach;
+                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            }
 
             for (int increaseCount = 0; increaseCount < totalIncreaseCount; increaseCount++) {
                 IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
@@ -283,14 +304,20 @@ internal sealed class QualiaIntensity : IDisposable {
 
     private async Task DecreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
         try {
-            int totalDecreaseCount = (int)(timeToReach * _updateTimesPerSecond);
+            int totalDecreaseCount;
+            int decreaseInterval;
+            float amountPerUpdate;
 
-            int secondToMillisecond = 1000;
-            int decreaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+            lock (null) {
+                totalDecreaseCount = (int)(timeToReach * _updateTimesPerSecond);
 
-            float amountPerSecond = amount / timeToReach;
-            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+                int secondToMillisecond = 1000;
+                decreaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
 
+                float amountPerSecond = amount / timeToReach;
+                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            }
+            
             for (int decreaseCount = 0; decreaseCount < totalDecreaseCount; decreaseCount++) {
                 DecreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
 
@@ -309,10 +336,15 @@ internal sealed class QualiaIntensity : IDisposable {
 
     private async void EnableAutoRecoveryAsync(float amountPerSecond, CancellationToken ct) {
         try {
-            int secondToMillisecond = 1000;
-            int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+            float amountPerUpdate;
+            int increaseInterval;
 
-            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            lock (null) {
+                int secondToMillisecond = 1000;
+                increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+
+                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            }
 
             while (true) {
                 IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
