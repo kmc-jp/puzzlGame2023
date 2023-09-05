@@ -10,6 +10,7 @@ public class GM : MonoBehaviour
 {
     //アニマごとのphysicsMaterial
     [SerializeField] PhysicsMaterial2D BlueAnimaPhysic;
+    [SerializeField] PhysicsMaterial2D YellowAnimaPhydic; 
 
     //標準の線の材質
     [SerializeField] Material lineMaterial;
@@ -206,7 +207,7 @@ public class GM : MonoBehaviour
 
     void _completeLineObject() {
         //_createMeshCollider();
-        _AnimaMovementBehaviour("blue");
+        _AnimaMovementBehaviour("yellow");
     }
 
     void _createMeshCollider() { 
@@ -219,11 +220,19 @@ public class GM : MonoBehaviour
 
     void _AnimaMovementBehaviour(string color)
     {
-        if(color == "blue") {
-            lineRenderers.Last().AddComponent<BlueAnimaMovementBehaviour>();
-            //var collider2d = lineRenderers.Last().GetComponent<Collider2D>(); //colliderの実装待ち
-            //collider2d.sharedMaterial = BlueAnimaPhysic; 
+        switch (color)
+        {
+            case "blue":
+                lineRenderers.Last().AddComponent<BlueAnimaMovementBehaviour>();
+                //var collider2d = lineRenderers.Last().GetComponent<Collider2D>(); //colliderの実装待ち
+                //collider2d.sharedMaterial = BlueAnimaPhysic; 
+                break;
 
+            case "yellow":
+                lineRenderers.Last().AddComponent<YellowAnimaBehavior>();
+                //var collider2d = lineRenderers.Last().GetComponent<Collider2D>(); //colliderの実装待ち
+                //collider2d.sharedMaterial = YellowAnimaPhysic; 
+                break;
         }
     }
 }
