@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-internal sealed class QualiaIntensity {
+internal sealed class QualiaIntensity : IDisposable {
     // Corrected the typo.
     private enum IntensityUpdatePattern {
         Discrete,
@@ -87,14 +87,15 @@ internal sealed class QualiaIntensity {
     }
 
     ~QualiaIntensity() {
-        foreach (var updateScheduleCts in  _updateScheduleCtsList) {
-            updateScheduleCts.Cancel();
-            updateScheduleCts.Dispose();
-        }
-
         if (_autoRecoveryCts != null) {
             _autoRecoveryCts.Cancel();
             _autoRecoveryCts.Dispose();
+        }
+    }
+
+    public void Dispose() {
+        foreach (var updateScheduleCts in _updateScheduleCtsList) {
+            updateScheduleCts.Cancel();
         }
     }
 
@@ -106,25 +107,35 @@ internal sealed class QualiaIntensity {
         DecreasePatternChecked(amount, IntensityUpdatePattern.Discrete);
     }
 
-    internal void IncreaseScheduled(float amount, float timeToReach) {
+    internal async void IncreaseScheduled(float amount, float timeToReach) {
         var updateScheduleCts = new CancellationTokenSource();
-        
         _updateScheduleCtsList.Add(updateScheduleCts);
 
-        _ = Task.Run(() => IncreaseScheduledAsync(amount, timeToReach), updateScheduleCts.Token);
-        updateScheduleCts.Dispose();
+        try {
+            await IncreaseScheduledAsync(amount, timeToReach, updateScheduleCts.Token);
+            _updateScheduleCtsList.Remove(updateScheduleCts);
+        }
+        catch (OperationCanceledException) {
 
-        _updateScheduleCtsList.Remove(updateScheduleCts);
+        }
+        finally {
+            updateScheduleCts.Dispose();
+        }
     }
 
-    internal void DecreaseScheduled(float amount, float timeToReach) {
+    internal async void DecreaseScheduled(float amount, float timeToReach) {
         var updateScheduleCts = new CancellationTokenSource();
 
-        _updateScheduleCtsList.Add(updateScheduleCts);
+        try {
+            await DecreaseScheduledAsync(amount, timeToReach, updateScheduleCts.Token);
+            _updateScheduleCtsList.Remove(updateScheduleCts);
+        }
+        catch (OperationCanceledException) {
 
-        _ = Task.Run(() => DecreaseScheduledAsync(amount, timeToReach), updateScheduleCts.Token);
-
-        _updateScheduleCtsList.Remove(updateScheduleCts);
+        }
+        finally {
+            updateScheduleCts.Dispose();
+        }
     }
 
     internal void EnableAutoRecovery(float amountPerSecond) {
@@ -133,7 +144,7 @@ internal sealed class QualiaIntensity {
         }
 
         _autoRecoveryCts = new CancellationTokenSource();
-        _ = Task.Run(() => EnableAutoRecoveryAsync(amountPerSecond), _autoRecoveryCts.Token);
+        EnableAutoRecoveryAsync(amountPerSecond, _autoRecoveryCts.Token);
     }
 
     internal void DisableAutoRecovery() {
@@ -244,58 +255,73 @@ internal sealed class QualiaIntensity {
         }
     }
 
-    private async void IncreaseScheduledAsync(float amount, float timeToReach) {
-        int totalIncreaseCount = (int)(timeToReach * _updateTimesPerSecond);
+    private async Task IncreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
+        try {
+            int totalIncreaseCount = (int)(timeToReach * _updateTimesPerSecond);
 
-        int secondToMillisecond = 1000;
-        int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+            int secondToMillisecond = 1000;
+            int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
 
-        float amountPerSecond = amount / timeToReach;
-        float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            float amountPerSecond = amount / timeToReach;
+            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
 
-        for (int increaseCount = 0; increaseCount < totalIncreaseCount; increaseCount++) {
-            IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
+            for (int increaseCount = 0; increaseCount < totalIncreaseCount; increaseCount++) {
+                IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
 
-            await Task.Delay(increaseInterval);
+                await Task.Delay(increaseInterval, ct);
+            }
+
+            // Error compensation.
+            float totalIncreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalIncreaseCount;
+            float errorCompensation = amountPerUpdate * totalIncreaseCountDecimalPortion;
+            IncreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
         }
-
-        // Error compensation.
-        float totalIncreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalIncreaseCount;
-        float errorCompensation = amountPerUpdate * totalIncreaseCountDecimalPortion;
-        IncreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
+        catch (OperationCanceledException) {
+            throw;
+        }
     }
 
-    private async void DecreaseScheduledAsync(float amount, float timeToReach) {
-        int totalDecreaseCount = (int)(timeToReach * _updateTimesPerSecond);
+    private async Task DecreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
+        try {
+            int totalDecreaseCount = (int)(timeToReach * _updateTimesPerSecond);
 
-        int secondToMillisecond = 1000;
-        int decreaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+            int secondToMillisecond = 1000;
+            int decreaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
 
-        float amountPerSecond = amount / timeToReach;
-        float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            float amountPerSecond = amount / timeToReach;
+            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
 
-        for (int decreaseCount = 0; decreaseCount < totalDecreaseCount; decreaseCount++) {
-            DecreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
+            for (int decreaseCount = 0; decreaseCount < totalDecreaseCount; decreaseCount++) {
+                DecreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
 
-            await Task.Delay(decreaseInterval);
+                await Task.Delay(decreaseInterval, ct);
+            }
+
+            // Error compensation.
+            float totalDecreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalDecreaseCount;
+            float errorCompensation = amountPerUpdate * totalDecreaseCountDecimalPortion;
+            DecreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
         }
-
-        // Error compensation.
-        float totalDecreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalDecreaseCount;
-        float errorCompensation = amountPerUpdate * totalDecreaseCountDecimalPortion;
-        DecreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
+        catch (OperationCanceledException) {
+            throw;
+        }
     }
 
-    private async void EnableAutoRecoveryAsync(float amountPerSecond) {
-        int secondToMillisecond = 1000;
-        int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
+    private async void EnableAutoRecoveryAsync(float amountPerSecond, CancellationToken ct) {
+        try {
+            int secondToMillisecond = 1000;
+            int increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
 
-        float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
+            float amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
 
-        while (true) {
-            IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
+            while (true) {
+                IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
 
-            await Task.Delay(increaseInterval);
+                await Task.Delay(increaseInterval, ct);
+            }
+        }
+        catch (OperationCanceledException) {
+            throw;
         }
     }
 }
