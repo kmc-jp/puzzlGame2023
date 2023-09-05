@@ -4,8 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 internal sealed class QualiaIntensity {
+    // Corrected the typo.
     private enum IntensityUpdatePattern {
-        Discreate,
+        Discrete,
         Continuous,
     }
 
@@ -98,11 +99,11 @@ internal sealed class QualiaIntensity {
     }
 
     internal void IncreaseImmediately(float amount) {
-        IncreasePatternChecked(amount, IntensityUpdatePattern.Discreate);
+        IncreasePatternChecked(amount, IntensityUpdatePattern.Discrete);
     }
 
     internal void DecreaseImmediately(float amount) {
-        DecreasePatternChecked(amount, IntensityUpdatePattern.Discreate);
+        DecreasePatternChecked(amount, IntensityUpdatePattern.Discrete);
     }
 
     internal void IncreaseScheduled(float amount, float timeToReach) {
@@ -157,7 +158,7 @@ internal sealed class QualiaIntensity {
         float intensityRateUpdated = IntensityRate;
 
         switch (pattern) {
-            case IntensityUpdatePattern.Discreate:
+            case IntensityUpdatePattern.Discrete:
                 if (intensityRateCache < 0.25f && intensityRateUpdated >= 0.25f) {
                     OnIntensityRateReached025Discretely();
                     OnIntensityRateThrough025UpwardDiscretely();
@@ -206,7 +207,7 @@ internal sealed class QualiaIntensity {
         float intensityRateUpdated = IntensityRate;
 
         switch (pattern) {
-            case IntensityUpdatePattern.Discreate:
+            case IntensityUpdatePattern.Discrete:
                 if (intensityRateCache > 0.75f && intensityRateUpdated <= 0.75f) {
                     OnIntensityRateReached075Discretely();
                     OnIntensityRateThrough075DownwardDiscretely();
@@ -257,6 +258,11 @@ internal sealed class QualiaIntensity {
 
             await Task.Delay(increaseInterval);
         }
+
+        // Error compensation.
+        float totalIncreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalIncreaseCount;
+        float errorCompensation = amountPerUpdate * totalIncreaseCountDecimalPortion;
+        IncreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
     }
 
     private async void DecreaseScheduledAsync(float amount, float timeToReach) {
@@ -273,6 +279,11 @@ internal sealed class QualiaIntensity {
 
             await Task.Delay(decreaseInterval);
         }
+
+        // Error compensation.
+        float totalDecreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalDecreaseCount;
+        float errorCompensation = amountPerUpdate * totalDecreaseCountDecimalPortion;
+        DecreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
     }
 
     private async void EnableAutoRecoveryAsync(float amountPerSecond) {
