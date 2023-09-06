@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class YellowAnimaBehavior : MonoBehaviour
@@ -24,9 +22,6 @@ public class YellowAnimaBehavior : MonoBehaviour
         //重さの調整
         rb.useAutoMass = true;
         rb.gravityScale = 0.0f;
-
-        //var collider2d = GetComponent<Collider2D>(); //colliderの実装待ち
-        //collider2d.density = 1.1f; // 値は適当です。
 
         //値は適当です
         rb.angularDrag = 5;
