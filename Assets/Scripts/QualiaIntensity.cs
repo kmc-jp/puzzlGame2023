@@ -1,73 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections;
+using UnityEngine;
 
-internal sealed class QualiaIntensity : IDisposable {
-    // Corrected the typo.
-    private enum IntensityUpdatePattern {
-        Discrete,
-        Continuous,
-    }
+/// <summary>
+/// Model layer to control Qualia Intensity.
+/// </summary>
+// CHANGED:
+// - Deleted the feature to change update frequency (_updateTimesPerSecond before)
+// - Used Coroutines to increase/decrease intensity gradually instead Tasks.
+// - Renamed XXXScheduled to XXXLinearly.
+internal sealed class QualiaIntensity : MonoBehaviour {
+    // HACK:
+    // _minIntensity and _maxIntensity are currently exposed as SerializedFields
+    // but these parameters are generally thought to be connected to characters' characteristics (?)
+    // so may have to be managed by ScriptableObject or other ways.
 
-    internal event Action OnIntensityRateReached000Discretely;
-    internal event Action OnIntensityRateReached025Discretely;
-    internal event Action OnIntensityRateReached050Discretely;
-    internal event Action OnIntensityRateReached075Discretely;
-    internal event Action OnIntensityRateReached100Discretely;
-
-    internal event Action OnIntensityRateThrough025UpwardDiscretely;
-    internal event Action OnIntensityRateThrough050UpwardDiscretely;
-    internal event Action OnIntensityRateThrough075UpwardDiscretely;
-
-    internal event Action OnIntensityRateThrough025DownwardDiscretely;
-    internal event Action OnIntensityRateThrough050DownwardDiscretely;
-    internal event Action OnIntensityRateThrough075DownwardDiscretely;
-
-    internal event Action OnIntensityRateReached000Continuously;
-    internal event Action OnIntensityRateReached025Continuously;
-    internal event Action OnIntensityRateReached050Continuously;
-    internal event Action OnIntensityRateReached075Continuously;
-    internal event Action OnIntensityRateReached100Continuously;
-
-    internal event Action OnIntensityRateThrough025UpwardContinuously;
-    internal event Action OnIntensityRateThrough050UpwardContinuously;
-    internal event Action OnIntensityRateThrough075UpwardContinuously;
-
-    internal event Action OnIntensityRateThrough025DownwardContinuously;
-    internal event Action OnIntensityRateThrough050DownwardContinuously;
-    internal event Action OnIntensityRateThrough075DownwardContinuously;
-
-    internal static int _updateTimesPerSecond;
-
-    internal static int UpdateTimesPerSecond {
-        get {
-            return _updateTimesPerSecond;
-        }
-        set {
-            _updateTimesPerSecond = value;
-        }
-    }
-
-    static QualiaIntensity() {
-        _updateTimesPerSecond = 60;
-    }
-
-    private readonly float _minIntensity;
-    private readonly float _maxIntensity;
-
-    private readonly List<CancellationTokenSource> _updateScheduleCtsList;
+    [SerializeField] private float _minIntensity = 0f;
+    [SerializeField] private float _maxIntensity = 100f;
 
     private float _intensity;
 
-    private CancellationTokenSource _autoRecoveryCts;
+    private Coroutine _autoRecovering;
 
-    internal float Intensity {
-        get {
-            return _intensity;
-        }
-    }
-
+    /// <summary>
+    /// The percentage within the range 0 to 1.
+    /// </summary>
+    // Unit test passed.
     internal float IntensityRate {
         get {
             float maxIntensityRange = _maxIntensity - _minIntensity;
@@ -77,283 +34,144 @@ internal sealed class QualiaIntensity : IDisposable {
         }
     }
 
-    internal QualiaIntensity(float minIntensity, float maxIntensity, float intensity) {
-        _minIntensity = minIntensity;
-        _maxIntensity = maxIntensity;
+    // Unit test passed.
+    internal void IncreaseImmediately(float intensityToIncrease) {
+#if UNITY_EDITOR
+        if (intensityToIncrease <= 0) {
+            Debug.LogAssertion($"{nameof(intensityToIncrease)} must be greater than 0.");
+        }
+#endif
 
-        _updateScheduleCtsList = new List<CancellationTokenSource>();
-
-        _intensity = intensity;
+        float intensityIncreased = _intensity + intensityToIncrease;
+        if (intensityIncreased > _maxIntensity) {
+            intensityIncreased = _maxIntensity;
+        }
+        _intensity = intensityIncreased;
     }
 
-    public void Dispose() {
-        foreach (var updateScheduleCts in _updateScheduleCtsList) {
-            updateScheduleCts.Cancel();
+    // Unit test passed.
+    internal void DecreaseImmediately(float intensityToDecrease) {
+#if UNITY_EDITOR
+        if (intensityToDecrease <= 0) {
+            Debug.LogAssertion($"{nameof(intensityToDecrease)} must be greater than 0.");
         }
+#endif
 
-        if (_autoRecoveryCts != null) {
-            _autoRecoveryCts.Cancel();
+        float intensityDecreased = _intensity - intensityToDecrease;
+        if (intensityDecreased < _minIntensity) {
+            intensityDecreased = _minIntensity;
         }
+        _intensity = intensityDecreased;
     }
 
-    internal void IncreaseImmediately(float amount) {
-        IncreasePatternChecked(amount, IntensityUpdatePattern.Discrete);
+    // Unit test passed.
+    internal void IncreaseLinearly(float intensityToIncrease, float estimatedDuration) {
+#if UNITY_EDITOR
+        if (intensityToIncrease <= 0) {
+            Debug.LogAssertion($"{nameof(intensityToIncrease)} must be greater than 0.");
+        }
+        if (estimatedDuration <= 0) {
+            Debug.LogAssertion($"{nameof(estimatedDuration)} must be greater than 0.");
+        }
+#endif
+
+        StartCoroutine(IncreaseLinearlyCoroutine(intensityToIncrease, estimatedDuration));
     }
 
-    internal void DecreaseImmediately(float amount) {
-        DecreasePatternChecked(amount, IntensityUpdatePattern.Discrete);
+    // Unit test passed.
+    internal void DecreaseLinearly(float intensityToDecrease, float estimatedDuration) {
+#if UNITY_EDITOR
+        if (intensityToDecrease <= 0) {
+            Debug.LogAssertion($"{nameof(intensityToDecrease)} must be greater than 0.");
+        }
+        if (estimatedDuration <= 0) {
+            Debug.LogAssertion($"{nameof(estimatedDuration)} must be greater than 0.");
+        }
+#endif
+
+        StartCoroutine(DecreaseLinearlyCoroutine(intensityToDecrease, estimatedDuration));
     }
 
-    internal async void IncreaseScheduled(float amount, float timeToReach) {
-        var updateScheduleCts = new CancellationTokenSource();
-        _updateScheduleCtsList.Add(updateScheduleCts);
-
-        try {
-            await IncreaseScheduledAsync(amount, timeToReach, updateScheduleCts.Token);
-            _updateScheduleCtsList.Remove(updateScheduleCts);
-        }
-        catch (OperationCanceledException) {
-
-        }
-        finally {
-            updateScheduleCts.Dispose();
-        }
-    }
-
-    internal async void DecreaseScheduled(float amount, float timeToReach) {
-        var updateScheduleCts = new CancellationTokenSource();
-
-        try {
-            await DecreaseScheduledAsync(amount, timeToReach, updateScheduleCts.Token);
-            _updateScheduleCtsList.Remove(updateScheduleCts);
-        }
-        catch (OperationCanceledException) {
-
-        }
-        finally {
-            updateScheduleCts.Dispose();
-        }
-    }
-
-    internal void EnableAutoRecovery(float amountPerSecond) {
-        if (_autoRecoveryCts != null) {
+    // Unit test passed.
+    internal void EnableAutoRecovery(float intensityToIncreasePerSecond) {
+        if (_autoRecovering != null) {
             return;
         }
 
-        _autoRecoveryCts = new CancellationTokenSource();
-
-        try {
-            EnableAutoRecoveryAsync(amountPerSecond, _autoRecoveryCts.Token);
-        }
-        catch (OperationCanceledException) {
-
-        }
-        finally {
-            _autoRecoveryCts.Dispose();
-            _autoRecoveryCts = null;
-        }
+        _autoRecovering = StartCoroutine(EnableAutoRecoveryCoroutine(intensityToIncreasePerSecond));
     }
 
+    // Unit test passed.
     internal void DisableAutoRecovery() {
-        if (_autoRecoveryCts == null) {
+        if (_autoRecovering == null) {
             return;
         }
 
-        _autoRecoveryCts.Cancel();
+        StopCoroutine(_autoRecovering);
+        _autoRecovering = null;
     }
 
-    private void IncreasePatternChecked(float amount, IntensityUpdatePattern pattern) {
-        float intensityRateCache;
-        float intensityRateUpdated;
+    // Unit test passed.
+    private IEnumerator IncreaseLinearlyCoroutine(float intensityToIncrease, float estimatedDuration) {
+        float increasePerSecond = intensityToIncrease / estimatedDuration;
 
-        lock (null) {
-            intensityRateCache = IntensityRate;
+        float elapsed;
+        for (elapsed = 0f; elapsed < estimatedDuration; elapsed += Time.deltaTime) {
+            float increaseInOneFrame = increasePerSecond * Time.deltaTime;
+            IncreaseImmediately(increaseInOneFrame);
 
-            float intensityUpdated = _intensity + amount;
-            if (intensityUpdated > _maxIntensity) {
-                intensityUpdated = _maxIntensity;
-            }
-            _intensity = intensityUpdated;
-
-            intensityRateUpdated = IntensityRate;
+            yield return null;
         }
 
-        switch (pattern) {
-            case IntensityUpdatePattern.Discrete:
-                if (intensityRateCache < 0.25f && intensityRateUpdated >= 0.25f) {
-                    OnIntensityRateReached025Discretely();
-                    OnIntensityRateThrough025UpwardDiscretely();
-                }
-                if (intensityRateCache < 0.5f && intensityRateUpdated >= 0.5f) {
-                    OnIntensityRateReached050Discretely();
-                    OnIntensityRateThrough050UpwardDiscretely();
-                }
-                if (intensityRateCache < 0.75f && intensityRateUpdated >= 0.75f) {
-                    OnIntensityRateReached075Discretely();
-                    OnIntensityRateThrough075UpwardDiscretely();
-                }
-                if (intensityRateCache < 1f && intensityRateUpdated == 1f) {
-                    OnIntensityRateReached100Discretely();
-                }
-                break;
-            case IntensityUpdatePattern.Continuous:
-                if (intensityRateCache < 0.25f && intensityRateUpdated >= 0.25f) {
-                    OnIntensityRateReached025Continuously();
-                    OnIntensityRateThrough025UpwardContinuously();
-                }
-                if (intensityRateCache < 0.5f && intensityRateUpdated >= 0.5f) {
-                    OnIntensityRateReached050Continuously();
-                    OnIntensityRateThrough050UpwardContinuously();
-                }
-                if (intensityRateCache < 0.75f && intensityRateUpdated >= 0.75f) {
-                    OnIntensityRateReached075Continuously();
-                    OnIntensityRateThrough075UpwardContinuously();
-                }
-                if (intensityRateCache < 1f && intensityRateUpdated == 1f) {
-                    OnIntensityRateReached100Continuously();
-                }
-                break;
-        }
+        // FIXME:
+        // This way of compensation is not exactly accurate to the extent
+        // which there will be an error of about four decimal places.
+
+        float elapsedInLastFrame = elapsed - Time.deltaTime;
+        float remainingDuration = estimatedDuration - elapsedInLastFrame;
+        float compensationIncrease = increasePerSecond * remainingDuration;
+        IncreaseImmediately(compensationIncrease);
     }
 
-    private void DecreasePatternChecked(float amount, IntensityUpdatePattern pattern) {
-        float intensityRateCache;
-        float intensityRateUpdated;
+    // Unit test passed.
+    private IEnumerator DecreaseLinearlyCoroutine(float intensityToDecrease, float estimatedDuration) {
+        float decreasePerSecond = intensityToDecrease / estimatedDuration;
 
-        lock (null) {
-            intensityRateCache = IntensityRate;
+        float elapsed;
+        for (elapsed = 0f; elapsed < estimatedDuration; elapsed += Time.deltaTime) {
+            float decreaseInOneFrame = decreasePerSecond * Time.deltaTime;
+            DecreaseImmediately(decreaseInOneFrame);
 
-            float intensityUpdated = _intensity - amount;
-            if (intensityUpdated < _minIntensity) {
-                intensityUpdated = _minIntensity;
-            }
-            _intensity = intensityUpdated;
-
-            intensityRateUpdated = IntensityRate;
+            yield return null;
         }
 
-        switch (pattern) {
-            case IntensityUpdatePattern.Discrete:
-                if (intensityRateCache > 0.75f && intensityRateUpdated <= 0.75f) {
-                    OnIntensityRateReached075Discretely();
-                    OnIntensityRateThrough075DownwardDiscretely();
-                }
-                if (intensityRateCache > 0.5f && intensityRateUpdated <= 0.5f) {
-                    OnIntensityRateReached050Discretely();
-                    OnIntensityRateThrough050DownwardDiscretely();
-                }
-                if (intensityRateCache > 0.25f && intensityRateUpdated <= 0.25f) {
-                    OnIntensityRateReached025Discretely();
-                    OnIntensityRateThrough025DownwardDiscretely();
-                }
-                if (intensityRateCache > 0f && intensityRateUpdated == 0f) {
-                    OnIntensityRateReached000Discretely();
-                }
-                break;
-            case IntensityUpdatePattern.Continuous:
-                if (intensityRateCache > 0.75f && intensityRateUpdated <= 0.75f) {
-                    OnIntensityRateReached075Continuously();
-                    OnIntensityRateThrough075DownwardContinuously();
-                }
-                if (intensityRateCache > 0.5f && intensityRateUpdated <= 0.5f) {
-                    OnIntensityRateReached050Continuously();
-                    OnIntensityRateThrough050DownwardContinuously();
-                }
-                if (intensityRateCache > 0.25f && intensityRateUpdated <= 0.25f) {
-                    OnIntensityRateReached025Continuously();
-                    OnIntensityRateThrough025DownwardContinuously();
-                }
-                if (intensityRateCache > 0f && intensityRateUpdated == 0f) {
-                    OnIntensityRateReached000Continuously();
-                }
-                break;
+        // FIXME:
+        // This way of compensation is not exactly accurate to the extent
+        // which there will be an error of about four decimal places.
+
+        float elapsedInLastFrame = elapsed - Time.deltaTime;
+        float remainingDuration = estimatedDuration - elapsedInLastFrame;
+        float compensationDecrease = decreasePerSecond * remainingDuration;
+        DecreaseImmediately(compensationDecrease);
+    }
+
+    // Unit test passed.
+    private IEnumerator EnableAutoRecoveryCoroutine(float intensityToIncreasePerSecond) {
+        while (true) {
+            float increaseInOneFrame = intensityToIncreasePerSecond * Time.deltaTime;
+            IncreaseImmediately(increaseInOneFrame);
+
+            yield return null;
         }
     }
 
-    private async Task IncreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
-        try {
-            int totalIncreaseCount;
-            int increaseInterval;
-            float amountPerUpdate;
-
-            lock (null) {
-                totalIncreaseCount = (int)(timeToReach * _updateTimesPerSecond);
-
-                int secondToMillisecond = 1000;
-                increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
-
-                float amountPerSecond = amount / timeToReach;
-                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
-            }
-
-            for (int increaseCount = 0; increaseCount < totalIncreaseCount; increaseCount++) {
-                IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
-
-                await Task.Delay(increaseInterval, ct);
-            }
-
-            // Error compensation.
-            float totalIncreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalIncreaseCount;
-            float errorCompensation = amountPerUpdate * totalIncreaseCountDecimalPortion;
-            IncreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
+    private void Awake() {
+#if UNITY_EDITOR
+        if (_maxIntensity <= _minIntensity) {
+            Debug.LogAssertion($"{nameof(_maxIntensity)} must be greater than {nameof(_minIntensity)}.");
         }
-        catch (OperationCanceledException) {
-            throw;
-        }
-    }
+#endif
 
-    private async Task DecreaseScheduledAsync(float amount, float timeToReach, CancellationToken ct) {
-        try {
-            int totalDecreaseCount;
-            int decreaseInterval;
-            float amountPerUpdate;
-
-            lock (null) {
-                totalDecreaseCount = (int)(timeToReach * _updateTimesPerSecond);
-
-                int secondToMillisecond = 1000;
-                decreaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
-
-                float amountPerSecond = amount / timeToReach;
-                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
-            }
-            
-            for (int decreaseCount = 0; decreaseCount < totalDecreaseCount; decreaseCount++) {
-                DecreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
-
-                await Task.Delay(decreaseInterval, ct);
-            }
-
-            // Error compensation.
-            float totalDecreaseCountDecimalPortion = timeToReach * _updateTimesPerSecond - totalDecreaseCount;
-            float errorCompensation = amountPerUpdate * totalDecreaseCountDecimalPortion;
-            DecreasePatternChecked(errorCompensation, IntensityUpdatePattern.Continuous);
-        }
-        catch (OperationCanceledException) {
-            throw;
-        }
-    }
-
-    private async void EnableAutoRecoveryAsync(float amountPerSecond, CancellationToken ct) {
-        try {
-            float amountPerUpdate;
-            int increaseInterval;
-
-            lock (null) {
-                int secondToMillisecond = 1000;
-                increaseInterval = (int)(1f / _updateTimesPerSecond * secondToMillisecond);
-
-                amountPerUpdate = amountPerSecond / _updateTimesPerSecond;
-            }
-
-            while (true) {
-                IncreasePatternChecked(amountPerUpdate, IntensityUpdatePattern.Continuous);
-
-                await Task.Delay(increaseInterval, ct);
-            }
-        }
-        catch (OperationCanceledException) {
-            throw;
-        }
+        _intensity = _maxIntensity;
     }
 }
