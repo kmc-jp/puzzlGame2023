@@ -9,7 +9,6 @@ public class AnimaCanvas : MonoBehaviour
 {
     [SerializeField] StageInputController InputController;
 
-    [SerializeField] PlayerManager Player;
 
     //標準の線の材質
     [SerializeField] Material DefaultLineMaterial;
