@@ -1,7 +1,18 @@
 using UnityEngine;
 
-public class BlueAnimaMovementBehaviour : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class BlueAnimaMovementBehaviour : AnimaObject
 {
+    [SerializeField] Color Color;
+    [SerializeField] PhysicsMaterial2D Material;
+    [SerializeField] float Drag = 10.0f;
+    [SerializeField] float AngularDrag = 10.0f;
+
+    public override Color GetColor()
+    {
+        return Color;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,12 +25,11 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
 
     }
 
-    
-
     void ApplyPhysicsParameters()
     {
-        this.gameObject.AddComponent<Rigidbody2D>();
         var rb = this.GetComponent<Rigidbody2D>();
+
+        rb.sharedMaterial = Material;
 
         //重さの調整
         rb.useAutoMass = true;
@@ -27,8 +37,7 @@ public class BlueAnimaMovementBehaviour : MonoBehaviour
         //var collider2d = GetComponent<Collider2D>(); //colliderの実装待ち
         //collider2d.density = 1.1f; // 値は適当です。
 
-
-        rb.angularDrag = 10;     
-        rb.drag = 10;
+        rb.angularDrag = AngularDrag;
+        rb.drag = Drag;
     }
 }
