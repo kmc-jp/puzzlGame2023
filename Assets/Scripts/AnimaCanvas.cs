@@ -36,12 +36,12 @@ public class AnimaCanvas : MonoBehaviour
 
     private AnimaCanvasState _state = AnimaCanvasState.None;
 
-    private GameObject tempDrawingObject = null;
-    private LineRenderer tempDrawingLineRenderer = null;
-    private int curDrawingColorIndex;
-    private float drawFrequencyTimer = 0.0f;
-    private float drawFrequencyInverted;
-    private float drawTimer;
+    private GameObject _tempDrawingObject = null;
+    private LineRenderer _tempDrawingLineRenderer = null;
+    private int _curDrawingColorIndex;
+    private float _drawFrequencyTimer = 0.0f;
+    private float _drawFrequencyInverted;
+    private float _drawTimer;
 
     public void BeginDraw(Vector3 startPosition, int color)
     {
@@ -54,24 +54,24 @@ public class AnimaCanvas : MonoBehaviour
 
         _state |= AnimaCanvasState.Drawing;
 
-        curDrawingColorIndex = color;
+        _curDrawingColorIndex = color;
 
-        tempDrawingObject = new GameObject();
-        tempDrawingObject.name = "TempStroke";
-        tempDrawingObject.transform.parent = transform;
-        tempDrawingObject.transform.position = startPosition;
-        tempDrawingObject.transform.localScale = Vector3.one;
+        _tempDrawingObject = new GameObject();
+        _tempDrawingObject.name = "TempStroke";
+        _tempDrawingObject.transform.parent = transform;
+        _tempDrawingObject.transform.position = startPosition;
+        _tempDrawingObject.transform.localScale = Vector3.one;
 
-        tempDrawingLineRenderer = tempDrawingObject.AddComponent<LineRenderer>();
-        tempDrawingLineRenderer.useWorldSpace = true;
-        tempDrawingLineRenderer.material = DefaultLineMaterial;
-        tempDrawingLineRenderer.material.color = AnimaColorPrefabs[curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
-        tempDrawingLineRenderer.startWidth = DefaultLineWidth;
-        tempDrawingLineRenderer.endWidth = DefaultLineWidth;
-        tempDrawingLineRenderer.positionCount = 0;
+        _tempDrawingLineRenderer = _tempDrawingObject.AddComponent<LineRenderer>();
+        _tempDrawingLineRenderer.useWorldSpace = true;
+        _tempDrawingLineRenderer.material = DefaultLineMaterial;
+        _tempDrawingLineRenderer.material.color = AnimaColorPrefabs[_curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
+        _tempDrawingLineRenderer.startWidth = DefaultLineWidth;
+        _tempDrawingLineRenderer.endWidth = DefaultLineWidth;
+        _tempDrawingLineRenderer.positionCount = 0;
 
-        drawFrequencyTimer = 0.0f;
-        drawTimer = 0.0f;
+        _drawFrequencyTimer = 0.0f;
+        _drawTimer = 0.0f;
     }
 
     public void EndDraw(Vector3 endPosition, bool cancel)
@@ -89,9 +89,9 @@ public class AnimaCanvas : MonoBehaviour
             _createAnimaObject();
         }
 
-        GameObject.Destroy(tempDrawingObject);
-        tempDrawingLineRenderer = null;
-        tempDrawingObject = null;
+        GameObject.Destroy(_tempDrawingObject);
+        _tempDrawingLineRenderer = null;
+        _tempDrawingObject = null;
     }
 
     // Start is called before the first frame update
@@ -100,7 +100,7 @@ public class AnimaCanvas : MonoBehaviour
         InputController.OnAnimaDrawingStart += BeginDraw;
         InputController.OnAnimaDrawingEnd += EndDraw;
 
-        drawFrequencyInverted = 1.0f / DrawFrequency;
+        _drawFrequencyInverted = 1.0f / DrawFrequency;
     }
 
     // Update is called once per frame
@@ -109,7 +109,7 @@ public class AnimaCanvas : MonoBehaviour
         // Drawing
         if ((_state & AnimaCanvasState.Drawing) == AnimaCanvasState.Drawing)
         {
-            if (drawFrequencyTimer <= 0.0f)
+            if (_drawFrequencyTimer <= 0.0f)
             {
                 //マウスポインタのワールド座標を取得
                 Vector3 mousePosition = InputController.GetAnimaDrawingPositionWorld();
@@ -120,14 +120,14 @@ public class AnimaCanvas : MonoBehaviour
                     //線を描画
                     _addPositionDataToLineRenderer(mousePosition);
                 }
-                drawFrequencyTimer = drawFrequencyInverted;
+                _drawFrequencyTimer = _drawFrequencyInverted;
             }
             else
             {
-                drawFrequencyTimer -= Time.deltaTime;
+                _drawFrequencyTimer -= Time.deltaTime;
             }
 
-            drawTimer += Time.deltaTime;
+            _drawTimer += Time.deltaTime;
         }
     }
 
@@ -136,13 +136,13 @@ public class AnimaCanvas : MonoBehaviour
         worldPosition.z = 0.0f;
 
         //lineRendererの線と線をつなぐ点の数を更新
-        tempDrawingLineRenderer.positionCount += 1;
+        _tempDrawingLineRenderer.positionCount += 1;
 
         //lineRendererを更新
-        tempDrawingLineRenderer.SetPosition(tempDrawingLineRenderer.positionCount - 1, worldPosition);
+        _tempDrawingLineRenderer.SetPosition(_tempDrawingLineRenderer.positionCount - 1, worldPosition);
 
         //あとから描いた線が上に来るように調整
-        tempDrawingLineRenderer.sortingOrder = 1;
+        _tempDrawingLineRenderer.sortingOrder = 1;
     }
 
     bool _positionInBounds(Vector3 worldPosition)
@@ -162,13 +162,13 @@ public class AnimaCanvas : MonoBehaviour
 
     void _createAnimaObject()
     {
-        if (tempDrawingLineRenderer.positionCount == 0)
+        if (_tempDrawingLineRenderer.positionCount == 0)
         {
             return;
         }
 
         //空のゲームオブジェクト作成
-        GameObject newLineObj = Instantiate(AnimaColorPrefabs[curDrawingColorIndex]);
+        GameObject newLineObj = Instantiate(AnimaColorPrefabs[_curDrawingColorIndex]);
         //オブジェクトにLineObjectMをアタッチ
         //newLineObj.GetOrAddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
@@ -183,11 +183,11 @@ public class AnimaCanvas : MonoBehaviour
         //LineRendererをMesh化して、新しいラインオブジェクトに付く
         //TODO: GetOrAddComponent doesn't work?
         MeshFilter newFilter = newLineObj.GetOrAddComponent<MeshFilter>();
-        tempDrawingLineRenderer.BakeMesh(newFilter.mesh);
+        _tempDrawingLineRenderer.BakeMesh(newFilter.mesh);
 
         MeshRenderer newRenderer = newLineObj.GetOrAddComponent<MeshRenderer>();
         newRenderer.material = DefaultLineMaterial;
-        newRenderer.material.color = AnimaColorPrefabs[curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
+        newRenderer.material.color = AnimaColorPrefabs[_curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
 
         //コライダーを付く
         _createCollider(newLineObj);
@@ -199,7 +199,7 @@ public class AnimaCanvas : MonoBehaviour
 
         //AnimaObjectを付く
         AnimaObject animaComponent = newLineObj.GetComponent<AnimaObject>();
-        animaComponent.InkUsed = drawTimer;
+        animaComponent.InkUsed = _drawTimer;
 
         //TODO: Allow movement with cursor for now. Remove once anima effects are implemented.
         newLineObj.GetOrAddComponent<CursorInteractable>();
@@ -208,13 +208,13 @@ public class AnimaCanvas : MonoBehaviour
     void _createCollider(GameObject lineObject)
     {
         //Note: This modifies tempDrawingLineRenderer
-        tempDrawingLineRenderer.Simplify(SimplifyColliderTolerance);
+        _tempDrawingLineRenderer.Simplify(SimplifyColliderTolerance);
 
         // NOTE:
         // BakeMesh takes a snapshot of the mesh that LineRenderer will use for rendering at the time it is called.
         // In this project, since the camera's projection type is orthographic, snapshots are independent of the camera's position whenever they are taken.
         var mesh = new Mesh();
-        tempDrawingLineRenderer.BakeMesh(mesh);
+        _tempDrawingLineRenderer.BakeMesh(mesh);
 
         var vertices = new List<Vector3>();
         mesh.GetVertices(vertices);
