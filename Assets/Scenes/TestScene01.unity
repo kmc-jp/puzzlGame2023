@@ -905,6 +905,9 @@ GameObject:
   - component: {fileID: 853969414}
   - component: {fileID: 853969413}
   - component: {fileID: 853969417}
+  - component: {fileID: 853969420}
+  - component: {fileID: 853969419}
+  - component: {fileID: 853969418}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -1056,6 +1059,48 @@ MonoBehaviour:
   CursorTrackingCoefficient: 1
   ThrowStrength: 1
   TrackingSmoothness: 20
+--- !u!114 &853969418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853969412}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443e9f8c8b65dfb49912af2b685450f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  length: 4
+  speed: 2
+--- !u!114 &853969419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853969412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91fd5ea61f0d04a46a8f5eca0fea712d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstImpact: -10
+  k: 4
+--- !u!114 &853969420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853969412}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bd1951b41db5524dbc5071d69eb876f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  power: 4
+  speed: 3
 --- !u!1 &893772178
 GameObject:
   m_ObjectHideFlags: 0

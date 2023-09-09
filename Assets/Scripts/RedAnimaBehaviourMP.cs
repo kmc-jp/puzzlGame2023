@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class RedAnimaBehaviourMP : MonoBehaviour
 {
-    public float length = 4.0f;
-    public float speed = 2.0f;
+    //往復の幅
+    [SerializeField] private float length = 4.0f;
+    //周期の切り替わりの速さ
+    [SerializeField] private float speed = 2.0f;
     private Vector3 startPos;
     private Rigidbody2D rb2d;
 
@@ -20,6 +22,15 @@ public class RedAnimaBehaviourMP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb2d.MovePosition( new Vector2((Mathf.Sin((Time.time) * speed) * length + startPos.x) , transform.position.y));
+        determinateMovePosition();
+    }
+
+    void determinateMovePosition()
+    {
+        rb2d.MovePosition(
+            new Vector2(
+                (Mathf.Sin((Time.time) * speed) * length + startPos.x), 
+                transform.position.y)
+            );
     }
 }
