@@ -5,6 +5,30 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
+    /*
+     * アニマ関連
+     */
+    //インクの最大量(秒)
+    [Range(0.0f, 100.0f)]
+    public double MaxInkAmount = 2.0;
+
+    //インクの回復測度(秒/秒)
+    [Range(0.0f, 100.0f)]
+    public double InkRecovery = 0.5;
+
+    //インク残量(秒)
+    private double _inkLeft;
+    public double InkLeft
+    {
+        get { return _inkLeft; }
+        set { _inkLeft = value; }
+    }
+
+    private double _inkUpdateAmount;
+
+    /*
+     * その他
+     */
     //HP表示用
     public Text HPtext;
     //最大HP
@@ -22,8 +46,17 @@ public class PlayerManager : MonoBehaviour
     public int godModeFlag = 0;
 
     //スクリプト取得用
-    public GameObject DrawingCampas;
-    GM GM;
+    public StageInputController InputController;
+
+    void OnAnimaDrawingStart(Vector3 startPositionWorld, int color)
+    {
+        _inkUpdateAmount = -1;
+    }
+
+    void OnAnimaDrawingEnd(Vector3 endPositionWorld, bool cancel)
+    {
+        _inkUpdateAmount = InkRecovery;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -32,39 +65,51 @@ public class PlayerManager : MonoBehaviour
         HP = MaxHP;
         //HP表示初期化
         HPtext.text = "HP:" + HP;
+
+        InkLeft = MaxInkAmount;
+        _inkUpdateAmount = InkRecovery;
+
+        InputController.OnAnimaDrawingStart += OnAnimaDrawingStart;
+        InputController.OnAnimaDrawingEnd += OnAnimaDrawingEnd;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //他スクリプトの情報を受け取る変数
-        double goalInFlag;
+        ////他スクリプトの情報を受け取る変数
+        //double goalInFlag;
 
-        //他スクリプトから情報を取得
-        DrawingCampas = GameObject.Find("DrawingCanvas");
-        GM = DrawingCampas.GetComponent<GM>();
-        goalInFlag = GM.goalInFlag;
+        ////オブジェクトがゴールエリアにあって無敵時間外なら
+        //if (goalInFlag == 1 && godModeFlag == 0)
+        //{
+        //    //HP更新
+        //    HP--;
+        //    //HP表示更新
+        //    HPtext.text = "HP:" + HP;
+        //    //無敵時間開始
+        //    godModeCount = 0;
+        //    godModeFlag = 1;
+        //}
 
-        //オブジェクトがゴールエリアにあって無敵時間外なら
-        if (goalInFlag == 1 && godModeFlag == 0)
+        ////無敵時間の経過時間を計測
+        ////無敵時間開始時にリセットされる
+        //godModeCount += Time.deltaTime;
+
+        ////無敵時間が終わったか判定
+        //if (godModeCount >= maxGodMode)
+        //{
+        //    godModeFlag = 0;
+        //}
+
+        //インク残量を減らす・回復する
+        InkLeft += _inkUpdateAmount * Time.deltaTime;
+        if (InkLeft < 0.0f)
         {
-            //HP更新
-            HP--;
-            //HP表示更新
-            HPtext.text = "HP:" + HP;
-            //無敵時間開始
-            godModeCount = 0;
-            godModeFlag = 1;
+            InkLeft = 0.0f;
         }
-
-        //無敵時間の経過時間を計測
-        //無敵時間開始時にリセットされる
-        godModeCount += Time.deltaTime;
-
-        //無敵時間が終わったか判定
-        if (godModeCount >= maxGodMode)
+        else if (InkLeft > MaxInkAmount)
         {
-            godModeFlag = 0;
+            InkLeft = MaxInkAmount;
         }
     }
 }

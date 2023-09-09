@@ -19,7 +19,6 @@ public class LineObjectM : MonoBehaviour
     //スクリプト取得用
     public GameObject DrawingCanvas;
     StageManager StageManager;
-    GM GM;
 
     //アタッチされたオブジェクトのLinerendere取得用
     public LineRenderer lineRenderer;
@@ -73,7 +72,7 @@ public class LineObjectM : MonoBehaviour
         }
         if (destroyFrag == 1)
         {
-            GM.goalInFlag = 0;
+            //GM.goalInFlag = 0;
             Destroy(this.gameObject);
         }
         destroyFrag = 0;
@@ -95,14 +94,14 @@ public class LineObjectM : MonoBehaviour
 
         //GMを取得
         DrawingCanvas = GameObject.Find("DrawingCanvas");
-        GM = DrawingCanvas.GetComponent<GM>();
+        //GM = DrawingCanvas.GetComponent<GM>();
 
         //ゴールエリアに描いたオブジェクトの一部が入っていたらゴールフラグを立てる
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
             if (linePoint[i].x < -10.5f + (float)goalWidth)
             {
-                GM.goalInFlag = 1;
+                //GM.goalInFlag = 1;
             }
         }
     }
