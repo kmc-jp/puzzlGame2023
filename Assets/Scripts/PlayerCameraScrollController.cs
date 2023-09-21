@@ -4,7 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 internal sealed class PlayerCameraScrollController : MonoBehaviour {
     [SerializeField] private Rect _scrollableArea = new Rect(-20f, -5f, 40f, 20f);
-    [SerializeField] private float _speedMaltiply = 0.1f;
+    [SerializeField] private float _moveSpeedMaltiply = 0.1f;
+    [SerializeField] private Vector2 _ownHalfFocusPoint = new Vector2(-10f, 0f);
+    [SerializeField] private Vector2 _oppositionHalfFocusPoint = new Vector2(10f, 0f);
+    [SerializeField] private float _focusSpeedMultiply = 1f;
 
     private Camera _playerCamera;
 
@@ -14,13 +17,14 @@ internal sealed class PlayerCameraScrollController : MonoBehaviour {
 
     private void Update() {
         MoveWithinScrollableArea();
+        FocusOwnOrOppositionHalf();
     }
 
     private void MoveWithinScrollableArea() {
         float horizontalDelta = Input.GetAxis("PlayerCameraHorizontal");
         float verticalDelta = Input.GetAxis("PlayerCameraVertical");
         var scrollDelta = new Vector2(horizontalDelta, verticalDelta);
-        scrollDelta *= _speedMaltiply;
+        scrollDelta *= _moveSpeedMaltiply;
         transform.Translate(scrollDelta);
 
         var cameraLeftCenterPoint = _playerCamera.ViewportToWorldPoint(new Vector3(0f, 0.5f, 0f));
@@ -43,5 +47,14 @@ internal sealed class PlayerCameraScrollController : MonoBehaviour {
 
         var correctionDelta = new Vector2(correctionX, correctionY);
         transform.Translate(correctionDelta);
+    }
+
+    private void FocusOwnOrOppositionHalf() {
+        if (Input.GetButton("PlayerCameraFocusOwnHalf")) {
+            transform.position = Vector2.MoveTowards(transform.position, _ownHalfFocusPoint, _focusSpeedMultiply);
+        }
+        if (Input.GetButton("PlayerCameraFocusOppositionHalf")) {
+            transform.position = Vector2.MoveTowards(transform.position, _oppositionHalfFocusPoint, _focusSpeedMultiply);
+        }
     }
 }
