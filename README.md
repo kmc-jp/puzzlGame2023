@@ -8,6 +8,7 @@
 * ヘルファイアいしだ
 * sinsun
 * 雪模様
+* kirby
 
 ### Scrapbox
 https://scrapbox.io/puzzle-game/
