@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
 public class CursorInteractable : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class CursorInteractable : MonoBehaviour
      Range(0.0f, 50.0f)]
     public float TrackingSmoothness = 20.0f;
 
+    // Reference to the controller managing cursor interactions
+    InteractableCursorController _interactionController;
+
     // Reference to the objects RigidBody2D component
     // This is also used to determine if the object is currently tracking the cursor or not
     Rigidbody2D _rigidBody2d = null;
@@ -30,9 +34,10 @@ public class CursorInteractable : MonoBehaviour
     Vector2 _throwVelocity = Vector2.zero;
     float _throwSpeed = 0.0f;
 
-    public void AttachToCursor()
+    public void AttachToCursor(InteractableCursorController controller)
     {
-        OnBeginAnchor(Input.mousePosition.x, Input.mousePosition.y);
+        _interactionController = controller;
+        OnBeginAnchor();
     }
 
     public void DetachFromCursor()
@@ -52,7 +57,7 @@ public class CursorInteractable : MonoBehaviour
         if (_rigidBody2d != null)
         {
             Vector3 objectPosWorld = transform.position + _anchorPos;
-            Vector3 cursorPosWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 cursorPosWorld = _interactionController.GetCursorInteractionPositionWorld();
             Vector2 previousTravelDir = (Vector2)objectPosWorld - _previousPos;
             transform.position = objectPosWorld * (1.0f - CursorTrackingCoefficient) + cursorPosWorld * CursorTrackingCoefficient - _anchorPos;
 
@@ -68,7 +73,7 @@ public class CursorInteractable : MonoBehaviour
         }
     }
 
-    void OnBeginAnchor(float cursorX, float cursorY)
+    void OnBeginAnchor()
     {
         _rigidBody2d = GetComponent<Rigidbody2D>();
 
@@ -76,7 +81,8 @@ public class CursorInteractable : MonoBehaviour
         _rigidBody2d.isKinematic = true;
 
         // Calculate the anchor position from world coordinates
-        _anchorPos = Camera.main.ScreenToWorldPoint(new Vector3(cursorX, cursorY, 0.0f)) - transform.position;
+        Vector3 interactionPosScreen = _interactionController.GetCursorInteractionPositionScreen();
+        _anchorPos = Camera.main.ScreenToWorldPoint(new Vector3(interactionPosScreen.x, interactionPosScreen.y, 0.0f)) - transform.position;
 
         // Reset the object's velocity
         _rigidBody2d.velocity = Vector2.zero;
