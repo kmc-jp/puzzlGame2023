@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -25,7 +26,11 @@ public class PurpleAnimaMovementBehaviour : AnimaObject
     {
         var rb = this.GetComponent<Rigidbody2D>();
 
-        rb.sharedMaterial = Material;
+        var collider = this.GetComponent<Collider2D>();
+        collider.sharedMaterial = Material;
+
+        Material.friction = 1.0f;
+        Material.bounciness = 0.0f;
 
     }
 }
