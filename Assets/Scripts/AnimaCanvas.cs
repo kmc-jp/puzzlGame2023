@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class AnimaCanvas : MonoBehaviour
+public class AnimaCanvas : NetworkBehaviour
 {
     [SerializeField] StageInputController InputController;
 
@@ -42,6 +43,7 @@ public class AnimaCanvas : MonoBehaviour
     private float _drawFrequencyTimer = 0.0f;
     private float _drawFrequencyInverted;
     private float _drawTimer;
+    private PlayerManager _localPlayer = null;
 
     public void BeginDraw(Vector3 startPosition, int color)
     {
@@ -86,12 +88,73 @@ public class AnimaCanvas : MonoBehaviour
         if (!cancel)
         {
             // Create the Anima object from the LineRenderer
-            _createAnimaObject();
+            if (_localPlayer && AnimaColorPrefabs[_curDrawingColorIndex].GetComponent<NetworkIdentity>())
+            {
+                Vector3[] positions = new Vector3[_tempDrawingLineRenderer.positionCount];
+                _tempDrawingLineRenderer.GetPositions(positions);
+                CmdSpawnNetworkedAnima(
+                    _localPlayer.GetComponent<NetworkIdentity>().netId,
+                    AnimaColorPrefabs[_curDrawingColorIndex].GetComponent<NetworkIdentity>().assetId,
+                    positions);
+            }
+            else
+            {
+                //空のゲームオブジェクト作成
+                GameObject newObj = Instantiate(AnimaColorPrefabs[_curDrawingColorIndex]);
+                _createAnimaObject(newObj, _tempDrawingLineRenderer);
+            }
         }
 
         GameObject.Destroy(_tempDrawingObject);
         _tempDrawingLineRenderer = null;
         _tempDrawingObject = null;
+    }
+
+    [Command(requiresAuthority = false)]
+    void CmdSpawnNetworkedAnima(uint ownerNetworkId, uint animaTemplatePrefabId, Vector3[] points)
+    {
+        NetworkManager networkManager = FindObjectOfType<NetworkManager>();
+        if (networkManager != null)
+        {
+            // Find the owning player
+            NetworkIdentity ownerIdentity;
+            if (!NetworkServer.spawned.TryGetValue(ownerNetworkId, out ownerIdentity)) {
+                Debug.LogErrorFormat("[SpawnNetworkedAnima] Unable to find player for ID {0}", ownerNetworkId);
+                return;
+            }
+
+            // Find the prefab
+            GameObject prefab = networkManager.spawnPrefabs.Find(prefab => prefab.GetComponent<NetworkIdentity>()?.assetId == animaTemplatePrefabId);
+            if (!prefab)
+            {
+                Debug.LogErrorFormat("[SpawnNetworkedAnima] Unable to find prefab for ID {0}", animaTemplatePrefabId);
+                return;
+            }
+
+            // Instantiate the object on the server
+            GameObject newObject = Instantiate(prefab);
+            Debug.Assert(newObject);
+
+            // Spawn the new object on all clients
+            NetworkServer.Spawn(newObject, ownerIdentity.gameObject);
+
+            // Initialize the object on all clients
+            RpcInitializeNetworkedAnima(newObject, points);
+        }
+    }
+
+    [ClientRpc]
+    void RpcInitializeNetworkedAnima(GameObject obj, Vector3[] points)
+    {
+        LineRenderer lineRenderer = obj.AddComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = true;
+        lineRenderer.startWidth = DefaultLineWidth;
+        lineRenderer.endWidth = DefaultLineWidth;
+        lineRenderer.positionCount = points.Length;
+        lineRenderer.SetPositions(points);
+        _createAnimaObject(obj, lineRenderer);
+
+        Destroy(lineRenderer);
     }
 
     // Start is called before the first frame update
@@ -101,11 +164,20 @@ public class AnimaCanvas : MonoBehaviour
         InputController.OnAnimaDrawingEnd += EndDraw;
 
         _drawFrequencyInverted = 1.0f / DrawFrequency;
+
+        _networkInitialize();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Disallow drawing until networked objects are initialized
+        if (_localPlayer == null)
+        {
+            _networkInitialize();
+            return;
+        }
+
         // Drawing
         if ((_state & AnimaCanvasState.Drawing) == AnimaCanvasState.Drawing)
         {
@@ -160,37 +232,30 @@ public class AnimaCanvas : MonoBehaviour
         return false;
     }
 
-    void _createAnimaObject()
+    GameObject _createAnimaObject(GameObject newLineObj, LineRenderer lineRenderer)
     {
-        if (_tempDrawingLineRenderer.positionCount == 0)
+        if (lineRenderer.positionCount == 0)
         {
-            return;
+            return null;
         }
 
-        //空のゲームオブジェクト作成
-        GameObject newLineObj = Instantiate(AnimaColorPrefabs[_curDrawingColorIndex]);
         //オブジェクトにLineObjectMをアタッチ
         //newLineObj.GetOrAddComponent<LineObjectM>();
         //オブジェクトの名前をStrokeに変更
         newLineObj.name = "Stroke";
-
-        //TODO: 親のtransformを無視できないため、設定しない
-        //lineObjを自身の子要素に設定
-        //newLineObj.transform.SetParent(transform);
-
         newLineObj.transform.localScale = Vector3.one;
 
         //LineRendererをMesh化して、新しいラインオブジェクトに付く
         //TODO: GetOrAddComponent doesn't work?
         MeshFilter newFilter = newLineObj.GetOrAddComponent<MeshFilter>();
-        _tempDrawingLineRenderer.BakeMesh(newFilter.mesh);
+        lineRenderer.BakeMesh(newFilter.mesh);
 
         MeshRenderer newRenderer = newLineObj.GetOrAddComponent<MeshRenderer>();
         newRenderer.material = DefaultLineMaterial;
-        newRenderer.material.color = AnimaColorPrefabs[_curDrawingColorIndex].GetComponent<AnimaObject>().GetColor();
+        newRenderer.material.color = newLineObj.GetComponent<AnimaObject>().GetColor();
 
         //コライダーを付く
-        _createCollider(newLineObj);
+        _createCollider(lineRenderer, newLineObj);
 
         //Rigidbody2Dを付く
         Rigidbody2D newRigidbody = newLineObj.GetOrAddComponent<Rigidbody2D>();
@@ -203,18 +268,20 @@ public class AnimaCanvas : MonoBehaviour
 
         //TODO: Allow movement with cursor for now. Remove once anima effects are implemented.
         newLineObj.GetOrAddComponent<CursorInteractable>();
+
+        return newLineObj;
     }
 
-    void _createCollider(GameObject lineObject)
+    void _createCollider(LineRenderer lineRenderer, GameObject lineObject)
     {
         //Note: This modifies tempDrawingLineRenderer
-        _tempDrawingLineRenderer.Simplify(SimplifyColliderTolerance);
+        lineRenderer.Simplify(SimplifyColliderTolerance);
 
         // NOTE:
         // BakeMesh takes a snapshot of the mesh that LineRenderer will use for rendering at the time it is called.
         // In this project, since the camera's projection type is orthographic, snapshots are independent of the camera's position whenever they are taken.
         var mesh = new Mesh();
-        _tempDrawingLineRenderer.BakeMesh(mesh);
+        lineRenderer.BakeMesh(mesh);
 
         var vertices = new List<Vector3>();
         mesh.GetVertices(vertices);
@@ -242,5 +309,14 @@ public class AnimaCanvas : MonoBehaviour
         }
 
         Destroy(mesh);
+    }
+
+    private void _networkInitialize()
+    {
+        if (_localPlayer == null)
+        {
+            var found = FindObjectsOfType<PlayerManager>();
+            _localPlayer = System.Array.Find(FindObjectsOfType<PlayerManager>(), player => player.isLocalPlayer);
+        }
     }
 }
