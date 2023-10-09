@@ -3,16 +3,22 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Camera))]
 internal sealed class PlayerCameraScrollController : MonoBehaviour {
-    [SerializeField] private Rect _scrollableArea = new Rect(-20f, -5f, 40f, 20f);
+    [SerializeField] private Rect _scrollableArea = new Rect(-20f, -5f, 40f, 10f);
     [SerializeField] private float _moveSpeedMaltiply = 0.1f;
-    [SerializeField] private Vector2 _ownHalfFocusPoint = new Vector2(-10f, 0f);
-    [SerializeField] private Vector2 _oppositionHalfFocusPoint = new Vector2(10f, 0f);
+    [SerializeField] private Vector3 _ownHalfFocusPoint = new Vector3(-10f, 0f);
+    [SerializeField] private Vector3 _oppositionHalfFocusPoint = new Vector3(10f, 0f);
     [SerializeField] private float _focusSpeedMultiply = 1f;
 
     private Camera _playerCamera;
 
     private void Awake() {
         _playerCamera = GetComponent<Camera>();
+    }
+
+    private void Start()
+    {
+        _ownHalfFocusPoint.z = transform.position.z;
+        _oppositionHalfFocusPoint.z = transform.position.z;
     }
 
     private void Update() {
@@ -51,10 +57,10 @@ internal sealed class PlayerCameraScrollController : MonoBehaviour {
 
     private void FocusOwnOrOppositionHalf() {
         if (Input.GetButton("PlayerCameraFocusOwnHalf")) {
-            transform.position = Vector2.MoveTowards(transform.position, _ownHalfFocusPoint, _focusSpeedMultiply);
+            transform.position = Vector3.MoveTowards(transform.position, _ownHalfFocusPoint, _focusSpeedMultiply);
         }
         if (Input.GetButton("PlayerCameraFocusOppositionHalf")) {
-            transform.position = Vector2.MoveTowards(transform.position, _oppositionHalfFocusPoint, _focusSpeedMultiply);
+            transform.position = Vector3.MoveTowards(transform.position, _oppositionHalfFocusPoint, _focusSpeedMultiply);
         }
     }
 }
