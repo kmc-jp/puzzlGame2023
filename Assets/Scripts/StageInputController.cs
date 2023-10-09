@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -113,11 +114,20 @@ public class StageInputController : MonoBehaviour
 
         //TODO: Temporarily allow cursor interaction at all times
         _state |= ControllerState.CursorInteractionEnabled;
+
+        _networkInitialize();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Disable input until required network objects are finished loading
+        if (Player == null)
+        {
+            _networkInitialize();
+            return;
+        }
+
         /*
          * Anima
          */
@@ -235,5 +245,14 @@ public class StageInputController : MonoBehaviour
         }
 
         OnAnimaColorChange?.Invoke(color);
+    }
+
+    private void _networkInitialize()
+    {
+        if (Player == null)
+        {
+            var found = FindObjectsOfType<PlayerManager>();
+            Player = System.Array.Find(FindObjectsOfType<PlayerManager>(), player => player.isLocalPlayer);
+        }
     }
 }
