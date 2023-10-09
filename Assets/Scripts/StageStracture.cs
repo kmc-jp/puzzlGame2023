@@ -15,7 +15,7 @@ public class StageStracture : MonoBehaviour
         Debug.Log(collision.gameObject.name);
         //触れたものがプレイヤーの書いた物体ならdestroy
 
-        if (collision.gameObject.name == DrawnLineName)//
+        if (collision.gameObject.GetComponent<AnimaObject>() != null)
         {
             Debug.Log("Hit");
             Destroy(gameObject, WaitTime);
