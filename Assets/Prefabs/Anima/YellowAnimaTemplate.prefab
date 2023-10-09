@@ -54,7 +54,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 00fae495e002f8548995e4f96b63b351, type: 2}
+  m_Material: {fileID: 6200000, guid: dfec6402290033e4bbf8ff65a968aec2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -79,6 +79,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InkUsed: 0
   Color: {r: 1, g: 0.9561808, b: 0, a: 0}
+  GravityScale: 0
+  AngularDrag: 5
+  Drag: 5
 --- !u!33 &5866312405462528633
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -138,7 +141,7 @@ PolygonCollider2D:
   m_GameObject: {fileID: 9216566993443551758}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: dfec6402290033e4bbf8ff65a968aec2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
