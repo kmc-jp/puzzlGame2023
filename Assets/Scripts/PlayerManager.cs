@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
     /*
      * アニマ関連
      */
     //インクの最大量(秒)
+    [SyncVar]
     [Range(0.0f, 100.0f)]
     public double MaxInkAmount = 2.0;
 
@@ -17,6 +19,7 @@ public class PlayerManager : MonoBehaviour
     public double InkRecovery = 0.5;
 
     //インク残量(秒)
+    [SyncVar]
     private double _inkLeft;
     public double InkLeft
     {
@@ -29,12 +32,12 @@ public class PlayerManager : MonoBehaviour
     /*
      * その他
      */
-    //HP表示用
-    public Text HPtext;
     //最大HP
-    [Range(1f, 10f)]
+    [SyncVar]
+    [Range(1, 10)]
     public int MaxHP = 2;
     //HP計算用
+    [SyncVar]
     public int HP;
 
     //無敵時間
@@ -43,6 +46,7 @@ public class PlayerManager : MonoBehaviour
     //無敵時間計算用
     public double godModeCount;
     //無敵時間フラグ
+    [SyncVar]
     public int godModeFlag = 0;
 
     //スクリプト取得用
@@ -51,9 +55,23 @@ public class PlayerManager : MonoBehaviour
     void OnAnimaDrawingStart(Vector3 startPositionWorld, int color)
     {
         _inkUpdateAmount = -1;
+        CmdAnimaDrawingStart(startPositionWorld, color);
     }
 
     void OnAnimaDrawingEnd(Vector3 endPositionWorld, bool cancel)
+    {
+        _inkUpdateAmount = InkRecovery;
+        CmdAnimaDrawingEnd(endPositionWorld, cancel);
+    }
+
+    [Command]
+    void CmdAnimaDrawingStart(Vector3 startPositionWorld, int color)
+    {
+        _inkUpdateAmount = -1;
+    }
+
+    [Command]
+    void CmdAnimaDrawingEnd(Vector3 endPositionWorld, bool cancel)
     {
         _inkUpdateAmount = InkRecovery;
     }
@@ -63,14 +81,20 @@ public class PlayerManager : MonoBehaviour
     {
         //HP初期化
         HP = MaxHP;
-        //HP表示初期化
-        HPtext.text = "HP:" + HP;
 
         InkLeft = MaxInkAmount;
         _inkUpdateAmount = InkRecovery;
 
-        InputController.OnAnimaDrawingStart += OnAnimaDrawingStart;
-        InputController.OnAnimaDrawingEnd += OnAnimaDrawingEnd;
+        if (InputController == null)
+        {
+            InputController = FindObjectOfType<StageInputController>();
+        }
+
+        if (isLocalPlayer)
+        {
+            InputController.OnAnimaDrawingStart += OnAnimaDrawingStart;
+            InputController.OnAnimaDrawingEnd += OnAnimaDrawingEnd;
+        }
     }
 
     // Update is called once per frame

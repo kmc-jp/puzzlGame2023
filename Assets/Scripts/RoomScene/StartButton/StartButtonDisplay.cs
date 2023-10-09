@@ -7,7 +7,7 @@ namespace RoomScene.StartButton {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NetworkIdentity), typeof(StartButtonController))]
     public class StartButtonDisplay : NetworkBehaviour {
-        // s[TargetRpc]
+        // [TargetRpc]
         public void TargetShow(NetworkConnectionToClient roomOwner) {
             var button = gameObject.GetComponent<Button>();
             button.interactable = true;

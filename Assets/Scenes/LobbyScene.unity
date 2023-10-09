@@ -132,8 +132,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 81717850}
-  - component: {fileID: 81717849}
   - component: {fileID: 81717848}
+  - component: {fileID: 81717851}
   m_Layer: 0
   m_Name: MatchNetworkDiscovery
   m_TagString: Untagged
@@ -157,7 +157,7 @@ MonoBehaviour:
   BroadcastAddress: 
   serverBroadcastListenPort: 47777
   ActiveDiscoveryInterval: 3
-  transport: {fileID: 81717849}
+  transport: {fileID: 81717851}
   OnServerFound:
     m_PersistentCalls:
       m_Calls:
@@ -174,30 +174,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   secretHandshake: -2990078834447088115
---- !u!114 &81717849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 81717847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  NoDelay: 1
-  SendTimeout: 5000
-  ReceiveTimeout: 30000
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  serverSendQueueLimitPerConnection: 10000
-  serverReceiveQueueLimitPerConnection: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
-  clientSendQueueLimit: 10000
-  clientReceiveQueueLimit: 10000
 --- !u!4 &81717850
 Transform:
   m_ObjectHideFlags: 0
@@ -213,6 +189,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &81717851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 81717847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  RecvBufferSize: 7361536
+  SendBufferSize: 7361536
+  FastResend: 2
+  ReceiveWindowSize: 4096
+  SendWindowSize: 4096
+  MaxRetransmit: 40
+  MaximizeSocketBuffers: 1
+  ReliableMaxMessageSize: 297433
+  UnreliableMaxMessageSize: 1195
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!1 &97852935
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,8 +533,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 699517371}
-  - component: {fileID: 699517372}
   - component: {fileID: 699517373}
+  - component: {fileID: 699517374}
   m_Layer: 0
   m_Name: MatchNetworkRoomManager
   m_TagString: Untagged
@@ -552,30 +557,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &699517372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699517370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  NoDelay: 1
-  SendTimeout: 5000
-  ReceiveTimeout: 30000
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  serverSendQueueLimitPerConnection: 10000
-  serverReceiveQueueLimitPerConnection: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
-  clientSendQueueLimit: 10000
-  clientReceiveQueueLimit: 10000
 --- !u!114 &699517373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,7 +576,7 @@ MonoBehaviour:
   sendRate: 30
   offlineScene: Assets/Scenes/LobbyScene.unity
   onlineScene: Assets/Scenes/RoomScene.unity
-  transport: {fileID: 699517372}
+  transport: {fileID: 699517374}
   networkAddress: localhost
   maxConnections: 2
   authenticator: {fileID: 0}
@@ -604,6 +585,11 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 1617138921596438242, guid: bc4e8c8643b571b4da7431373270740f, type: 3}
+  - {fileID: 1042735178320405216, guid: fad919c36566ca74a9186c484190f907, type: 3}
+  - {fileID: 6447896671177425480, guid: 42245ce3a798b3241ab75bcdb78a745f, type: 3}
+  - {fileID: 3980142083496525070, guid: e863b1673e3b0ef40b9a29880d1eec01, type: 3}
+  - {fileID: 3770243082173566418, guid: 57aab6b4f2548dd42852e0f0e735bf67, type: 3}
+  - {fileID: 9216566993443551758, guid: d5f26ab7b7b3a854184764710cf1502f, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -619,10 +605,39 @@ MonoBehaviour:
   minPlayers: 2
   roomPlayerPrefab: {fileID: 9018994136843380585, guid: 0b2a489c3bf80fd4d80e08a9f1b56417, type: 3}
   RoomScene: Assets/Scenes/RoomScene.unity
-  GameplayScene: Assets/Scenes/GameplayScene.unity
+  GameplayScene: Assets/Scenes/TestSceneNetworked.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+--- !u!114 &699517374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699517370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  RecvBufferSize: 7361536
+  SendBufferSize: 7361536
+  FastResend: 2
+  ReceiveWindowSize: 4096
+  SendWindowSize: 4096
+  MaxRetransmit: 40
+  MaximizeSocketBuffers: 1
+  ReliableMaxMessageSize: 297433
+  UnreliableMaxMessageSize: 1195
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!1 &1049864314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 540, y: 472.5}
+  m_AnchoredPosition: {x: 540, y: 59}
   m_SizeDelta: {x: 960, y: 810}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2005779006
