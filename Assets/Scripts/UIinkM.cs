@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -21,18 +22,35 @@ public class UIinkMnager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Assert(sprites.Length > 0);
         image = GetComponent<Image>();
+        _networkInitialize();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Assert(sprites.Length > 0);
+        double inkLeftRatio = 0.0f;
+        if (Player == null)
+        {
+            _networkInitialize();
+        }
+        else
+        {
+            //_inkLeftを取得
+            inkLeftRatio = Player.InkLeft / Player.MaxInkAmount;
+        }
 
-        //_inkLeftを取得
-        double inkLeftRatio = Player.InkLeft / Player.MaxInkAmount;
         int imageIndex = (int)(inkLeftRatio * (sprites.Length - 1));
 
         image.sprite = sprites[imageIndex];
+    }
+
+    private void _networkInitialize()
+    {
+        if (Player == null)
+        {
+            Player = System.Array.Find(FindObjectsOfType<PlayerManager>(), player => player.isLocalPlayer);
+        }
     }
 }
