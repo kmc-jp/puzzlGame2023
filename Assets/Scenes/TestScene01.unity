@@ -937,8 +937,73 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7085561397138254053, guid: 405fef0bc091e75459a2699126c88271, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 568026143}
+    - targetCorrespondingSourceObject: {fileID: 7085561397138254053, guid: 405fef0bc091e75459a2699126c88271, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 568026144}
+    - targetCorrespondingSourceObject: {fileID: 7085561397138254053, guid: 405fef0bc091e75459a2699126c88271, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 568026148}
   m_SourcePrefab: {fileID: 100100000, guid: 405fef0bc091e75459a2699126c88271, type: 3}
+--- !u!1 &568026142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7085561397138254053, guid: 405fef0bc091e75459a2699126c88271, type: 3}
+  m_PrefabInstance: {fileID: 568026141}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &568026143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568026142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa12bff907ca9b43932e172c79c55b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+--- !u!114 &568026144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568026142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17837ba591a55454396ca05d70af2455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BlinksPerSecond: 2
+  BlinkOutDuration: 0.1
+  BlinkAccelerateThreshold: 4
+  MaxBlinkRateDuration: 1
+  DefaultSprite: {fileID: 21300000, guid: 1de34806673af5340bab89b44c7c6e93, type: 3}
+  BlinkInSprite: {fileID: 21300000, guid: e55a550ae255ab8459d08a9bc47ab262, type: 3}
+  BlinkOutSprite: {fileID: 21300000, guid: 1de34806673af5340bab89b44c7c6e93, type: 3}
+--- !u!114 &568026148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568026142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3540058860
+  _assetId: 1205880293
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &639538199
 GameObject:
   m_ObjectHideFlags: 0
