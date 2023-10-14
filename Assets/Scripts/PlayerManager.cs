@@ -41,13 +41,11 @@ public class PlayerManager : NetworkBehaviour
     public int HP;
 
     //無敵時間
-    [Range(0.0f, 5.0f)]
-    public double maxGodMode;
+    [Range(0.0f, 100.0f)]
+    public float MaxGodMode = 8.0f;
+
     //無敵時間計算用
-    public double godModeCount;
-    //無敵時間フラグ
-    [SyncVar]
-    public int godModeFlag = 0;
+    private float _godModeDuration;
 
     //スクリプト取得用
     public StageInputController InputController;
@@ -76,6 +74,24 @@ public class PlayerManager : NetworkBehaviour
         _inkUpdateAmount = InkRecovery;
     }
 
+    public bool TakeDamage(int amount, bool enableGodMode)
+    {
+        if (isServer)
+        {
+            if (_godModeDuration <= 0.0f)
+            {
+                HP -= amount;
+
+                if (enableGodMode)
+                {
+                    _godModeDuration = MaxGodMode;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -100,30 +116,8 @@ public class PlayerManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        ////他スクリプトの情報を受け取る変数
-        //double goalInFlag;
-
-        ////オブジェクトがゴールエリアにあって無敵時間外なら
-        //if (goalInFlag == 1 && godModeFlag == 0)
-        //{
-        //    //HP更新
-        //    HP--;
-        //    //HP表示更新
-        //    HPtext.text = "HP:" + HP;
-        //    //無敵時間開始
-        //    godModeCount = 0;
-        //    godModeFlag = 1;
-        //}
-
-        ////無敵時間の経過時間を計測
-        ////無敵時間開始時にリセットされる
-        //godModeCount += Time.deltaTime;
-
-        ////無敵時間が終わったか判定
-        //if (godModeCount >= maxGodMode)
-        //{
-        //    godModeFlag = 0;
-        //}
+        //無敵時間が終わったか判定
+        _godModeDuration -= Time.deltaTime;
 
         //インク残量を減らす・回復する
         InkLeft += _inkUpdateAmount * Time.deltaTime;

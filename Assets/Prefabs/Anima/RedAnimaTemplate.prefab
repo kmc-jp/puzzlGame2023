@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1260067915453302295}
   - component: {fileID: 7599289537470189193}
   - component: {fileID: -7019560426112638274}
+  - component: {fileID: 5979431912732885319}
   m_Layer: 0
   m_Name: RedAnimaTemplate
   m_TagString: Untagged
@@ -232,3 +233,18 @@ MonoBehaviour:
   positionSensitivity: 0.001
   rotationSensitivity: 0.001
   scaleSensitivity: 0.01
+--- !u!114 &5979431912732885319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042735178320405216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96f04d7d4152064a98d7679a7afb6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

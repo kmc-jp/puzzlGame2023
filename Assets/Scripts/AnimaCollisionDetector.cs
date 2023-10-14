@@ -1,23 +1,24 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimaCollisionDetector : ObjectCollisionDetector
 {
-    void OnCollisionWithGoal(GameObject obj, ContactPoint2D contactPoint)
+    void OnCollisionWithGoal(GameObject obj, Vector2 contactPoint)
     {
         if (obj.GetComponent<GoalLineEntryDetector>() != null)
         {
-            Object.Destroy(this);
+            NetworkServer.Destroy(this.gameObject);
         }
     }
 
-    void OnCollisionWithAnima(GameObject obj, ContactPoint2D contactPoint)
+    void OnCollisionWithAnima(GameObject obj, Vector2 contactPoint)
     {
         if (obj.GetComponent<AnimaCollisionDetector>() != null)
         {
             //TODO: Reduce anima health instead of outright destroying
-            Object.Destroy(this);
+            NetworkServer.Destroy(this.gameObject);
         }
     }
 

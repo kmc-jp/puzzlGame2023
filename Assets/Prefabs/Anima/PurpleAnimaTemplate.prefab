@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1622979935760126692}
   - component: {fileID: -8015278407702100046}
   - component: {fileID: 3647098988580015271}
+  - component: {fileID: 4620388761848380563}
   m_Layer: 0
   m_Name: PurpleAnimaTemplate
   m_TagString: Untagged
@@ -229,3 +230,18 @@ MonoBehaviour:
   positionSensitivity: 0.001
   rotationSensitivity: 0.001
   scaleSensitivity: 0.01
+--- !u!114 &4620388761848380563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770243082173566418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96f04d7d4152064a98d7679a7afb6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

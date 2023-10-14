@@ -10,14 +10,15 @@ using UnityEngine;
 // The OnCollision events will only trigger on the server
 public class ObjectCollisionDetector : NetworkBehaviour
 {
-    public delegate void OnCollisionFunc(GameObject obj, ContactPoint2D contactPoint);
+    public delegate void OnCollisionFunc(GameObject obj, Vector2 contactPoint);
     public event OnCollisionFunc OnCollisionWithHostile;
     public event OnCollisionFunc OnCollisionWithFriendly;
     public event OnCollisionFunc OnCollisionWithNeutral;
 
-    private int _ownerNetworkId = 0;
+    [SerializeField]
+    protected uint _ownerNetworkId = 0;
 
-    public void SetOwnerNetworkId(int networkId)
+    public void SetOwnerNetworkId(uint networkId)
     {
         _ownerNetworkId = networkId;
     }
@@ -75,20 +76,33 @@ public class ObjectCollisionDetector : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        HandleCollision(collision.gameObject, collision.GetContact(0).point);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        HandleCollision(collider.gameObject, collider.ClosestPoint(transform.position));
+    }
+
+    private void HandleCollision(GameObject otherGameObject, Vector2 contactPoint)
+    {
         // Only do collision checks on the server
         if (isServer)
         {
-            if (IsHostileObject(collision.gameObject))
+            if (otherGameObject.GetComponent<ObjectCollisionDetector>() != null)
             {
-                OnCollisionWithHostile?.Invoke(collision.gameObject, collision.GetContact(0));
-            }
-            else if (IsFriendlyObject(collision.gameObject))
-            {
-                OnCollisionWithFriendly?.Invoke(collision.gameObject, collision.GetContact(0));
-            }
-            else if (IsNeutralObject(collision.gameObject))
-            {
-                OnCollisionWithNeutral?.Invoke(collision.gameObject, collision.GetContact(0));
+                if (IsHostileObject(otherGameObject))
+                {
+                    OnCollisionWithHostile?.Invoke(otherGameObject, contactPoint);
+                }
+                else if (IsFriendlyObject(otherGameObject))
+                {
+                    OnCollisionWithFriendly?.Invoke(otherGameObject, contactPoint);
+                }
+                else if (IsNeutralObject(otherGameObject))
+                {
+                    OnCollisionWithNeutral?.Invoke(otherGameObject, contactPoint);
+                }
             }
         }
     }
