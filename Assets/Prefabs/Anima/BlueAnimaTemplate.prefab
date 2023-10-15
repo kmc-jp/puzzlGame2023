@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3549859341286160182}
   - component: {fileID: 3860934293113238444}
   - component: {fileID: -8103044073660358036}
+  - component: {fileID: -876414446409906550}
   m_Layer: 0
   m_Name: BlueAnimaTemplate
   m_TagString: Untagged
@@ -232,3 +233,18 @@ MonoBehaviour:
   positionSensitivity: 0.001
   rotationSensitivity: 0.001
   scaleSensitivity: 0.01
+--- !u!114 &-876414446409906550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6447896671177425480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96f04d7d4152064a98d7679a7afb6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

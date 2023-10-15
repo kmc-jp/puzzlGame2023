@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5730410119714516963}
   - component: {fileID: -269969080081680138}
   - component: {fileID: -2724019280085202623}
+  - component: {fileID: 3452905207122768675}
   m_Layer: 0
   m_Name: GreenAnimaTemplate
   m_TagString: Untagged
@@ -79,6 +80,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InkUsed: 0
   Color: {r: 0.14098358, g: 1, b: 0, a: 0}
+  bounciness: 1
+  friction: 1
 --- !u!33 &4086952481118364797
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -229,3 +232,18 @@ MonoBehaviour:
   positionSensitivity: 0.001
   rotationSensitivity: 0.001
   scaleSensitivity: 0.01
+--- !u!114 &3452905207122768675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980142083496525070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96f04d7d4152064a98d7679a7afb6f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

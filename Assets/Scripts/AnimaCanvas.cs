@@ -137,6 +137,7 @@ public class AnimaCanvas : NetworkBehaviour
 
             // Spawn the new object on all clients
             NetworkServer.Spawn(newObject, ownerIdentity.gameObject);
+            newObject.GetComponent<AnimaCollisionDetector>().SetOwnerNetworkId(ownerNetworkId);
 
             // Initialize the object on all clients
             RpcInitializeNetworkedAnima(newObject, points);
