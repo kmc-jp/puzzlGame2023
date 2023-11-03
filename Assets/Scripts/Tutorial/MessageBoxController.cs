@@ -4,76 +4,48 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MessageBoxController : MonoBehaviour {
-    private GameObject _frame;
-    private GameObject _message;
-    private GameObject _arrow;
+    private Image _frameImage;
+    private Image _iconImage;
+    private TextMeshProUGUI _messageTextMeshProUGUI;
+    private Image _arrowImage;
 
     private void Start() {
-        _frame = transform.Find("Frame").gameObject;
-        _message = _frame.transform.Find("Message").gameObject;
-        _arrow = _frame.transform.Find("Arrow").gameObject;
-
-        OpenMessageBox();
+        _frameImage = transform.Find("Frame").GetComponent<Image>();
+        _iconImage = _frameImage.transform.Find("Icon").GetComponent<Image>();
+        _messageTextMeshProUGUI = _frameImage.transform.Find("Message").GetComponent<TextMeshProUGUI>();
+        _arrowImage = _frameImage.transform.Find("Arrow").GetComponent<Image>();
     }
 
-    private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            MoveToNextPageOrCloseMessageBox();
-        }
+    public void ShowMessageBox() {
+        _frameImage.enabled = true;
+        _iconImage.enabled = true;
+        _messageTextMeshProUGUI.enabled = true;
+        _arrowImage.enabled = true;
+
+        _messageTextMeshProUGUI.pageToDisplay = 1;
+
+        _arrowImage.transform.localPosition = new Vector3(420f, -168.75f, 0f);
+        _arrowImage.transform.DOLocalMoveY(40f, 0.5f).SetRelative(true).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
-    public void OpenMessageBox() {
-        _frame.SetActive(true);
+    public void HideMessageBox() {
+        _frameImage.enabled = false;
+        _iconImage.enabled = false;
+        _messageTextMeshProUGUI.enabled = false;
+        _arrowImage.enabled = false;
 
-        var arrowRectTransform = _arrow.GetComponent<RectTransform>();
-        arrowRectTransform.DOLocalMoveY(-168.75f + 40f, 0.75f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine); // 540 270 90
-
-        if (IsMessageOnLastPage()) {
-            HideArrow();
-        }
+        _arrowImage.transform.DOKill();
     }
 
-    public void MoveToNextPage() {
-        var messageTextMeshPro = _message.GetComponent<TextMeshProUGUI>();
-        messageTextMeshPro.pageToDisplay++;
-    }
-
-    public void CloseMessageBox() {
-        _arrow.transform.DOKill();
-        _frame.SetActive(false);
-    }
-
-    public void MoveToNextPageOrCloseMessageBox() {
-        if (IsMessageOnLastPage()) {
-            CloseMessageBox();
-            PlayPageFeedOrMessageBoxClsoeSE();
-        } else {
-            MoveToNextPage();
-            PlayPageFeedOrMessageBoxClsoeSE();
-
-            if (IsMessageOnLastPage()) {
-                HideArrow();
-            }
-        }
-    }
-
-    private bool IsMessageOnLastPage() {
-        var messageTextMeshProUGUI = _message.GetComponent<TextMeshProUGUI>();
-
-        int currentPageNum = messageTextMeshProUGUI.pageToDisplay;
-        int lastPageNum = messageTextMeshProUGUI.textInfo.pageCount;
+    public void TurnPageOrHideMessageBox() {
+        int currentPageNum = _messageTextMeshProUGUI.pageToDisplay;
+        int lastPageNum = _messageTextMeshProUGUI.textInfo.pageCount;
         bool isMessageOnLastPage = currentPageNum == lastPageNum;
-
-        return isMessageOnLastPage;
-    }
-
-    private void PlayPageFeedOrMessageBoxClsoeSE() {
-        var audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
-    }
-
-    private void HideArrow() {
-        var arrowImage = _arrow.GetComponent<Image>();
-        arrowImage.enabled = false;
+        
+        if (isMessageOnLastPage) {
+            HideMessageBox();
+        } else {
+            _messageTextMeshProUGUI.pageToDisplay++;
+        }
     }
 }
