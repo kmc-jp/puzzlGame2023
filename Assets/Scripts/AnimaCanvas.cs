@@ -2,6 +2,7 @@ using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class AnimaCanvas : NetworkBehaviour
     [SerializeField, Tooltip("Points drawn per second")]
     int DrawFrequency = 48;
 
-    [SerializeField] GameObject[] AnimaColorPrefabs;
+    public GameObject[] AnimaColorPrefabs;
 
     [Flags]
     private enum AnimaCanvasState
@@ -44,11 +45,12 @@ public class AnimaCanvas : NetworkBehaviour
     private float _drawFrequencyInverted;
     private float _drawTimer;
     private PlayerManager _localPlayer = null;
+    private int _curAnimaColor = 0;
 
     public void BeginDraw(Vector3 startPosition, int color)
     {
-        // StageInputController color is 1-based
-        color -= 1;
+        // Ignore color from input and use the currently set color instead
+        color = _curAnimaColor;
 
         Debug.Assert((_state & AnimaCanvasState.Drawing) != AnimaCanvasState.Drawing);
         Debug.Assert(color < AnimaColorPrefabs.Length);
@@ -110,6 +112,16 @@ public class AnimaCanvas : NetworkBehaviour
         _tempDrawingObject = null;
     }
 
+    void AnimaColorChange(int newColor)
+    {
+        // Ignore the new color if the index is out of range
+        if (newColor <= AnimaColorPrefabs.Length)
+        {
+            // StageInputController color is 1-based
+            _curAnimaColor = newColor - 1;
+        }
+    }
+
     [Command(requiresAuthority = false)]
     void CmdSpawnNetworkedAnima(uint ownerNetworkId, uint animaTemplatePrefabId, Vector3[] points)
     {
@@ -133,6 +145,7 @@ public class AnimaCanvas : NetworkBehaviour
 
             // Instantiate the object on the server
             GameObject newObject = Instantiate(prefab);
+            newObject.SetActive(false);
             Debug.Assert(newObject);
 
             // Spawn the new object on all clients
@@ -156,6 +169,8 @@ public class AnimaCanvas : NetworkBehaviour
         _createAnimaObject(obj, lineRenderer);
 
         Destroy(lineRenderer);
+
+        obj.SetActive(true);
     }
 
     // Start is called before the first frame update
@@ -163,6 +178,7 @@ public class AnimaCanvas : NetworkBehaviour
     {
         InputController.OnAnimaDrawingStart += BeginDraw;
         InputController.OnAnimaDrawingEnd += EndDraw;
+        InputController.OnAnimaColorChange += AnimaColorChange;
 
         _drawFrequencyInverted = 1.0f / DrawFrequency;
 

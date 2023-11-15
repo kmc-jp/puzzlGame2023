@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TMPro;
 
 public class NetworkGameplayInitializer : NetworkBehaviour
 {
     private bool _initialized = false;
+
+    public PlayerManager Player1 = null;
+    public PlayerManager Player2 = null;
+    public int LocalPlayerIndex = -1; // 0 = Player 1, 1 = Player 2
 
     // Start is called before the first frame update
     void Start()
@@ -28,23 +33,37 @@ public class NetworkGameplayInitializer : NetworkBehaviour
 
         // Left goal is player 1, Right goal is player 2
         PlayerManager[] players = FindObjectsOfType<PlayerManager>();
-        PlayerManager player1 = null;
-        PlayerManager player2 = null;
         foreach (PlayerManager p in players)
         {
-            if (p.isServer && p.isLocalPlayer)
+            if (isServer)
             {
-                player1 = p;
+                if (p.isLocalPlayer)
+                {
+                    Player1 = p;
+                    LocalPlayerIndex = 0;
+                }
+                else
+                {
+                    Player2 = p;
+                }
             }
             else
             {
-                player2 = p;
+                if (p.isLocalPlayer)
+                {
+                    Player2 = p;
+                    LocalPlayerIndex = 1;
+                }
+                else
+                {
+                    Player1 = p;
+                }
             }
         }
-        if (player1 != null && player2 != null)
+        if (Player1 != null && Player2 != null)
         {
-            GameObject.Find("GoalObject_1")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(player1.GetComponent<NetworkIdentity>().netId);
-            GameObject.Find("GoalObject_2")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(player2.GetComponent<NetworkIdentity>().netId);
+            GameObject.Find("GoalObject_1")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(Player1.GetComponent<NetworkIdentity>().netId);
+            GameObject.Find("GoalObject_2")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(Player2.GetComponent<NetworkIdentity>().netId);
             _initialized = true;
         }
     }
