@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 [Serializable]
 public struct CharacterConfig
@@ -12,13 +13,31 @@ public struct CharacterConfig
     public GameObject[] AnimaPrefabs;
 }
 
-public class StageConfig : MonoBehaviour
+public class StageConfig : NetworkBehaviour
 {
     // List of characters available
     public CharacterConfig[] Characters;
 
     // Selected character of each player
-    public int[] CharacterIndex = new int[2];
+    [SyncVar]
+    public readonly SyncList<int> CharacterIndex = new SyncList<int> { 0, 0 };
+
+    public void SetPlayerCharacterIndex(int newCharacterIndex)
+    {
+        int playerIndex = isServer ? 0 : 1;
+        CmdSetPlayerCharacterIndex(playerIndex, newCharacterIndex);
+    }
+
+    public int GetPlayerCharacterIndex(int player)
+    {
+        return CharacterIndex[player];
+    }
+
+    [Command(requiresAuthority = false)]
+    void CmdSetPlayerCharacterIndex(int playerIndex, int characterIndex)
+    {
+        CharacterIndex[playerIndex] = characterIndex;
+    }
 
     // Start is called before the first frame update
     void Start()
