@@ -9,14 +9,13 @@ public class RedAnimaMovementBehaviour : AnimaObject
     //power 物体に与える力が強くなります。
     //speed 運動の切り替わりの速度が早くなります
     [SerializeField] private bool vectorReverse = false;
-    [SerializeField] private float power = 4.0f;
+    [SerializeField] private float power = 7.0f;
     [SerializeField] private float speed = 3.0f;
     [SerializeField] PhysicsMaterial2D redMat;
     [SerializeField] float massRatio = 1.0f;
-    
-
+    [SerializeField] float destroyTime = 1.5f;
     private Rigidbody2D rb;
-    private float _startTime;
+    private float startTime;
 
     public override Color GetColor()
     {
@@ -28,7 +27,7 @@ public class RedAnimaMovementBehaviour : AnimaObject
     {
         rb = GetComponent<Rigidbody2D>();
         if (vectorReverse) power = -power;
-        _startTime = Time.time;
+        startTime = Time.time;
         rb.sharedMaterial = redMat;
 
         //重さの調整
@@ -46,13 +45,19 @@ public class RedAnimaMovementBehaviour : AnimaObject
 
     void GiveForce()
     {
-        if (((Time.time - _startTime) * speed) < 1)
+        if (((Time.time - startTime) * speed) < 1)
         {
             rb.AddForce(new Vector2(power, 0f));
         }
-        else if (((Time.time - _startTime) * speed) < 3)
+        else if (((Time.time - startTime) * speed) < 3)
         {
             rb.AddForce(new Vector2(-power, 0f));
+        }
+
+
+        if (Time.time - startTime > destroyTime)
+        {
+            Destroy(this.gameObject);
         }
     }
 }

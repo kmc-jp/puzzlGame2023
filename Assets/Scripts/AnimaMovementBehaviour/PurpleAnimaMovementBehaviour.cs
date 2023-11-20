@@ -6,7 +6,10 @@ public class PurpleAnimaMovementBehaviour : AnimaObject
     [SerializeField] Color Color;
     [SerializeField] private PhysicsMaterial2D purpleMat;
     [SerializeField] float massRatio = 0.5f;
+    [SerializeField] float destroyTime = 5.0f;
     private Rigidbody2D rb;
+
+    private float startTime;
 
     public override Color GetColor()
     {
@@ -23,10 +26,15 @@ public class PurpleAnimaMovementBehaviour : AnimaObject
         rb.useAutoMass = true;
         rb.useAutoMass = false;
         rb.mass = (rb.mass * massRatio);
+        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Time.time - startTime > destroyTime)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

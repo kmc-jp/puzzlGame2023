@@ -9,7 +9,9 @@ public class YellowAnimaMovementBehaviour : AnimaObject
     [SerializeField] float Drag = 5;
     [SerializeField] private PhysicsMaterial2D yellowMat;
     [SerializeField] float massRatio = 0.1f;
+    [SerializeField] float destroyTime = 3.0f;
     private Rigidbody2D rb;
+    private float startTime;
 
 
 
@@ -22,11 +24,16 @@ public class YellowAnimaMovementBehaviour : AnimaObject
     void Start()
     {
         ApplyPhysicsParameters();
+        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Time.time - startTime > destroyTime)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void ApplyPhysicsParameters()
