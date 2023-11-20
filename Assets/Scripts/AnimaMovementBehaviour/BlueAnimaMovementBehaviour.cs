@@ -8,6 +8,9 @@ public class BlueAnimaMovementBehaviour : AnimaObject
     [SerializeField] float AngularDrag = 10.0f;
     [SerializeField] PhysicsMaterial2D blueMat;
     [SerializeField] float massRatio = 0.8f;
+    [SerializeField] float destroyTime = 5.0f;
+
+    private float startTime;
 
     public override Color GetColor()
     {
@@ -18,12 +21,16 @@ public class BlueAnimaMovementBehaviour : AnimaObject
     void Start()
     {
         ApplyPhysicsParameters();
+        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if(Time.time - startTime > destroyTime)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void ApplyPhysicsParameters()
