@@ -11,7 +11,11 @@ public class RedAnimaMovementBehaviour : AnimaObject
     [SerializeField] private bool vectorReverse = false;
     [SerializeField] private float power = 4.0f;
     [SerializeField] private float speed = 3.0f;
-    private Rigidbody2D _rb;
+    [SerializeField] PhysicsMaterial2D redMat;
+    [SerializeField] float massRatio = 1.0f;
+    
+
+    private Rigidbody2D rb;
     private float _startTime;
 
     public override Color GetColor()
@@ -22,9 +26,15 @@ public class RedAnimaMovementBehaviour : AnimaObject
     // Start is called before the first frame update
     void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         if (vectorReverse) power = -power;
         _startTime = Time.time;
+        rb.sharedMaterial = redMat;
+
+        //重さの調整
+        rb.useAutoMass = true;
+        rb.useAutoMass = false;
+        rb.mass = (rb.mass * massRatio);
     }
 
     // Update is called once per frame
@@ -37,11 +47,11 @@ public class RedAnimaMovementBehaviour : AnimaObject
     {
         if (((Time.time - _startTime) * speed) < 1)
         {
-            _rb.AddForce(new Vector2(power, 0f));
+            rb.AddForce(new Vector2(power, 0f));
         }
         else if (((Time.time - _startTime) * speed) < 3)
         {
-            _rb.AddForce(new Vector2(-power, 0f));
+            rb.AddForce(new Vector2(-power, 0f));
         }
     }
 }

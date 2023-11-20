@@ -83,6 +83,7 @@ MonoBehaviour:
   vectorReverse: 0
   power: 4
   speed: 3
+  redMat: {fileID: 6200000, guid: 2f37ac4dfd1eff34e86458a5c4d3a2de, type: 2}
 --- !u!33 &8039947358501186359
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -248,3 +249,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _ownerNetworkId: 0

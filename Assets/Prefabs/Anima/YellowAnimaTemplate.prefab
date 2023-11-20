@@ -37,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1199657418030321605
 Rigidbody2D:
@@ -83,6 +83,7 @@ MonoBehaviour:
   GravityScale: 0
   AngularDrag: 5
   Drag: 5
+  yellowMat: {fileID: 6200000, guid: dfec6402290033e4bbf8ff65a968aec2, type: 2}
 --- !u!33 &5866312405462528633
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -248,3 +249,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _ownerNetworkId: 0

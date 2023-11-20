@@ -2225,6 +2225,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  OtherPlayer: {fileID: 0}
+  NetworkGameplayInitializer: {fileID: 0}
+  WinEffect: {fileID: 0}
+  LoseEffect: {fileID: 0}
 --- !u!1 &1574341265
 GameObject:
   m_ObjectHideFlags: 0

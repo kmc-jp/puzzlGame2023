@@ -7,6 +7,11 @@ public class YellowAnimaMovementBehaviour : AnimaObject
     [SerializeField] float GravityScale = 0.0f;
     [SerializeField] float AngularDrag = 5;
     [SerializeField] float Drag = 5;
+    [SerializeField] private PhysicsMaterial2D yellowMat;
+    [SerializeField] float massRatio = 0.1f;
+    private Rigidbody2D rb;
+
+
 
     public override Color GetColor()
     {
@@ -26,11 +31,14 @@ public class YellowAnimaMovementBehaviour : AnimaObject
 
     void ApplyPhysicsParameters()
     {
-        this.gameObject.AddComponent<Rigidbody2D>();
-        var rb = this.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        rb.sharedMaterial = yellowMat;
 
         //重さの調整
+        
         rb.useAutoMass = true;
+        rb.useAutoMass = false;
+        rb.mass = (rb.mass * massRatio);
         rb.gravityScale = GravityScale;
 
         //値は適当です

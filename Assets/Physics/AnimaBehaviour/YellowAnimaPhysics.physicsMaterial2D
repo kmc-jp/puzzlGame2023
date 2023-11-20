@@ -6,6 +6,6 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlueAnimaMaterial
-  friction: 0.7
-  bounciness: 0
+  m_Name: YellowAnimaPhysics
+  friction: 0.2
+  bounciness: 0.2
