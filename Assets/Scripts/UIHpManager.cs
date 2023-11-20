@@ -1,28 +1,34 @@
+using Mirror;
+using NetworkRoomManagerExt;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
 public class UIHpManager : MonoBehaviour
 {
-    //プレーヤーデータ取得用
     public PlayerManager Player;
+    public PlayerManager OtherPlayer;
+    public NetworkGameplayInitializer NetworkGameplayInitializer;
 
     private Text _hpText;
+    [SerializeField]
+    private Image WinEffect;
+    [SerializeField]
+    private Image LoseEffect;
 
-    // Start is called before the first frame update
+    private bool _gameEnded = false;
+    private bool _initialized = false;
+
     void Start()
     {
         _hpText = GetComponent<Text>();
-        _networkInitialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
         int hp = 0;
-        if (Player == null)
+        if (Player == null || OtherPlayer == null)
         {
             _networkInitialize();
         }
@@ -31,14 +37,57 @@ public class UIHpManager : MonoBehaviour
             hp = Player.HP;
         }
 
-        _hpText.text = "HP:" + hp;
-    }
+        if (!_initialized) { return; }
+        if (_gameEnded) return;
 
+        _hpText.text = "HP:" + hp;
+
+        // 勝利または敗北条件のチェック
+        if (Player != null && OtherPlayer != null)
+        {
+            if (Player.HP <= 0)
+            {
+                LoseEffect.enabled = true;
+                StartCoroutine(EndGame());
+                _gameEnded = true;
+            }
+            else if (OtherPlayer.HP <= 0)
+            {
+                WinEffect.enabled = true;
+                StartCoroutine(EndGame());
+                _gameEnded = true;
+            }
+        }
+    }
     private void _networkInitialize()
     {
-        if (Player == null)
+        if (_initialized) return;
+
+        if (NetworkGameplayInitializer.Player1 != null && NetworkGameplayInitializer.Player2 != null)
         {
-            Player = System.Array.Find(FindObjectsOfType<PlayerManager>(), player => player.isLocalPlayer);
+            Debug.Log("NetworkGameplayInitializer.Player1 != null && NetworkGameplayInitializer.Player2 != null");
+            if(NetworkGameplayInitializer.LocalPlayerIndex == 0)
+            {
+                Player = NetworkGameplayInitializer.Player1;
+                OtherPlayer = NetworkGameplayInitializer.Player2;
+            }
+            else
+            {
+                Player = NetworkGameplayInitializer.Player2;
+                OtherPlayer = NetworkGameplayInitializer.Player1;
+            }
+            _initialized = true;
+        }
+    }
+
+
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(3);
+        if (NetworkGameplayInitializer.LocalPlayerIndex == 0)
+        {
+            NetworkManager.singleton.StopHost();
         }
     }
 }

@@ -46,6 +46,10 @@ namespace NetworkRoomManagerExt {
             // base.OnRoomServerPlayersReady();
 
             var startButton = GameObject.Find("StartButton");
+            if(startButton == null)
+            {
+                return;
+            }
             var display = startButton.GetComponent<StartButtonDisplay>();
             var buttonOwner = NetworkClient.connection as NetworkConnectionToClient;
             display.TargetShow(buttonOwner);
@@ -55,6 +59,10 @@ namespace NetworkRoomManagerExt {
             base.OnRoomServerPlayersNotReady();
 
             var startButton = GameObject.Find("StartButton");
+            if(startButton == null)
+            {
+                return;
+            }
             var display = startButton.GetComponent<StartButtonDisplay>();
             var buttonOwner = NetworkClient.connection as NetworkConnectionToClient;
             display.TargetHide(buttonOwner);
