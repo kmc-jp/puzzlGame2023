@@ -35,6 +35,7 @@ public class RedAnimaMovementBehaviour : AnimaObject
         rb.useAutoMass = true;
         rb.useAutoMass = false;
         rb.mass = (rb.mass * massRatio);
+        power = rb.mass * power;
     }
 
     // Update is called once per frame
