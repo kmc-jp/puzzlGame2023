@@ -2,13 +2,11 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.AssetImporters;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class UIinkMnager : MonoBehaviour
+public class UIinkM : MonoBehaviour
 {
     //画像格納
     public Sprite[] sprites;
