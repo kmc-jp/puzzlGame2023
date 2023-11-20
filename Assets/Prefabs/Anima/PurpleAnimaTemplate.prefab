@@ -80,6 +80,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InkUsed: 0
   Color: {r: 0.5760298, g: 0, b: 1, a: 0}
+  purpleMat: {fileID: 6200000, guid: 41f676aa8d0668a42ad1ab5f02380a37, type: 2}
+  massRatio: 0.5
 --- !u!33 &5497303342569591644
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -245,3 +247,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _ownerNetworkId: 0

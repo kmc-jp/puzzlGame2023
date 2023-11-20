@@ -4,11 +4,9 @@ using UnityEngine;
 public class GreenAnimaMovementBehaviour : AnimaObject
 {
     [SerializeField] Color Color;
-
-    private PhysicsMaterial2D greenMat;
+    [SerializeField] private PhysicsMaterial2D greenMat;
+    [SerializeField] float massRatio = 0.1f;
     private Rigidbody2D rb;
-    [SerializeField] private float bounciness = 1.0f;
-    [SerializeField] private float friction = 1.0f;
 
     public override Color GetColor()
     {
@@ -19,10 +17,13 @@ public class GreenAnimaMovementBehaviour : AnimaObject
     void Start()
     {
         //TODO: Green material not created yet
-        //greenMat.friction = friction;
-        //greenMat.bounciness = bounciness;
         rb = this.gameObject.GetComponent<Rigidbody2D>();
-        //rb.sharedMaterial = greenMat;
+        rb.sharedMaterial = greenMat;
+        //重さの調整
+        rb.useAutoMass = true;
+        rb.useAutoMass = false;
+        rb.mass = (rb.mass * massRatio);
+
     }
 
     // Update is called once per frame

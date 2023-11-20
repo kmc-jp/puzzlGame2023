@@ -80,9 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InkUsed: 0
   Color: {r: 0.03003788, g: 0, b: 1, a: 0}
-  Material: {fileID: 6200000, guid: 5560f481b35f6184a840887902c6f801, type: 2}
   Drag: 10
   AngularDrag: 10
+  blueMat: {fileID: 6200000, guid: 5560f481b35f6184a840887902c6f801, type: 2}
+  massRatio: 0.8
 --- !u!33 &1217109876377522307
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -248,3 +249,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _ownerNetworkId: 0
