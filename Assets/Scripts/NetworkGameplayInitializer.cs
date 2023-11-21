@@ -15,6 +15,9 @@ public class NetworkGameplayInitializer : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject.Find("DrawingAreaP1").GetComponent<SpriteRenderer>().enabled = false;
+        GameObject.Find("DrawingAreaP2").GetComponent<SpriteRenderer>().enabled = false;
+
         InitializeNetwork();
     }
 
@@ -64,6 +67,22 @@ public class NetworkGameplayInitializer : NetworkBehaviour
         {
             GameObject.Find("GoalObject_1")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(Player1.GetComponent<NetworkIdentity>().netId);
             GameObject.Find("GoalObject_2")?.GetComponent<GoalLineEntryDetector>()?.SetOwnerNetworkId(Player2.GetComponent<NetworkIdentity>().netId);
+
+            // DrawingCanvasの位置を調整する
+            GameObject p1CanvasPos = GameObject.Find("DrawingAreaP1");
+            GameObject p2CanvasPos = GameObject.Find("DrawingAreaP2");
+            GameObject localCanvas = GameObject.Find("DrawingCanvas");
+            if (LocalPlayerIndex == 0)
+            {
+                localCanvas.transform.position = p1CanvasPos.transform.position;
+            }
+            else
+            {
+                localCanvas.transform.position = p2CanvasPos.transform.position;
+            }
+            Destroy(p1CanvasPos);
+            Destroy(p2CanvasPos);
+
             _initialized = true;
         }
     }
