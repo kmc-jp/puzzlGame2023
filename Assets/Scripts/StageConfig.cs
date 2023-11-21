@@ -11,6 +11,7 @@ public struct CharacterConfig
     public Sprite Icon;
     public Sprite Portrait;
     public GameObject[] AnimaPrefabs;
+    public Sprite[] AnimaColorImage;
 }
 
 public class StageConfig : NetworkBehaviour
