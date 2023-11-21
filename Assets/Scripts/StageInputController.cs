@@ -103,6 +103,11 @@ public class StageInputController : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
+    public void SetAnimaColor(int newAnimaColor)
+    {
+        _setAnimaColor(newAnimaColor);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
